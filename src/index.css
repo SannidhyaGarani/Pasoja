@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-cream: #F7F2EA;
+  --color-brand-primary: #5A2D0C;
+  --color-brand-primary-light: #8B5A3C;
+  --color-brand-accent: #A85721;
+  --color-brand-accent-light: #C87A3A;
+  --color-brand-gray: #E6D8C3;
+  --color-brand-gray-dark: #333333;
+  
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Instrument Sans", sans-serif;
+  --font-poppins: "Instrument Sans", sans-serif;
+  --font-instrument: "Instrument Sans", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-[#333333] font-sans antialiased min-h-screen text-[14px];
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-black font-sans;
+  }
+}
