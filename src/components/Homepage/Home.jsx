@@ -7,16 +7,14 @@ import GenderBanner from '../Home/GenderBanner';
 import Features from '../Home/Features';
 import Testimonials from '../Home/Testimonials';
 
-
-
 const Home = () => {
   return (
     <main className="bg-white min-h-screen">
       <Hero />
       <BenefitsStrip />
       <Bestsellers />
-      <Banner />
       <GenderBanner />
+      <Banner />
       <Features />
       <Testimonials />
     </main>

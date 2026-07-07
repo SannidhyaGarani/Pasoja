@@ -1,37 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, ChevronRight, Leaf } from "lucide-react";
+import { Home, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-/**
- * PageHeader Component
- * A premium breadcrumb-focused header with heritage aesthetics.
- * Built with the provided design specifications including the heritage background image.
- */
-const PageHeader = ({ breadcrumbItems = [] }) => {
+const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
   return (
-    <section className="relative w-full h-[140px] md:h-[60px] flex items-center justify-center overflow-hidden bg-[#] mt-[45px] md:mt-[120px]">
+    <section className="relative w-full bg-[#F7F2EA] mt-[76px] md:mt-[118px] overflow-hidden">
+      {/* Subtle top border accent */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#A85721]/20 to-transparent" />
 
-      {/* 
-          Main Heritage Banner Background 
-          Image uses path from public directory: /img/background.jpeg
-      */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90 transition-transform duration-1000"
-
-      />
-
-      {/* Tonal Luxury Grain Overlay for texture depth and tactile feel */}
-      <div className="absolute inset-0 opacity-[0.05]  pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/p6-grain.png')] mix-blend-multiply" />
-
-      {/* Decorative Gradient Scrim for subtle framing */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#FAF4E3]/20 via-transparent to-[#FAF4E3]/20 pointer-events-none" />
-
-      {/* Breadcrumbs Logic Matrix */}
-      <div className="container mx-auto px-6 relative z-10 flex flex-col items-center bg-[#faf4e3]">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-8 md:py-12">
+        {/* Breadcrumbs */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-2.5 md:gap-5 text-[#6b4f3a] font-poppins font-bold text-[14px] md:text-sm uppercase tracking-[0.2em] md:tracking-[0.25em]"
+          className="flex items-center gap-2 mb-4"
         >
           {breadcrumbItems.map((item, index) => {
             const isLast = index === breadcrumbItems.length - 1;
@@ -40,17 +22,9 @@ const PageHeader = ({ breadcrumbItems = [] }) => {
             if (isLast) {
               return (
                 <React.Fragment key={index}>
-                  {index > 0 && (
-                    <ChevronRight size={13} className="text-[#6b4f3a]/40" strokeWidth={3} />
-                  )}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="inline-flex items-center gap-2  backdrop-blur-[1px] text-[#bf8d2d] px-5 md:px-7 py-1.5 md:py-2.5 rounded-full text-[14px] md:text-[14px] font-poppins font-bold uppercase tracking-[0.3em]  transition-all duration-400 ease-out"
-                  >
-                    <Leaf size={14} className="fill-current rotate-45 opacity-90" strokeWidth={1.5} />
-                    <span className="whitespace-nowrap tracking-[0.1em]">{item.label}</span>
-                  </motion.div>
+                  <span className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.2em] text-[#A85721]">
+                    {item.label}
+                  </span>
                 </React.Fragment>
               );
             }
@@ -58,23 +32,47 @@ const PageHeader = ({ breadcrumbItems = [] }) => {
             return (
               <React.Fragment key={index}>
                 <Link
-                  to={item.path || "#"}
-                  className="flex items-center gap-2 hover:text-[#976E2A] transition-all duration-300 group"
+                  to={item.path || "/"}
+                  className="flex items-center gap-1.5 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.15em] text-[#5A2D0C]/50 hover:text-[#5A2D0C] transition-colors"
                 >
-                  {isFirst && (
-                    <Home size={18} className="text-[#6b4f3a] group-hover:-translate-y-0.5 transition-transform" strokeWidth={2} />
-                  )}
-                  <span className="hover:underline underline-offset-4 decoration-[#976E2A]/30 transition-all">{item.label}</span>
+                  {isFirst && <Home size={13} strokeWidth={2} />}
+                  <span>{item.label}</span>
                 </Link>
-                <ChevronRight size={13} className="text-[#6b4f3a]/40" strokeWidth={3} />
+                <ChevronRight size={12} className="text-[#5A2D0C]/25" strokeWidth={2.5} />
               </React.Fragment>
             );
           })}
         </nav>
+
+        {/* Title */}
+        {title && (
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1a1a1a] tracking-tight leading-[1.1]"
+          >
+            {title}
+          </motion.h1>
+        )}
+
+        {/* Subtitle */}
+        {subtitle && (
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-[14px] sm:text-[15px] text-[#5A2D0C]/50 font-medium mt-2 max-w-lg"
+          >
+            {subtitle}
+          </motion.p>
+        )}
       </div>
+
+      {/* Bottom border */}
+      <div className="h-[1px] bg-[#E6D8C3]/60" />
     </section>
   );
 };
 
 export default PageHeader;
-

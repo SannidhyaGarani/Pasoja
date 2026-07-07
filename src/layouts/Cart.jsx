@@ -1,17 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  ShoppingBag, 
-  Trash2, 
-  ShieldCheck, 
-  Truck, 
-  RotateCcw, 
-  ArrowRight, 
-  Sparkles, 
-  ChevronRight, 
-  Gift, 
-  FileText 
-} from "lucide-react";
+import { ShoppingBag, Trash2, ShieldCheck, Truck, RotateCcw, ChevronRight, Gift, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 import { useStore } from "../components/StoreProvider";
@@ -21,13 +10,10 @@ const Cart = () => {
   const { cart, removeFromCart, updateQuantity, loading } = useStore();
   const { user } = useAuth();
   const navigate = useNavigate();
-  
-  // State for optional luxury gift note interaction
   const [isGiftNoteOpen, setIsGiftNoteOpen] = useState(false);
   const [giftNote, setGiftNote] = useState("");
 
   const total = cart.reduce((sum, item) => sum + ((Number(item.price) || 0) * (item.quantity || 1)), 0);
-  const premiumEase = [0.16, 1, 0.3, 1]; // Ultra smooth luxury cubic bezier
 
   const handleCheckout = () => {
     if (!user) {
@@ -37,42 +23,22 @@ const Cart = () => {
     }
   };
 
-  // --- EDITORIAL MINIMALIST LOADING STATE ---
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF4E3] flex flex-col items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/p6-grain.png')]" />
-        <div className="relative flex flex-col items-center gap-6">
-          <motion.div 
-            animate={{ rotation: 360 }}
-            transition={{ repeat: Infinity, duration: 1.8, ease: "linear" }}
-            className="w-16 h-16 border-t-2 border-[#976E2A] border-r-2 border-r-transparent rounded-full"
-          />
-          <div className="text-center space-y-1">
-            <p className="text-[11px] font-poppins font-bold uppercase tracking-[0.4em] text-[#976E2A]">
-              Loading Cart
-            </p>
-            <p className="text-[13px] font-serif italic text-[#6b4f3a]/60">
-              Fetching your items...
-            </p>
-          </div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-[#E6D8C3] border-t-[#A85721] rounded-full animate-spin" />
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#5A2D0C]/40">Loading your bag...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className="min-h-screen relative bg-cover bg-center text-[#6b4f3a] selection:bg-[#976E2A] selection:text-[#FFFDF6] font-poppins"
-      style={{ backgroundImage: "url('/img/b3.png')" }}
-    >
-      {/* Premium Multi-layered Tonal Overlays */}
-      <div className="absolute inset-0 bg-[#FAF4E3]/90 pointer-events-none mix-blend-color-burn" />
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/p6-grain.png')]" />
-
+    <div className="min-h-screen bg-white">
       <PageHeader
-        title="Your Cart"
-        subtitle="Manage Selections"
+        title="Shopping Bag"
+        subtitle="Review your selections before checkout"
         breadcrumbItems={[
           { label: "Home", path: "/" },
           { label: "Shop", path: "/shop" },
@@ -80,106 +46,92 @@ const Cart = () => {
         ]}
       />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-10 md:py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-          {/* MAIN CART ARCHIVE AREA */}
+          {/* CART ITEMS */}
           <div className="lg:col-span-8 w-full">
             <AnimatePresence mode="popLayout">
               {cart.length === 0 ? (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.6, ease: premiumEase }}
-                  className="bg-[#FFFDF6] border border-[#E3DBC5]/60 rounded-[24px] p-16 text-center shadow-[0_20px_50px_rgba(32,59,35,0.02)] max-w-xl mx-auto flex flex-col items-center"
+                  className="text-center py-20 max-w-md mx-auto"
                 >
-                  <div className="w-16 h-16 rounded-full bg-[#FAF4E3] border border-[#E3DBC5]/50 flex items-center justify-center text-[#976E2A] mb-6">
-                    <ShoppingBag size={22} strokeWidth={1.2} />
+                  <div className="w-16 h-16 rounded-full bg-[#F7F2EA] border border-[#E6D8C3] flex items-center justify-center text-[#A85721] mx-auto mb-5">
+                    <ShoppingBag size={24} strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-2xl font-serif italic text-[#6b4f3a] mb-3">
-                    Your cart is empty
-                  </h3>
-                  <p className="text-[13px] text-[#6b4f3a]/60 italic max-w-xs mb-8 leading-relaxed">
-                    Looks like you haven't added anything to your cart yet.
+                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-2">Your bag is empty</h3>
+                  <p className="text-[13px] text-[#333333]/50 leading-relaxed mb-6">
+                    Looks like you haven't added anything yet. Start exploring our collection.
                   </p>
                   <Link
                     to="/shop"
-                    className="inline-flex items-center gap-3 px-8 py-4 bg-[#6b4f3a] text-[#FFFDF6] font-bold text-[12px] uppercase tracking-[0.3em] rounded-lg hover:bg-[#976E2A] transition-all duration-300 shadow-sm group"
+                    className="inline-flex items-center gap-2.5 px-6 py-3 bg-[#5A2D0C] text-white font-bold text-[11px] uppercase tracking-[0.2em] rounded-sm hover:bg-[#A85721] transition-all shadow-sm"
                   >
-                    Go Shopping
-                    <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                    Continue Shopping
+                    <ArrowRight size={13} />
                   </Link>
                 </motion.div>
               ) : (
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between border-b border-[#E3DBC5]/40 pb-3 px-1">
-                    <h2 className="text-[12px] font-bold uppercase tracking-[0.3em] text-[#976E2A]">
-                      {cart.length} {cart.length === 1 ? "Item" : "Items"} in your cart
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#E6D8C3]/40">
+                    <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#A85721]">
+                      {cart.length} {cart.length === 1 ? "Item" : "Items"}
                     </h2>
                   </div>
 
-                  {/* COMPACT ITEM ROW STACK */}
-                  <motion.div layout className="space-y-4">
+                  <motion.div layout className="space-y-3">
                     <AnimatePresence mode="popLayout">
                       {cart.map((item, idx) => (
                         <motion.div
-                          key={`${item.id}-${idx}`}
+                          key={`${item.cartId || item.id}-${idx}`}
                           layout
-                          initial={{ opacity: 0, y: 20 }}
+                          initial={{ opacity: 0, y: 15 }}
                           animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, x: -30, opacity: 0 }}
-                          transition={{ duration: 0.5, ease: premiumEase }}
-                          className="group relative bg-[#FFFDF6] rounded-[20px] p-4 flex flex-col sm:flex-row items-center gap-6 border border-[#E3DBC5]/50 hover:border-[#976E2A]/40 transition-all duration-500 shadow-[0_4px_20px_rgba(32,59,35,0.01)] hover:shadow-[0_20px_40px_rgba(151,110,42,0.04)]"
+                          exit={{ opacity: 0, x: -30 }}
+                          transition={{ duration: 0.4 }}
+                          className="group bg-[#F7F2EA] rounded-sm p-4 flex flex-col sm:flex-row items-center gap-4 border border-[#E6D8C3]/30 hover:border-[#A85721]/15 transition-all"
                         >
-                          {/* Fine Art Presentation Frame */}
-                          <Link to={`/product/${item.id}`} className="w-24 h-28 rounded-[14px] bg-[#FFFDF6] border border-[#E3DBC5]/40 p-2 shrink-0 shadow-[inset_0_2px_8px_rgba(0,0,0,0.01)] group-hover:border-[#976E2A]/20 transition-all duration-500">
-                            <div className="w-full h-full overflow-hidden rounded-[10px] bg-[#FAF4E3]/60 flex items-center justify-center p-1 relative">
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="w-full h-full object-contain filter drop-shadow-sm transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                              />
-                            </div>
+                          <Link to={`/product/${item.id}`} className="w-20 h-24 bg-white rounded-sm shrink-0 overflow-hidden border border-[#E6D8C3]/30 p-1.5">
+                            <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                           </Link>
 
-                          {/* Info Typography Matrix */}
-                          <div className="flex-1 text-center sm:text-left space-y-1">
-                            <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#976E2A]">
-                              {item.flavor || "Classic"}
-                            </span>
-                            <h3 className="text-lg font-bold text-[#6b4f3a] tracking-tight group-hover:text-[#976E2A] transition-colors duration-300">
+                          <div className="flex-1 text-center sm:text-left space-y-0.5">
+                            {item.category && (
+                              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#A85721]">{item.category}</span>
+                            )}
+                            <h3 className="text-sm font-bold text-[#1a1a1a] group-hover:text-[#A85721] transition-colors leading-tight">
                               {item.name}
                             </h3>
-                            <p className="text-lg font-medium text-[#6b4f3a]/90 pt-1 font-sans">
-                              ₹{Number(item.price).toLocaleString("en-IN", { minimumFractionDigits: 0 })}
+                            {item.size && (
+                              <p className="text-[11px] font-medium text-[#5A2D0C]/65 uppercase tracking-wider">
+                                Size: {item.size}
+                              </p>
+                            )}
+                            <p className="text-sm font-semibold text-[#1a1a1a] mt-1">
+                              ₹{Number(item.price).toLocaleString("en-IN")}
                             </p>
                           </div>
 
-                          {/* Quantity Controls */}
-                          <div className="flex items-center bg-[#FAF4E3]/30 border border-[#E3DBC5]/40 rounded-xl p-1 gap-2">
-                             <button 
-                               onClick={() => updateQuantity(item.id, -1)}
-                               className="w-8 h-8 flex items-center justify-center text-[#6b4f3a]/60 hover:text-[#976E2A] transition-colors"
-                             >
-                               -
-                             </button>
-                             <span className="w-6 text-center text-[14px] font-bold font-sans text-[#6b4f3a]">{item.quantity || 1}</span>
-                             <button 
-                               onClick={() => updateQuantity(item.id, 1)}
-                               className="w-8 h-8 flex items-center justify-center text-[#6b4f3a]/60 hover:text-[#976E2A] transition-colors"
-                             >
-                               +
-                             </button>
+                          <div className="flex items-center bg-white border border-[#E6D8C3]/40 rounded-sm h-9">
+                            <button
+                              onClick={() => updateQuantity(item.cartId || item.id, -1)}
+                              className="w-8 h-full flex items-center justify-center text-[#5A2D0C]/40 hover:text-[#A85721] transition-colors text-sm font-bold"
+                            >−</button>
+                            <span className="w-7 text-center text-[13px] font-bold text-[#1a1a1a]">{item.quantity || 1}</span>
+                            <button
+                              onClick={() => updateQuantity(item.cartId || item.id, 1)}
+                              className="w-8 h-full flex items-center justify-center text-[#5A2D0C]/40 hover:text-[#A85721] transition-colors text-sm font-bold"
+                            >+</button>
                           </div>
 
-                          {/* Minimalist Removal Node */}
                           <button
-                            onClick={() => removeFromCart(item.id)}
-                            className="sm:mr-2 p-3.5 rounded-xl bg-[#FAF4E3]/50 text-[#6b4f3a]/40 border border-[#E3DBC5]/30 hover:bg-red-50/60 hover:text-red-600 hover:border-red-100 transition-all duration-300 group/trash"
+                            onClick={() => removeFromCart(item.cartId || item.id)}
+                            className="p-2.5 rounded-sm bg-white text-[#5A2D0C]/30 border border-[#E6D8C3]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all"
                             aria-label="Remove item"
                           >
-                            <Trash2 size={15} strokeWidth={1.5} className="group-hover/trash:scale-105 transition-transform" />
+                            <Trash2 size={14} strokeWidth={1.5} />
                           </button>
                         </motion.div>
                       ))}
@@ -190,125 +142,92 @@ const Cart = () => {
             </AnimatePresence>
           </div>
 
-          {/* SUMMARY SIDEBAR */}
+          {/* ORDER SUMMARY */}
           {cart.length > 0 && (
             <aside className="lg:col-span-4 w-full sticky top-32">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: premiumEase }}
-                className="bg-[#FFFDF6] rounded-[24px] border border-[#E3DBC5]/70 shadow-[0_30px_70px_rgba(32,59,35,0.04)] p-8 relative overflow-hidden"
-              >
-                {/* Micro Fine-Art Ornament */}
-                <div className="absolute top-0 right-0 p-6 opacity-20 pointer-events-none">
-                  <Sparkles size={15} className="text-[#976E2A]" />
-                </div>
-
-                <h2 className="text-md font-bold uppercase tracking-wider text-[#6b4f3a] mb-6 border-b border-[#E3DBC5]/40 pb-4">
+              <div className="bg-[#F7F2EA] rounded-sm border border-[#E6D8C3]/50 p-6 shadow-sm">
+                <h2 className="text-sm font-bold text-[#1a1a1a] mb-5 pb-3 border-b border-[#E6D8C3]/40">
                   Order Summary
                 </h2>
 
-                {/* Ledger Breakdown Row Vectors */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex justify-between items-baseline text-[12px] uppercase tracking-widest text-[#6b4f3a]/60 font-sans">
+                <div className="space-y-3 mb-5">
+                  <div className="flex justify-between text-[12px] text-[#5A2D0C]/50">
                     <span>Subtotal</span>
-                    <span className="text-[#6b4f3a] font-bold">
-                      ₹{total.toLocaleString("en-IN")}
-                    </span>
+                    <span className="font-bold text-[#1a1a1a]">₹{total.toLocaleString("en-IN")}</span>
                   </div>
-                  <div className="flex justify-between items-baseline text-[12px] uppercase tracking-widest text-[#6b4f3a]/60">
+                  <div className="flex justify-between text-[12px] text-[#5A2D0C]/50">
                     <span>Shipping</span>
-                    <span className="text-[#976E2A] italic tracking-normal normal-case font-serif text-[13px]">
-                      Complimentary
-                    </span>
+                    <span className="text-[#A85721] font-semibold">Free</span>
                   </div>
-                  <div className="flex justify-between items-baseline text-[12px] uppercase tracking-widest text-[#6b4f3a]/60 font-sans">
+                  <div className="flex justify-between text-[12px] text-[#5A2D0C]/50">
                     <span>GST (Included)</span>
-                    <span className="text-[#6b4f3a] font-bold">₹0.00</span>
+                    <span className="font-bold text-[#1a1a1a]">₹0</span>
                   </div>
 
-                  {/* PREMIUM OPTIONAL LUXURY ADD-ON (Gift Inscription) */}
-                  <div className="pt-2 border-t border-[#E3DBC5]/30">
-                    <button 
+                  {/* Gift Note */}
+                  <div className="pt-2 border-t border-[#E6D8C3]/30">
+                    <button
                       onClick={() => setIsGiftNoteOpen(!isGiftNoteOpen)}
-                      className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#976E2A] hover:text-[#6b4f3a] transition-colors"
+                      className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#A85721] hover:text-[#5A2D0C] transition-colors"
                     >
-                      <Gift size={13} strokeWidth={1.8} />
+                      <Gift size={13} strokeWidth={1.5} />
                       <span>{isGiftNoteOpen ? "Remove gift note" : "Add a gift note"}</span>
                     </button>
-                    
                     <AnimatePresence>
                       {isGiftNoteOpen && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3, ease: premiumEase }}
-                          className="overflow-hidden mt-3"
+                          className="overflow-hidden mt-2"
                         >
                           <textarea
                             value={giftNote}
                             onChange={(e) => setGiftNote(e.target.value)}
-                            placeholder="Write your message here..."
+                            placeholder="Write your message..."
                             maxLength={180}
-                            className="w-full h-20 bg-[#FAF4E3]/40 border border-[#E3DBC5]/60 rounded-xl p-3 text-[12px] italic text-[#6b4f3a] placeholder-[#6b4f3a]/30 focus:outline-none focus:border-[#976E2A]/50 resize-none font-sans"
+                            className="w-full h-16 bg-white border border-[#E6D8C3] rounded-sm p-2.5 text-[12px] text-[#1a1a1a] placeholder-[#5A2D0C]/25 focus:outline-none focus:border-[#A85721] resize-none"
                           />
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
 
-                  {/* Vault Valuation Divider Line */}
-                  <div className="pt-5 border-t border-dashed border-[#E3DBC5] flex justify-between items-end">
-                    <div className="space-y-0.5">
-                      <span className="text-[11px] font-bold text-[#976E2A] uppercase tracking-[0.25em] block">
-                        Total Value
-                      </span>
-                      <span className="text-[11px] text-[#6b4f3a]/40 italic font-serif block">
-                        Include wrapping
-                      </span>
-                    </div>
-                    <span className="text-3xl font-bold text-[#6b4f3a] tracking-tight font-sans">
-                      ₹{total.toLocaleString("en-IN")}
-                    </span>
+                  <div className="pt-4 mt-2 border-t border-dashed border-[#E6D8C3] flex justify-between items-end">
+                    <span className="text-[11px] font-bold text-[#A85721] uppercase tracking-[0.15em]">Total</span>
+                    <span className="text-2xl font-bold text-[#1a1a1a]">₹{total.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
 
-                {/* Primary Secure Action Node Button */}
                 <button
                   onClick={handleCheckout}
-                  className="w-full py-4 bg-[#6b4f3a] text-[#FFFDF6] font-bold text-[12px] uppercase tracking-[0.25em] rounded-xl hover:bg-[#976E2A] hover:shadow-[0_12px_30px_rgba(151,110,42,0.15)] transition-all duration-500 shadow-[0_10px_25px_rgba(32,59,35,0.08)] mb-8 flex items-center justify-center gap-2 group/checkout"
+                  className="w-full py-3.5 bg-[#5A2D0C] hover:bg-[#A85721] text-white font-bold text-[12px] uppercase tracking-[0.2em] rounded-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-sm mb-5"
                 >
-                  <span>Checkout Now</span>
-                  <ChevronRight size={14} className="group-hover/checkout:translate-x-1 transition-transform" />
+                  <span>Checkout</span>
+                  <ChevronRight size={14} />
                 </button>
 
-                {/* Trust Certificate Stamp Components */}
-                <div className="grid grid-cols-1 gap-4 pt-6 border-t border-[#E3DBC5]/40">
+                <div className="space-y-3 pt-4 border-t border-[#E6D8C3]/30">
                   {[
-                    { icon: ShieldCheck, title: "Vault Security", sub: "Pillar Layer Encryption" },
-                    { icon: Truck, title: "Priority Delivery", sub: "Climate Controlled Fleet" },
-                    { icon: RotateCcw, title: "Registry Guarantee", sub: "30-Day Escrow Window" },
+                    { icon: ShieldCheck, title: "Secure Checkout", sub: "256-bit encryption" },
+                    { icon: Truck, title: "Free Shipping", sub: "On orders ₹1999+" },
+                    { icon: RotateCcw, title: "Easy Returns", sub: "30-day hassle-free" },
                   ].map((badge, i) => {
                     const Icon = badge.icon;
                     return (
-                      <div key={i} className="flex items-center gap-4">
-                        <div className="w-9 h-9 rounded-xl bg-[#FAF4E3]/70 border border-[#E3DBC5]/60 flex items-center justify-center text-[#976E2A] shrink-0 shadow-none">
-                          <Icon size={15} strokeWidth={1.5} />
+                      <div key={i} className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white border border-[#E6D8C3]/40 flex items-center justify-center text-[#A85721] shrink-0">
+                          <Icon size={13} strokeWidth={1.5} />
                         </div>
-                        <div className="space-y-0.5">
-                          <p className="text-[11px] font-bold text-[#6b4f3a] uppercase tracking-wider">
-                            {badge.title}
-                          </p>
-                          <p className="text-[12px] font-serif italic text-[#6b4f3a]/40 leading-none">
-                            {badge.sub}
-                          </p>
+                        <div>
+                          <p className="text-[10px] font-bold text-[#1a1a1a] uppercase tracking-wide">{badge.title}</p>
+                          <p className="text-[10px] text-[#5A2D0C]/35">{badge.sub}</p>
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </motion.div>
+              </div>
             </aside>
           )}
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Trash2, ShoppingBag, ArrowRight, Sparkles, X, ChevronRight } from "lucide-react";
+import { Heart, ShoppingBag, ArrowRight, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "./Home/PageHeader";
 import { useStore } from "./StoreProvider";
@@ -12,127 +12,118 @@ const Wishlist = () => {
 
   const triggerToast = (msg) => {
     setFeedbackMessage(msg);
-    setTimeout(() => setFeedbackMessage(null), 4000);
+    setTimeout(() => setFeedbackMessage(null), 3500);
   };
 
   const handleMoveToCart = async (product) => {
-    await addToCart(product);
+    const defaultSize = product.size_prices && product.size_prices.length > 0
+      ? (product.size_prices.find(s => s.size?.toUpperCase() === 'L') || product.size_prices[0])
+      : null;
+    await addToCart(product, defaultSize);
     await removeFromWishlist(product.id);
     triggerToast("Moved to your bag!");
   };
 
-  const premiumEase = [0.25, 1, 0.5, 1];
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF4E3] flex flex-col items-center justify-center gap-6 relative">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/p6-grain.png')]" />
-        <div className="relative w-16 h-16">
-          <div className="absolute inset-0 border border-[#E3DBC5] rounded-full" />
-          <div className="absolute inset-0 border border-t-[#976E2A] rounded-full animate-spin" />
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-[#E6D8C3] border-t-[#A85721] rounded-full animate-spin" />
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#5A2D0C]/40">Loading wishlist...</p>
         </div>
-        <p className="text-[14px] font-poppins font-bold uppercase tracking-[0.4em] text-[#976E2A]">Curating Catalog...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF4E3] relative selection:bg-[#976E2A] selection:text-[#FFFDF6]">
+    <div className="min-h-screen bg-white">
       <PageHeader
-        title="Saved Gems"
-        subtitle="Wishlist Archive"
+        title="Wishlist"
+        subtitle="Your saved favourites"
         breadcrumbItems={[
           { label: "Home", path: "/" },
-          { label: "Collection", path: "/shop" },
+          { label: "Shop", path: "/shop" },
           { label: "Wishlist" },
         ]}
       />
 
-      {/* Heritage Detail Overlay */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/p6-grain.png')] mix-blend-multiply"></div>
-
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 relative z-10">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-10 md:py-14">
         {wishlist.length === 0 ? (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#FFFDF6] rounded-[48px] border-[1.5px] border-dashed border-[#E3DBC5] p-24 text-center shadow-sm max-w-2xl mx-auto"
+            className="text-center py-20 max-w-md mx-auto"
           >
-            <div className="w-24 h-24 rounded-full bg-[#FAF4E3] border border-[#E3DBC5] flex items-center justify-center text-[#976E2A] mx-auto mb-10">
-              <Heart size={40} strokeWidth={1} />
+            <div className="w-16 h-16 rounded-full bg-[#F7F2EA] border border-[#E6D8C3] flex items-center justify-center text-[#A85721] mx-auto mb-5">
+              <Heart size={24} strokeWidth={1.5} />
             </div>
-            <h3 className="text-4xl font-poppins font-bold text-[#6b4f3a] mb-5 tracking-tight">
-              Registry Empty
-            </h3>
-            <p className="text-sm text-[#6b4f3a]/60 font-poppins max-w-sm mx-auto mb-14 leading-relaxed tracking-wide">
-              Your personal curator catalog is currently unassigned. Archive your favorite heritage blends here for future acquisition.
+            <h3 className="text-xl font-bold text-[#1a1a1a] mb-2">Your wishlist is empty</h3>
+            <p className="text-[13px] text-[#333333]/50 leading-relaxed mb-6">
+              Save items you love to your wishlist and come back to them anytime.
             </p>
             <Link
               to="/shop"
-              className="inline-flex items-center gap-4 px-12 py-6 bg-[#6b4f3a] text-[#FFFDF6] font-poppins font-bold text-[14px] uppercase tracking-[0.4em] rounded-2xl hover:bg-[#976E2A] transition-all duration-300 shadow-2xl shadow-[#6b4f3a]/10"
+              className="inline-flex items-center gap-2.5 px-6 py-3 bg-[#5A2D0C] text-white font-bold text-[11px] uppercase tracking-[0.2em] rounded-sm hover:bg-[#A85721] transition-all shadow-sm"
             >
-              Discover Boutique
-              <ArrowRight size={14} />
+              Explore Collection
+              <ArrowRight size={13} />
             </Link>
           </motion.div>
         ) : (
-          <div className="space-y-12">
-            <div className="flex items-center justify-between border-b border-[#E3DBC5]/60 pb-8">
-              <h2 className="text-[14px] font-poppins font-bold uppercase tracking-[0.5em] text-[#976E2A]">
-                {wishlist.length} {wishlist.length === 1 ? "Archive Entry" : "Archive Entries"}
+          <div className="space-y-6">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E6D8C3]/40">
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#A85721]">
+                {wishlist.length} {wishlist.length === 1 ? "Item" : "Items"} Saved
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 xl:gap-10">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8">
               {wishlist.map((item, idx) => (
                 <motion.div
                   key={`${item.id}-${idx}`}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: idx * 0.05, duration: 0.8, ease: premiumEase }}
-                  className="group relative bg-[#FFFDF6] rounded-[32px] p-6 border border-[#E3DBC5]/60 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(32,59,35,0.06)] flex flex-col"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.04, duration: 0.4 }}
+                  className="group relative flex flex-col"
                 >
-                  {/* Removal Micro-Action */}
+                  {/* Remove button */}
                   <button
-                    onClick={() => removeFromWishlist(item.id)}
-                    className="absolute top-4 right-4 z-20 w-10 h-10 rounded-xl bg-white/80 backdrop-blur-sm text-[#6b4f3a]/30 hover:bg-red-50 hover:text-red-500 transition-all duration-300 border border-[#E3DBC5]/40 opacity-0 group-hover:opacity-100 transform translate-y-[-10px] group-hover:translate-y-0"
+                    onClick={() => { removeFromWishlist(item.id); triggerToast("Removed from wishlist"); }}
+                    className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm text-[#5A2D0C]/40 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-all duration-300 shadow-sm"
                   >
-                    <X size={16} strokeWidth={2} />
+                    <X size={14} strokeWidth={2} />
                   </button>
 
-                  {/* Arched Architectural Frame */}
+                  {/* Image */}
                   <div
                     onClick={() => navigate(`/product/${item.id}`)}
-                    className="relative aspect-[4/5] rounded-[24px] overflow-hidden bg-[#FAF4E3] mb-8 border border-[#E3DBC5]/30 cursor-pointer p-6 flex items-center justify-center"
+                    className="relative w-full aspect-[3/4] overflow-hidden bg-[#F7F2EA] rounded-sm cursor-pointer"
                   >
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full h-full object-contain filter drop-shadow-xl transition-transform duration-[1.5s] group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-[#6b4f3a]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
 
-                  <div className="space-y-4 px-1 flex-grow">
-                    <span className="text-[14px] font-poppins font-bold uppercase tracking-[0.35em] text-[#C45525]">
-                      {item.flavor || "Artisanal Selection"}
-                    </span>
+                  {/* Info */}
+                  <div className="pt-3 flex-grow flex flex-col">
+                    {item.category && (
+                      <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-[#A85721] font-semibold mb-1">{item.category}</span>
+                    )}
                     <h3
                       onClick={() => navigate(`/product/${item.id}`)}
-                      className="text-2xl font-poppins font-bold text-[#6b4f3a] tracking-tight hover:text-[#976E2A] transition-colors cursor-pointer"
+                      className="text-[13px] sm:text-sm font-semibold text-[#1a1a1a] leading-snug mb-2 group-hover:text-[#A85721] transition-colors cursor-pointer line-clamp-2"
                     >
                       {item.name}
                     </h3>
-
-                    <div className="pt-6 border-t border-[#E3DBC5]/40 flex items-center justify-between mt-auto">
-                      <span className="text-3xl font-poppins font-bold text-[#6b4f3a]">
-                        ₹{Number(item.price).toFixed(0)}
-                      </span>
+                    <div className="flex items-center justify-between mt-auto">
+                      <span className="text-sm font-bold text-[#1a1a1a]">₹{Number(item.price).toLocaleString("en-IN")}</span>
                       <button
                         onClick={() => handleMoveToCart(item)}
-                        className="w-14 h-14 bg-[#6b4f3a] text-[#FFFDF6] rounded-[18px] flex items-center justify-center hover:bg-[#976E2A] transition-all duration-500 shadow-xl shadow-[#6b4f3a]/10 group/btn"
+                        className="w-9 h-9 bg-[#5A2D0C] text-white rounded-full flex items-center justify-center hover:bg-[#A85721] transition-all shadow-sm"
                       >
-                        <ShoppingBag size={20} strokeWidth={1.5} className="group-hover/btn:scale-110 transition-transform" />
+                        <ShoppingBag size={14} strokeWidth={1.5} />
                       </button>
                     </div>
                   </div>
@@ -143,25 +134,18 @@ const Wishlist = () => {
         )}
       </div>
 
-      {/* Premium Toast Notification System */}
+      {/* Toast */}
       <AnimatePresence>
         {feedbackMessage && (
           <motion.div
-            initial={{ opacity: 0, y: 50, x: "-50%" }}
-            animate={{ opacity: 1, y: 0, x: "-50%" }}
-            exit={{ opacity: 0, y: 20, x: "-50%" }}
-            className="fixed bottom-12 left-1/2 z-50 bg-[#6b4f3a] border border-[#FAF4E3]/10 text-[#FAF4E3] px-8 py-5 rounded-[24px] shadow-2xl flex items-center gap-6 backdrop-blur-xl max-w-md w-[90%]"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#5A2D0C] text-[#F7F2EA] px-5 py-3.5 rounded-lg shadow-2xl flex items-center gap-3 max-w-sm w-auto"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#FAF4E3]/10 flex items-center justify-center text-[#976E2A]">
-              <Sparkles size={20} />
-            </div>
-            <p className="text-[14px] font-poppins font-bold uppercase tracking-widest flex-1">{feedbackMessage}</p>
-            <button
-              onClick={() => setFeedbackMessage(null)}
-              className="opacity-40 hover:opacity-100 transition-opacity"
-            >
-              <X size={20} />
-            </button>
+            <Sparkles size={13} />
+            <p className="text-[13px] font-semibold whitespace-nowrap">{feedbackMessage}</p>
+            <button onClick={() => setFeedbackMessage(null)} className="opacity-60 hover:opacity-100 ml-2"><X size={14} /></button>
           </motion.div>
         )}
       </AnimatePresence>

@@ -22,6 +22,8 @@ const ProductDetail = () => {
 
   const { addToCart, addToWishlist, removeFromWishlist, wishlist, cart } = useStore();
   const isWishlisted = wishlist.some(item => item.id === id);
+  const currentCartId = selectedSize ? `${id}-${selectedSize.size}` : id;
+  const isInCart = cart.some(item => (item.cartId || item.id) === currentCartId);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -32,7 +34,8 @@ const ProductDetail = () => {
           const data = { id: docSnap.id, ...docSnap.data() };
           setProduct(data);
           if (data.size_prices && data.size_prices.length > 0) {
-            setSelectedSize(data.size_prices[0]);
+            const lSize = data.size_prices.find(s => s.size?.toUpperCase() === 'L');
+            setSelectedSize(lSize || data.size_prices[0]);
           }
 
           const q = query(collection(db, "products"), limit(4));
@@ -63,7 +66,7 @@ const ProductDetail = () => {
       const isInCartWithSize = cart.some(item => item.cartId === cartItemId);
       
       if (isInCartWithSize) {
-        triggerToast("Item is already in your shopping bag!");
+        navigate('/cart');
         return;
       }
       
@@ -282,7 +285,7 @@ const ProductDetail = () => {
                   onClick={() => addToCollection('cart')}
                   className="w-full h-12 bg-white border-2 border-neutral-900 text-neutral-900 font-medium text-xs uppercase tracking-widest hover:bg-neutral-950 hover:text-white transition-all duration-300"
                 >
-                  Add to Shopping Bag
+                  {isInCart ? "Item added to cart" : "Add to Shopping Bag"}
                 </button>
                 <button
                   onClick={() => addToCollection('cart')}

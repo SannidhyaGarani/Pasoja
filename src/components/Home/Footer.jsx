@@ -22,7 +22,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#E6D8C3] pt-20 lg:pt-28 pb-12 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        
+
         {/* ================= MAIN FOOTER GRID ================= */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-y-12 gap-x-8 mb-20">
 
@@ -38,7 +38,7 @@ const Footer = () => {
             <p className="text-[#333333]/80 font-poppins text-[15px] leading-relaxed">
               Elevate your style with our curated collection of premium, ethically-made apparel. Crafted with attention to detail and quality.
             </p>
-            
+
             {/* SOCIAL LINKS */}
             <div className="flex gap-3 mt-4">
               {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
@@ -91,7 +91,7 @@ const Footer = () => {
             <h4 className="text-[13px] font-poppins font-bold uppercase tracking-[0.3em] text-[#A85721] mb-6">
               Get In Touch
             </h4>
-            
+
             <div className="flex flex-col gap-5 mb-8">
               <div className="flex items-start gap-3">
                 <MapPin size={18} className="text-[#A85721] flex-shrink-0 mt-0.5" />
@@ -171,7 +171,7 @@ const Footer = () => {
           <p className="text-[#333333]/70 font-poppins text-sm text-center md:text-left">
             © {currentYear} Pasoja. All rights reserved.
           </p>
-          
+
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
               <a key={item} href="#" className="text-[#5A2D0C]/70 hover:text-[#A85721] transition-colors font-medium">

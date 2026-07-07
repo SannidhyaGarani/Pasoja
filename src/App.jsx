@@ -37,16 +37,17 @@ const AppRoutes = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
-          {/* <Route path="/login" element={<Login />} /> */}
-          {/* <Route path="/signup" element={<Signup />} /> */}
-          {/* <Route path="/cart" element={<Cart />} /> */}
-          {/* <Route path="/checkout" element={<Checkout />} /> */}
-          {/* <Route path="/wishlist" element={<Wishlist />} /> */}
-          {/* <Route path="/account" element={<Account />} /> */}
-          {/* <Route path="/about" element={<About />} /> */}
-          {/* <Route path="/contact" element={<Contact />} /> */}
-          {/* <Route path="/shop" element={<Shop />} /*/}
-          {/* <Route path="/orders" element={<Orders />} /> */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/shop" element={<Shop />} />
+
+          <Route path="/orders" element={<Orders />} />
           {/* <Route path="/benefits" element={<Benefits />} /> */}
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/product/:id/quickview" element={<QuickView />} />

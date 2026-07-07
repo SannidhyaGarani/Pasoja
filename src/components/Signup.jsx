@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "./useAuth";
-import { Mail, Lock, User, ArrowRight, Leaf, AlertCircle, ShieldCheck, Eye, EyeOff, Sparkles, ChevronLeft } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Signup = () => {
@@ -14,8 +14,6 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const premiumEase = [0.25, 1, 0.5, 1];
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -24,191 +22,127 @@ const Signup = () => {
       await signup(email, password, displayName);
       navigate("/");
     } catch {
-      setError("We encountered an error initializing your profile. Please check your data and retry.");
+      setError("Failed to create account. Please check your details and try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-transparent text-[#6b4f3a] flex relative overflow-hidden selection:bg-[#976E2A] selection:text-[#FFFDF6] pt-16 md:pt-0">
+    <div className="min-h-screen bg-[#F7F2EA] flex relative overflow-hidden pt-16 md:pt-0">
+      <div className="max-w-[1300px] mx-auto px-5 md:px-8 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 min-h-screen relative z-10 py-20 lg:py-0 w-full">
 
-      {/* Background Texture Overlay */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/p6-grain.png')] mix-blend-multiply" />
-
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex flex-col lg:flex-row items-center justify-between gap-16 min-h-screen relative z-10 py-20 lg:py-0">
-
-        {/* LEFT COLUMN: BRAND NARRATIVE */}
+        {/* LEFT: Brand Narrative */}
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
+          initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: premiumEase }}
-          className="lg:w-1/2 space-y-12"
+          transition={{ duration: 0.7 }}
+          className="lg:w-1/2 space-y-6"
         >
-          <div className="space-y-6">
-            <Link to="/" className="flex items-center gap-3 text-[14px] font-poppins font-bold uppercase tracking-[0.4em] text-[#6b4f3a] hover:text-[#976E2A] transition-colors group">
-              <div className="w-8 h-8 rounded-full bg-[#6b4f3a]/5 flex items-center justify-center border border-[#6b4f3a]/10">
-                <Leaf size={14} className="text-[#976E2A]" />
-              </div>
-              <span>Sattu Heritage</span>
-            </Link>
+          <Link to="/" className="inline-flex">
+            <img src="/img/Pasoja option-01.png" alt="Pasoja" className="h-10 md:h-12 object-contain" />
+          </Link>
 
-            <h1 className="text-4xl md:text-5xl xl:text-6xl font-poppins capitalize  font-bold text-[#6b4f3a] leading-[1.05] tracking-tight">
-              Start your <br />
-              journey to <br />
-              <span className="text-[#976E2A]">wellness.</span>
-            </h1>
+          <h1 className="text-3xl md:text-4xl xl:text-5xl font-bold text-[#1a1a1a] leading-[1.1] tracking-tight">
+            Begin your<br />
+            style journey with{" "}
+            <span className="text-[#A85721]">Pasoja.</span>
+          </h1>
 
-            <div className="w-20 h-px bg-[#976E2A]/30" />
+          <div className="w-12 h-[2px] bg-[#A85721]" />
 
-            <p className="text-lg md:text-xl text-[#6b4f3a]/70 font-poppins leading-relaxed max-w-md">
-              Create an account to track your orders, save your wishlist, and enjoy a faster checkout experience.
-            </p>
-          </div>
+          <p className="text-[15px] text-[#333333]/60 leading-relaxed max-w-md">
+            Create an account to track orders, save your wishlist, and enjoy a faster checkout experience.
+          </p>
         </motion.div>
 
-        {/* RIGHT COLUMN: REGISTRY CARD */}
+        {/* RIGHT: Registration Card */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: premiumEase, delay: 0.2 }}
-          className="lg:w-[500px] w-full"
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="lg:w-[460px] w-full"
         >
-          <div className="bg-[#FFFDF6] border border-[#E3DBC5] mb-20 mt-35 rounded-[48px] p-10 md:p-14 shadow-[0_40px_100px_rgba(32,59,35,0.06)] relative overflow-hidden group">
-
-            {/* Card Header Emblem */}
-            <div className="flex flex-col items-center mb-12 text-center">
-              <div className="w-20 h-20 rounded-3xl bg-[#FAF4E3] border border-[#E3DBC5] flex items-center justify-center mb-6 shadow-sm rotate-3">
-                <Leaf size={32} className="text-[#6b4f3a] fill-current opacity-80" />
-              </div>
-              <h2 className="text-4xl font-poppins font-bold text-[#6b4f3a] tracking-tight mb-3">
+          <div className="bg-white border border-[#E6D8C3]/50 rounded-sm p-7 sm:p-10 shadow-sm">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-[#1a1a1a] tracking-tight mb-1">
                 Create Account
               </h2>
-              <p className="text-base text-[#6b4f3a]/50 font-poppins leading-relaxed">
-                Join us today for a premium experience.
+              <p className="text-[13px] text-[#5A2D0C]/40">
+                Join us for a premium shopping experience
               </p>
             </div>
 
-            {/* Error Message Diagnostics */}
             <AnimatePresence mode="wait">
               {error && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mb-8 overflow-hidden"
+                  className="mb-5 overflow-hidden"
                 >
-                  <div className="p-5 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-4 text-red-700 text-base font-medium">
-                    <AlertCircle size={18} className="shrink-0 text-red-500" />
-                    <span>Failed to create account. Please try again.</span>
+                  <div className="p-3.5 bg-red-50 border border-red-100 rounded-sm flex items-start gap-3 text-red-700 text-[13px] font-medium">
+                    <AlertCircle size={15} className="shrink-0 text-red-500 mt-0.5" />
+                    <span>{error}</span>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Identity Block */}
-              <div className="space-y-2">
-                <label className="text-[14px] font-poppins font-bold uppercase tracking-[0.2em] text-[#6b4f3a]/40 ml-1">
-                  Full Name
-                </label>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#5A2D0C]/60">Full Name</label>
                 <div className="relative">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#6b4f3a]/30">
-                    <User size={20} strokeWidth={1.5} />
-                  </div>
-                  <input
-                    type="text"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="Enter your name"
-                    className="w-full pl-16 pr-6 py-5 rounded-2xl bg-[#FFFDF6] border border-[#E3DBC5] focus:border-[#6b4f3a] outline-none transition-all duration-300 font-poppins text-lg text-[#6b4f3a] placeholder:text-[#6b4f3a]/20 shadow-sm"
-                    required
-                  />
+                  <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A2D0C]/25" />
+                  <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Your name" className="w-full pl-10 pr-4 py-3 bg-[#F7F2EA] border border-[#E6D8C3] rounded-sm text-[14px] text-[#1a1a1a] outline-none focus:border-[#A85721] transition-colors placeholder:text-[#5A2D0C]/25" required />
                 </div>
               </div>
 
-              {/* Endpoint Block */}
-              <div className="space-y-2">
-                <label className="text-[14px] font-poppins font-bold uppercase tracking-[0.2em] text-[#6b4f3a]/40 ml-1">
-                  Email Address
-                </label>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#5A2D0C]/60">Email Address</label>
                 <div className="relative">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#6b4f3a]/30">
-                    <Mail size={20} strokeWidth={1.5} />
-                  </div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="email@example.com"
-                    className="w-full pl-16 pr-6 py-5 rounded-2xl bg-[#FFFDF6] border border-[#E3DBC5] focus:border-[#6b4f3a] outline-none transition-all duration-300 font-poppins text-lg text-[#6b4f3a] placeholder:text-[#6b4f3a]/20 shadow-sm"
-                    required
-                  />
+                  <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A2D0C]/25" />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com" className="w-full pl-10 pr-4 py-3 bg-[#F7F2EA] border border-[#E6D8C3] rounded-sm text-[14px] text-[#1a1a1a] outline-none focus:border-[#A85721] transition-colors placeholder:text-[#5A2D0C]/25" required />
                 </div>
               </div>
 
-              {/* Cipher Block */}
-              <div className="space-y-2">
-                <label className="text-[14px] font-poppins font-bold uppercase tracking-[0.2em] text-[#6b4f3a]/40 ml-1">
-                  Password
-                </label>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#5A2D0C]/60">Password</label>
                 <div className="relative">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#6b4f3a]/30">
-                    <Lock size={20} strokeWidth={1.5} />
-                  </div>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Min. 6 characters"
-                    className="w-full pl-16 pr-14 py-5 rounded-2xl bg-[#FFFDF6] border border-[#E3DBC5] focus:border-[#6b4f3a] outline-none transition-all duration-300 font-poppins text-lg text-[#6b4f3a] placeholder:text-[#6b4f3a]/20 shadow-sm"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-6 top-1/2 -translate-y-1/2 text-[#6b4f3a]/20 hover:text-[#6b4f3a] transition-colors"
-                   >
-                    {showPassword ? <EyeOff size={20} strokeWidth={1.5} /> : <Eye size={20} strokeWidth={1.5} />}
+                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A2D0C]/25" />
+                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min. 6 characters" className="w-full pl-10 pr-10 py-3 bg-[#F7F2EA] border border-[#E6D8C3] rounded-sm text-[14px] text-[#1a1a1a] outline-none focus:border-[#A85721] transition-colors placeholder:text-[#5A2D0C]/25" required />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5A2D0C]/25 hover:text-[#5A2D0C] transition-colors">
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
 
-              {/* Main Committal Action */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-16 rounded-2xl bg-[#6b4f3a] text-white font-poppins font-bold text-lg uppercase tracking-[0.2em] shadow-xl hover:bg-[#2E1A0C] transition-all duration-300 flex items-center justify-center gap-4 disabled:opacity-50 mt-6"
+                className="w-full py-3.5 bg-[#5A2D0C] hover:bg-[#A85721] text-white font-bold text-[12px] uppercase tracking-[0.2em] rounded-sm transition-all duration-300 flex items-center justify-center gap-2.5 disabled:opacity-50 shadow-sm mt-2"
               >
                 {loading ? (
-                  <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
                     <span>Create Account</span>
-                    <ArrowRight size={20} />
+                    <ArrowRight size={14} />
                   </>
                 )}
               </button>
             </form>
 
-            <div className="mt-12 text-center">
-              <p className="text-base text-[#6b4f3a]/60 font-poppins">
+            <div className="mt-6 text-center">
+              <p className="text-[13px] text-[#5A2D0C]/40">
                 Already have an account?{" "}
-                <Link to="/login" className="text-[#976E2A] font-bold hover:text-[#6b4f3a] underline underline-offset-4 ml-1">
-                  Login here
+                <Link to="/login" className="text-[#A85721] font-bold hover:text-[#5A2D0C] transition-colors">
+                  Sign in
                 </Link>
               </p>
             </div>
           </div>
         </motion.div>
-      </div>
-
-      {/* Footer Branding Detail */}
-      <div className="absolute bottom-10 left-0 w-full px-6 md:px-12 pointer-events-none flex justify-between items-center z-10 opacity-40">
-        <div className="text-[14px] font-poppins font-bold uppercase tracking-[0.3em]">
-          © 2026 SATTU HERITAGE
-        </div>
-        <div className="w-12 h-px bg-[#6b4f3a]/20" />
       </div>
     </div>
   );
