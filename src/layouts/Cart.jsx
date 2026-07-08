@@ -16,119 +16,79 @@ const Cart = () => {
   const total = cart.reduce((sum, item) => sum + ((Number(item.price) || 0) * (item.quantity || 1)), 0);
 
   const handleCheckout = () => {
-    if (!user) {
-      navigate("/login?redirect=checkout");
-    } else {
-      navigate("/checkout");
-    }
+    if (!user) navigate("/login?redirect=checkout");
+    else navigate("/checkout");
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-[#E6D8C3] border-t-[#A85721] rounded-full animate-spin" />
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#5A2D0C]/40">Loading your bag...</p>
+          <div className="w-8 h-8 border border-white/10 border-t-white rounded-full animate-spin" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/25">Loading your bag...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0a0a0a]">
       <PageHeader
         title="Shopping Bag"
         subtitle="Review your selections before checkout"
-        breadcrumbItems={[
-          { label: "Home", path: "/" },
-          { label: "Shop", path: "/shop" },
-          { label: "Cart" },
-        ]}
+        breadcrumbItems={[{ label: 'Home', path: '/' }, { label: 'Shop', path: '/shop' }, { label: 'Cart' }]}
       />
 
-      <div className="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-10 md:py-14">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-          {/* CART ITEMS */}
+          {/* Cart Items */}
           <div className="lg:col-span-8 w-full">
             <AnimatePresence mode="popLayout">
               {cart.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-20 max-w-md mx-auto"
-                >
-                  <div className="w-16 h-16 rounded-full bg-[#F7F2EA] border border-[#E6D8C3] flex items-center justify-center text-[#A85721] mx-auto mb-5">
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20 max-w-md mx-auto">
+                  <div className="w-16 h-16 border border-white/10 flex items-center justify-center text-white/25 mx-auto mb-5">
                     <ShoppingBag size={24} strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-2">Your bag is empty</h3>
-                  <p className="text-[13px] text-[#333333]/50 leading-relaxed mb-6">
-                    Looks like you haven't added anything yet. Start exploring our collection.
-                  </p>
-                  <Link
-                    to="/shop"
-                    className="inline-flex items-center gap-2.5 px-6 py-3 bg-[#5A2D0C] text-white font-bold text-[11px] uppercase tracking-[0.2em] rounded-sm hover:bg-[#A85721] transition-all shadow-sm"
-                  >
-                    Continue Shopping
-                    <ArrowRight size={13} />
+                  <h3 className="text-xl font-black text-white uppercase mb-2">Your bag is empty</h3>
+                  <p className="text-[13px] text-white/35 leading-relaxed mb-6">Start exploring our collection.</p>
+                  <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">
+                    Continue Shopping <ArrowRight size={13} />
                   </Link>
                 </motion.div>
               ) : (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#E6D8C3]/40">
-                    <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#A85721]">
-                      {cart.length} {cart.length === 1 ? "Item" : "Items"}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
+                      {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
                     </h2>
                   </div>
-
-                  <motion.div layout className="space-y-3">
+                  <motion.div layout className="space-y-2">
                     <AnimatePresence mode="popLayout">
                       {cart.map((item, idx) => (
                         <motion.div
                           key={`${item.cartId || item.id}-${idx}`}
                           layout
-                          initial={{ opacity: 0, y: 15 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, x: -30 }}
+                          initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -30 }}
                           transition={{ duration: 0.4 }}
-                          className="group bg-[#F7F2EA] rounded-sm p-4 flex flex-col sm:flex-row items-center gap-4 border border-[#E6D8C3]/30 hover:border-[#A85721]/15 transition-all"
+                          className="group bg-[#111111] border border-white/[0.06] p-4 flex flex-col sm:flex-row items-center gap-4 hover:border-white/[0.12] transition-all"
                         >
-                          <Link to={`/product/${item.id}`} className="w-20 h-24 bg-white rounded-sm shrink-0 overflow-hidden border border-[#E6D8C3]/30 p-1.5">
+                          <Link to={`/product/${item.id}`} className="w-20 h-24 bg-[#1a1a1a] shrink-0 overflow-hidden border border-white/[0.06]">
                             <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                           </Link>
-
                           <div className="flex-1 text-center sm:text-left space-y-0.5">
-                            {item.category && (
-                              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#A85721]">{item.category}</span>
-                            )}
-                            <h3 className="text-sm font-bold text-[#1a1a1a] group-hover:text-[#A85721] transition-colors leading-tight">
-                              {item.name}
-                            </h3>
-                            {item.size && (
-                              <p className="text-[11px] font-medium text-[#5A2D0C]/65 uppercase tracking-wider">
-                                Size: {item.size}
-                              </p>
-                            )}
-                            <p className="text-sm font-semibold text-[#1a1a1a] mt-1">
-                              ₹{Number(item.price).toLocaleString("en-IN")}
-                            </p>
+                            {item.category && <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/25">{item.category}</span>}
+                            <h3 className="text-sm font-bold text-white/85 group-hover:text-white transition-colors leading-tight">{item.name}</h3>
+                            {item.size && <p className="text-[11px] font-medium text-white/35 uppercase tracking-wider">Size: {item.size}</p>}
+                            <p className="text-sm font-bold text-white mt-1">₹{Number(item.price).toLocaleString("en-IN")}</p>
                           </div>
-
-                          <div className="flex items-center bg-white border border-[#E6D8C3]/40 rounded-sm h-9">
-                            <button
-                              onClick={() => updateQuantity(item.cartId || item.id, -1)}
-                              className="w-8 h-full flex items-center justify-center text-[#5A2D0C]/40 hover:text-[#A85721] transition-colors text-sm font-bold"
-                            >−</button>
-                            <span className="w-7 text-center text-[13px] font-bold text-[#1a1a1a]">{item.quantity || 1}</span>
-                            <button
-                              onClick={() => updateQuantity(item.cartId || item.id, 1)}
-                              className="w-8 h-full flex items-center justify-center text-[#5A2D0C]/40 hover:text-[#A85721] transition-colors text-sm font-bold"
-                            >+</button>
+                          <div className="flex items-center bg-[#1a1a1a] border border-white/10 h-9">
+                            <button onClick={() => updateQuantity(item.cartId || item.id, -1)} className="w-8 h-full flex items-center justify-center text-white/35 hover:text-white transition-colors text-sm font-bold">−</button>
+                            <span className="w-7 text-center text-[13px] font-bold text-white">{item.quantity || 1}</span>
+                            <button onClick={() => updateQuantity(item.cartId || item.id, 1)} className="w-8 h-full flex items-center justify-center text-white/35 hover:text-white transition-colors text-sm font-bold">+</button>
                           </div>
-
-                          <button
-                            onClick={() => removeFromCart(item.cartId || item.id)}
-                            className="p-2.5 rounded-sm bg-white text-[#5A2D0C]/30 border border-[#E6D8C3]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all"
+                          <button onClick={() => removeFromCart(item.cartId || item.id)}
+                            className="p-2.5 bg-[#1a1a1a] text-white/25 border border-white/10 hover:bg-red-900/30 hover:text-red-400 hover:border-red-500/20 transition-all"
                             aria-label="Remove item"
                           >
                             <Trash2 size={14} strokeWidth={1.5} />
@@ -142,90 +102,73 @@ const Cart = () => {
             </AnimatePresence>
           </div>
 
-          {/* ORDER SUMMARY */}
+          {/* Order Summary */}
           {cart.length > 0 && (
-            <aside className="lg:col-span-4 w-full sticky top-32">
-              <div className="bg-[#F7F2EA] rounded-sm border border-[#E6D8C3]/50 p-6 shadow-sm">
-                <h2 className="text-sm font-bold text-[#1a1a1a] mb-5 pb-3 border-b border-[#E6D8C3]/40">
-                  Order Summary
-                </h2>
-
+            <aside className="lg:col-span-4 w-full sticky top-28">
+              <div className="bg-[#111111] border border-white/[0.06] p-6">
+                <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mb-5 pb-4 border-b border-white/[0.06]">Order Summary</h2>
                 <div className="space-y-3 mb-5">
-                  <div className="flex justify-between text-[12px] text-[#5A2D0C]/50">
+                  <div className="flex justify-between text-[12px] text-white/35">
                     <span>Subtotal</span>
-                    <span className="font-bold text-[#1a1a1a]">₹{total.toLocaleString("en-IN")}</span>
+                    <span className="font-bold text-white">₹{total.toLocaleString("en-IN")}</span>
                   </div>
-                  <div className="flex justify-between text-[12px] text-[#5A2D0C]/50">
+                  <div className="flex justify-between text-[12px] text-white/35">
                     <span>Shipping</span>
-                    <span className="text-[#A85721] font-semibold">Free</span>
+                    <span className="text-white font-semibold">Free</span>
                   </div>
-                  <div className="flex justify-between text-[12px] text-[#5A2D0C]/50">
+                  <div className="flex justify-between text-[12px] text-white/35">
                     <span>GST (Included)</span>
-                    <span className="font-bold text-[#1a1a1a]">₹0</span>
+                    <span className="font-bold text-white">₹0</span>
                   </div>
 
                   {/* Gift Note */}
-                  <div className="pt-2 border-t border-[#E6D8C3]/30">
-                    <button
-                      onClick={() => setIsGiftNoteOpen(!isGiftNoteOpen)}
-                      className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#A85721] hover:text-[#5A2D0C] transition-colors"
+                  <div className="pt-2 border-t border-white/[0.06]">
+                    <button onClick={() => setIsGiftNoteOpen(!isGiftNoteOpen)}
+                      className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-white/35 hover:text-white transition-colors"
                     >
-                      <Gift size={13} strokeWidth={1.5} />
-                      <span>{isGiftNoteOpen ? "Remove gift note" : "Add a gift note"}</span>
+                      <Gift size={12} strokeWidth={1.5} />
+                      {isGiftNoteOpen ? 'Remove gift note' : 'Add a gift note'}
                     </button>
                     <AnimatePresence>
                       {isGiftNoteOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden mt-2"
-                        >
-                          <textarea
-                            value={giftNote}
-                            onChange={(e) => setGiftNote(e.target.value)}
-                            placeholder="Write your message..."
-                            maxLength={180}
-                            className="w-full h-16 bg-white border border-[#E6D8C3] rounded-sm p-2.5 text-[12px] text-[#1a1a1a] placeholder-[#5A2D0C]/25 focus:outline-none focus:border-[#A85721] resize-none"
+                        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden mt-2">
+                          <textarea value={giftNote} onChange={(e) => setGiftNote(e.target.value)}
+                            placeholder="Write your message..." maxLength={180}
+                            className="w-full h-16 bg-[#0a0a0a] border border-white/10 p-2.5 text-[12px] text-white placeholder-white/20 focus:outline-none focus:border-white/25 resize-none"
                           />
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
 
-                  <div className="pt-4 mt-2 border-t border-dashed border-[#E6D8C3] flex justify-between items-end">
-                    <span className="text-[11px] font-bold text-[#A85721] uppercase tracking-[0.15em]">Total</span>
-                    <span className="text-2xl font-bold text-[#1a1a1a]">₹{total.toLocaleString("en-IN")}</span>
+                  <div className="pt-4 mt-2 border-t border-dashed border-white/[0.08] flex justify-between items-end">
+                    <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Total</span>
+                    <span className="text-2xl font-black text-white">₹{total.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
 
-                <button
-                  onClick={handleCheckout}
-                  className="w-full py-3.5 bg-[#5A2D0C] hover:bg-[#A85721] text-white font-bold text-[12px] uppercase tracking-[0.2em] rounded-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-sm mb-5"
+                <button onClick={handleCheckout}
+                  className="w-full py-4 bg-white hover:bg-white/85 text-black font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5"
                 >
-                  <span>Checkout</span>
-                  <ChevronRight size={14} />
+                  Checkout <ChevronRight size={14} />
                 </button>
 
-                <div className="space-y-3 pt-4 border-t border-[#E6D8C3]/30">
+                <div className="space-y-3 pt-4 border-t border-white/[0.06]">
                   {[
-                    { icon: ShieldCheck, title: "Secure Checkout", sub: "256-bit encryption" },
-                    { icon: Truck, title: "Free Shipping", sub: "On orders ₹1999+" },
-                    { icon: RotateCcw, title: "Easy Returns", sub: "30-day hassle-free" },
-                  ].map((badge, i) => {
-                    const Icon = badge.icon;
-                    return (
-                      <div key={i} className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white border border-[#E6D8C3]/40 flex items-center justify-center text-[#A85721] shrink-0">
-                          <Icon size={13} strokeWidth={1.5} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-[#1a1a1a] uppercase tracking-wide">{badge.title}</p>
-                          <p className="text-[10px] text-[#5A2D0C]/35">{badge.sub}</p>
-                        </div>
+                    { icon: ShieldCheck, title: 'Secure Checkout', sub: '256-bit encryption' },
+                    { icon: Truck, title: 'Free Shipping', sub: 'On orders ₹1999+' },
+                    { icon: RotateCcw, title: 'Easy Returns', sub: '30-day hassle-free' },
+                  ].map(({ icon: Icon, title, sub }, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-8 h-8 border border-white/10 flex items-center justify-center text-white/25 shrink-0">
+                        <Icon size={13} strokeWidth={1.5} />
                       </div>
-                    );
-                  })}
+                      <div>
+                        <p className="text-[10px] font-bold text-white/60 uppercase tracking-wide">{title}</p>
+                        <p className="text-[10px] text-white/25">{sub}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </aside>

@@ -22,45 +22,45 @@
     -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply bg-white text-[#333333] font-sans antialiased min-h-screen text-[14px];
+    @apply bg-[#0a0a0a] text-white font-sans antialiased min-h-screen text-[14px];
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply text-black font-sans;
+    @apply text-white font-sans;
   }
   ::selection {
-    background-color: #A85721;
-    color: #F7F2EA;
+    background-color: #ffffff;
+    color: #000000;
   }
 }
 
 /* Custom Swiper Pagination */
 .swiper-pagination-bullet {
-  width: 6px !important;
-  height: 6px !important;
-  background: #5A2D0C !important;
-  opacity: 0.2 !important;
+  width: 4px !important;
+  height: 4px !important;
+  background: rgba(255,255,255,0.2) !important;
+  opacity: 1 !important;
   transition: all 0.3s ease !important;
-  border-radius: 3px !important;
+  border-radius: 2px !important;
 }
 .swiper-pagination-bullet-active {
   width: 20px !important;
   opacity: 1 !important;
-  background: #A85721 !important;
-  border-radius: 3px !important;
+  background: #ffffff !important;
+  border-radius: 2px !important;
 }
 
 /* Testimonial dots override */
 .testimonial-dots .swiper-pagination-bullet {
-  width: 8px !important;
-  height: 3px !important;
+  width: 4px !important;
+  height: 4px !important;
   border-radius: 2px !important;
-  background: #5A2D0C !important;
-  opacity: 0.15 !important;
+  background: rgba(255,255,255,0.15) !important;
+  opacity: 1 !important;
 }
 .testimonial-dots .swiper-pagination-bullet-active {
-  width: 24px !important;
+  width: 20px !important;
   opacity: 1 !important;
-  background: #A85721 !important;
+  background: #ffffff !important;
 }
 
 /* Line clamp utility */

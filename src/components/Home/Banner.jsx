@@ -3,124 +3,120 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.7, ease: [0.215, 0.61, 0.355, 1] }
+};
+
 const EditorialStory = () => {
-  const fadeInUp = {
-    initial: { opacity: 0, y: 25 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: "-80px" },
-    transition: { duration: 0.7, ease: [0.215, 0.61, 0.355, 1] }
-  };
-
   return (
-    <section className="py-16 md:py-24 bg-[#F7F2EA] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-5 md:px-8 lg:px-12">
+    <section className="py-20 md:py-28 bg-[#111111] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-        {/* Editorial Frame Layout Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          
-          {/* Left Column: Asymmetrical Double Image Panel */}
-          <div className="grid grid-cols-12 gap-3 sm:gap-5 relative">
-            
-            {/* Primary Large Image */}
-            <motion.div 
-              {...fadeInUp}
-              className="col-span-7 aspect-[3/4] overflow-hidden rounded-sm relative group"
+          {/* ── Left: Asymmetric Double Image Panel ── */}
+          <div className="grid grid-cols-12 gap-3 sm:gap-4 relative">
+            {/* Primary large image */}
+            <motion.div
+              {...fadeUp}
+              className="col-span-7 aspect-[3/4] overflow-hidden relative group"
             >
               <img
                 src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop"
-                alt="Premium textile craftsmanship"
+                alt="Premium craft"
                 className="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#5A2D0C]/15 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </motion.div>
 
-            {/* Secondary Offset Image */}
-            <motion.div 
-              {...fadeInUp}
-              transition={{ ...fadeInUp.transition, delay: 0.2 }}
-              className="col-span-5 aspect-[3/4] overflow-hidden rounded-sm mt-12 sm:mt-16 relative group"
+            {/* Secondary offset image */}
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.18 }}
+              className="col-span-5 aspect-[3/4] overflow-hidden mt-12 sm:mt-20 relative group"
             >
               <img
                 src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop"
-                alt="Artisanal fashion silhouette"
+                alt="Artisanal fashion"
                 className="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#5A2D0C]/15 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </motion.div>
 
-            {/* Floating accent badge */}
+            {/* Floating Year Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 lg:bottom-auto lg:top-1/2 lg:-right-6 lg:left-auto lg:translate-x-0 lg:-translate-y-1/2 z-10 bg-[#5A2D0C] text-[#F7F2EA] px-5 py-3 rounded-sm shadow-lg"
+              transition={{ delay: 0.45, duration: 0.5 }}
+              className="absolute bottom-5 left-1/2 -translate-x-1/2 lg:bottom-auto lg:top-1/2 lg:-right-6 lg:left-auto lg:translate-x-0 lg:-translate-y-1/2 z-10 bg-white text-black px-5 py-3"
             >
-              <span className="text-[10px] uppercase tracking-[0.25em] font-bold block text-[#A85721]">Since</span>
-              <span className="text-xl font-bold">2024</span>
+              <span className="text-[9px] uppercase tracking-[0.3em] font-black block text-black/40 mb-0.5">Since</span>
+              <span className="text-2xl font-black">2024</span>
             </motion.div>
           </div>
 
-          {/* Right Column: Narrative Copy & Call to Action */}
-          <div className="space-y-6 lg:pl-6">
-            <motion.div {...fadeInUp}>
-              <span className="text-[#A85721] font-semibold tracking-[0.3em] uppercase text-[10px] sm:text-[11px] mb-3 block">
+          {/* ── Right: Narrative Copy ── */}
+          <div className="space-y-7 lg:pl-4">
+            <motion.div {...fadeUp}>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold block mb-4">
                 Our Philosophy
               </span>
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1a1a1a] leading-[1.2] tracking-tight">
-                Conscious Craft,<br />Timeless Design
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.1] tracking-tight uppercase">
+                Conscious Craft,<br />Timeless Design.
               </h3>
             </motion.div>
 
-            <motion.div 
-              {...fadeInUp}
-              transition={{ ...fadeInUp.transition, delay: 0.1 }}
-              className="space-y-4 text-[14px] sm:text-[15px] text-[#333333]/80 leading-relaxed"
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.1 }}
+              className="space-y-4 text-[14px] sm:text-[15px] text-white/45 leading-relaxed"
             >
               <p>
                 We believe premium garments should breathe with the skin. Every piece in our core collection originates from natural, raw materials — sourced responsibly and refined through precision craftsmanship.
               </p>
-              <p className="hidden sm:block text-[#333333]/60">
+              <p className="hidden sm:block text-white/30">
                 No rushed trends. No compromises. Just timeless pieces designed to outlast seasons while retaining architectural movement and structural integrity.
               </p>
             </motion.div>
 
-            {/* Metadata Stats */}
-            <motion.div 
-              {...fadeInUp}
-              transition={{ ...fadeInUp.transition, delay: 0.15 }}
-              className="grid grid-cols-2 gap-6 py-6 border-y border-[#5A2D0C]/10"
+            {/* Stats */}
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.15 }}
+              className="grid grid-cols-2 gap-6 py-7 border-y border-white/[0.07]"
             >
               <div>
-                <span className="block text-[10px] font-bold text-[#A85721] uppercase tracking-[0.25em] mb-1.5">Traceability</span>
-                <span className="text-sm text-[#1a1a1a] font-bold">100% Verified Origins</span>
+                <span className="block text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mb-2">Traceability</span>
+                <span className="text-sm text-white font-bold">100% Verified Origins</span>
               </div>
               <div>
-                <span className="block text-[10px] font-bold text-[#A85721] uppercase tracking-[0.25em] mb-1.5">Production</span>
-                <span className="text-sm text-[#1a1a1a] font-bold">Small-Batch Curated</span>
+                <span className="block text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mb-2">Production</span>
+                <span className="text-sm text-white font-bold">Small-Batch Curated</span>
               </div>
             </motion.div>
 
             {/* CTA */}
-            <motion.div 
-              {...fadeInUp}
-              transition={{ ...fadeInUp.transition, delay: 0.2 }}
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.2 }}
             >
               <Link
                 to="/about"
                 className="inline-flex items-center gap-3 group"
               >
-                <span className="text-[12px] uppercase tracking-[0.2em] font-bold text-[#5A2D0C] group-hover:text-[#A85721] transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1.5px] after:bg-[#A85721] after:origin-left after:scale-x-100 group-hover:after:scale-x-0 after:transition-transform after:duration-300">
+                <span className="text-[11px] uppercase tracking-[0.2em] font-black text-white/60 group-hover:text-white transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-white/60 after:origin-left">
                   Read Our Story
                 </span>
-                <div className="w-9 h-9 rounded-full border border-[#E6D8C3] flex items-center justify-center group-hover:bg-[#5A2D0C] group-hover:border-[#5A2D0C] transition-all duration-300">
-                  <ArrowUpRight size={15} className="text-[#5A2D0C] group-hover:text-white transition-colors duration-300" />
+                <div className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center group-hover:bg-white group-hover:border-white transition-all duration-400">
+                  <ArrowUpRight size={14} className="text-white/60 group-hover:text-black transition-colors duration-400" />
                 </div>
               </Link>
             </motion.div>
           </div>
         </div>
-
       </div>
     </section>
   );

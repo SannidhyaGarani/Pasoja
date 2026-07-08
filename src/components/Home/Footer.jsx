@@ -5,7 +5,6 @@ import {
   Facebook,
   Twitter,
   Youtube,
-  ArrowUpRight,
   Phone,
   Mail,
   MapPin,
@@ -20,105 +19,35 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#E6D8C3] pt-20 lg:pt-28 pb-12 overflow-hidden">
+    <footer className="bg-[#080808] pt-20 lg:pt-28 pb-10 overflow-hidden border-t border-white/[0.06]">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
-        {/* ================= MAIN FOOTER GRID ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-y-12 gap-x-8 mb-20">
-
-          {/* BRAND COLUMN */}
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            <Link to="/" className="flex items-center gap-4">
-              <img
-                src="/img/Pasoja option-01.png"
-                alt="Pasoja Logo"
-                className="h-16 md:h-20 object-contain"
-              />
-            </Link>
-            <p className="text-[#333333]/80 font-poppins text-[15px] leading-relaxed">
-              Elevate your style with our curated collection of premium, ethically-made apparel. Crafted with attention to detail and quality.
-            </p>
-
-            {/* SOCIAL LINKS */}
-            <div className="flex gap-3 mt-4">
-              {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-11 h-11 rounded-full border border-[#5A2D0C]/20 bg-[#F7F2EA] flex items-center justify-center text-[#5A2D0C] hover:bg-[#A85721] hover:text-[#F7F2EA] hover:border-[#A85721] transition-all duration-300 shadow-sm"
-                >
-                  <Icon size={18} strokeWidth={1.75} />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* SHOP LINKS */}
-          <div className="lg:col-span-2">
-            <h4 className="text-[13px] font-poppins font-bold uppercase tracking-[0.3em] text-[#A85721] mb-6">
-              Shop
-            </h4>
-            <ul className="flex flex-col gap-2.5">
-              {['New Arrivals', 'Best Sellers', 'Men', 'Women', 'Accessories', 'Sale'].map((item) => (
-                <li key={item}>
-                  <Link to="/shop" className="text-sm font-poppins text-[#5A2D0C]/80 hover:text-[#A85721] transition-colors flex items-center gap-1.5">
-                    <span>{item}</span>
-                    <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* HELP LINKS */}
-          <div className="lg:col-span-2">
-            <h4 className="text-[13px] font-poppins font-bold uppercase tracking-[0.3em] text-[#A85721] mb-6">
-              Help
-            </h4>
-            <ul className="flex flex-col gap-2.5">
-              {['My Account', 'Track Order', 'Shipping Info', 'Returns & Exchanges', 'Size Guide', 'FAQs'].map((item) => (
-                <li key={item}>
-                  <Link to="/account" className="text-sm font-poppins text-[#5A2D0C]/80 hover:text-[#A85721] transition-colors flex items-center gap-1.5">
-                    <span>{item}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* CONTACT & NEWSLETTER */}
-          <div className="lg:col-span-4">
-            <h4 className="text-[13px] font-poppins font-bold uppercase tracking-[0.3em] text-[#A85721] mb-6">
-              Get In Touch
-            </h4>
-
-            <div className="flex flex-col gap-5 mb-8">
-              <div className="flex items-start gap-3">
-                <MapPin size={18} className="text-[#A85721] flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-[#5A2D0C]/80">123 Fashion Street, Mumbai, Maharashtra 400001</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <Phone size={18} className="text-[#A85721] flex-shrink-0" />
-                <p className="text-sm text-[#5A2D0C]/80">+91 98765 43210</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail size={18} className="text-[#A85721] flex-shrink-0" />
-                <p className="text-sm text-[#5A2D0C]/80">hello@pasoja.com</p>
-              </div>
-            </div>
-
-            {/* NEWSLETTER */}
+        {/* ── BRAND STATEMENT ── */}
+        <div className="mb-16 pb-12 border-b border-white/[0.06]">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
             <div>
-              <h5 className="text-sm font-poppins font-semibold text-[#5A2D0C] mb-3">
-                Subscribe to our Newsletter
-              </h5>
-              <div className="flex gap-3">
+              <Link to="/">
+                <img
+                  src="/img/Pasoja option-01.png"
+                  alt="Pasoja"
+                  className="h-14 md:h-18 object-contain brightness-0 invert mb-5"
+                />
+              </Link>
+              <p className="text-white/35 text-sm leading-relaxed max-w-xs">
+                Elevate your style with our curated collection of premium, ethically-made apparel.
+              </p>
+            </div>
+
+            {/* Newsletter */}
+            <div className="max-w-sm w-full">
+              <h5 className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold mb-4">Join The List</h5>
+              <div className="flex gap-0">
                 <input
                   type="email"
                   placeholder="Your email address"
-                  className="flex-1 px-4 py-3 bg-[#F7F2EA] border border-[#E6D8C3] rounded-xl text-[#5A2D0C] placeholder:text-[#5A2D0C]/40 focus:outline-none focus:border-[#A85721] transition-all"
+                  className="flex-1 px-4 py-3.5 bg-white/5 border border-white/10 text-white placeholder-white/25 text-sm outline-none focus:border-white/30 transition-colors"
                 />
-                <button className="bg-[#A85721] text-[#F7F2EA] px-6 py-3 rounded-xl font-semibold hover:bg-[#C87A3A] transition-all shadow-md">
+                <button className="bg-white text-black px-6 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/85 transition-all duration-300 shrink-0">
                   Join
                 </button>
               </div>
@@ -126,55 +55,113 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* ================= USER BENEFIT STRIP ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-10 border-y border-[#5A2D0C]/10 mb-10">
-          <div className="flex items-center gap-4 p-4">
-            <div className="p-3 rounded-full bg-[#F7F2EA] text-[#A85721] shadow-sm border border-[#E6D8C3]">
-              <Truck size={20} strokeWidth={1.75} />
-            </div>
-            <div>
-              <h4 className="text-sm font-poppins font-semibold text-[#5A2D0C]">Free Shipping</h4>
-              <p className="text-sm font-poppins text-[#333333]/70">On all orders over ₹1999</p>
-            </div>
+        {/* ── MAIN GRID ── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+
+          {/* Shop */}
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 mb-6">Shop</h4>
+            <ul className="flex flex-col gap-3">
+              {['New Arrivals', 'Best Sellers', 'Men', 'Women', 'Accessories', 'Sale'].map((item) => (
+                <li key={item}>
+                  <Link to="/shop" className="text-sm text-white/45 hover:text-white transition-colors duration-300 font-medium">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="flex items-center gap-4 p-4">
-            <div className="p-3 rounded-full bg-[#F7F2EA] text-[#A85721] shadow-sm border border-[#E6D8C3]">
-              <Zap size={20} strokeWidth={1.75} />
-            </div>
-            <div>
-              <h4 className="text-sm font-poppins font-semibold text-[#5A2D0C]">Fast Delivery</h4>
-              <p className="text-sm font-poppins text-[#333333]/70">Delivered in 3-5 working days</p>
-            </div>
+
+          {/* Help */}
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 mb-6">Help</h4>
+            <ul className="flex flex-col gap-3">
+              {['My Account', 'Track Order', 'Shipping Info', 'Returns & Exchanges', 'Size Guide', 'FAQs'].map((item) => (
+                <li key={item}>
+                  <Link to="/account" className="text-sm text-white/45 hover:text-white transition-colors duration-300 font-medium">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="flex items-center gap-4 p-4">
-            <div className="p-3 rounded-full bg-[#F7F2EA] text-[#A85721] shadow-sm border border-[#E6D8C3]">
-              <RotateCcw size={20} strokeWidth={1.75} />
-            </div>
-            <div>
-              <h4 className="text-sm font-poppins font-semibold text-[#5A2D0C]">Easy Returns</h4>
-              <p className="text-sm font-poppins text-[#333333]/70">30-day hassle-free returns</p>
-            </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 mb-6">Company</h4>
+            <ul className="flex flex-col gap-3">
+              {['Our Story', 'Sustainability', 'Careers', 'Press', 'Gallery'].map((item) => (
+                <li key={item}>
+                  <Link to="/about" className="text-sm text-white/45 hover:text-white transition-colors duration-300 font-medium">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="flex items-center gap-4 p-4">
-            <div className="p-3 rounded-full bg-[#F7F2EA] text-[#A85721] shadow-sm border border-[#E6D8C3]">
-              <ShieldCheck size={20} strokeWidth={1.75} />
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 mb-6">Contact</h4>
+            <div className="flex flex-col gap-4 mb-8">
+              <div className="flex items-start gap-3">
+                <MapPin size={15} className="text-white/25 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-white/40 leading-snug">123 Fashion Street, Mumbai 400001</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone size={15} className="text-white/25 flex-shrink-0" />
+                <p className="text-sm text-white/40">+91 98765 43210</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail size={15} className="text-white/25 flex-shrink-0" />
+                <p className="text-sm text-white/40">hello@pasoja.com</p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-sm font-poppins font-semibold text-[#5A2D0C]">Secure Checkout</h4>
-              <p className="text-sm font-poppins text-[#333333]/70">Encrypted payment gateway</p>
+
+            {/* Socials */}
+            <div className="flex gap-2">
+              {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="w-9 h-9 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:border-white/40 transition-all duration-300"
+                >
+                  <Icon size={15} strokeWidth={1.75} />
+                </a>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* ================= BOTTOM LEGAL & COPYRIGHT ================= */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[#333333]/70 font-poppins text-sm text-center md:text-left">
+        {/* ── BENEFITS STRIP ── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 py-10 border-y border-white/[0.06] mb-10">
+          {[
+            { icon: Truck, title: 'Free Shipping', sub: 'On all orders over ₹1999' },
+            { icon: Zap, title: 'Fast Delivery', sub: 'Delivered in 3–5 working days' },
+            { icon: RotateCcw, title: 'Easy Returns', sub: '30-day hassle-free returns' },
+            { icon: ShieldCheck, title: 'Secure Checkout', sub: 'Encrypted payment gateway' },
+          ].map(({ icon: Icon, title, sub }) => (
+            <div key={title} className="flex items-start gap-3 p-3">
+              <div className="p-2 border border-white/10 text-white/30 shrink-0">
+                <Icon size={16} strokeWidth={1.75} />
+              </div>
+              <div>
+                <h4 className="text-[12px] font-bold text-white/70 mb-0.5">{title}</h4>
+                <p className="text-[11px] text-white/30">{sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── BOTTOM BAR ── */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-5">
+          <p className="text-white/25 text-[11px] tracking-wide text-center md:text-left">
             © {currentYear} Pasoja. All rights reserved.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-6 text-sm">
+          <div className="flex flex-wrap justify-center gap-6 text-[11px]">
             {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
-              <a key={item} href="#" className="text-[#5A2D0C]/70 hover:text-[#A85721] transition-colors font-medium">
+              <a key={item} href="#" className="text-white/25 hover:text-white transition-colors font-medium tracking-wide">
                 {item}
               </a>
             ))}
@@ -182,10 +169,10 @@ const Footer = () => {
 
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-12 h-12 bg-[#A85721] text-[#F7F2EA] rounded-full flex items-center justify-center hover:bg-[#C87A3A] transition-all shadow-md order-first md:order-last"
-            aria-label="Scroll back to top"
+            className="w-10 h-10 border border-white/15 text-white/40 flex items-center justify-center hover:bg-white hover:text-black hover:border-white transition-all duration-300 order-first md:order-last"
+            aria-label="Scroll to top"
           >
-            <ChevronUp size={20} strokeWidth={1.75} />
+            <ChevronUp size={18} strokeWidth={2} />
           </button>
         </div>
       </div>

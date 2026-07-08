@@ -29,60 +29,42 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F2EA] flex relative overflow-hidden pt-16 md:pt-0">
-      <div className="max-w-[1300px] mx-auto px-5 md:px-8 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 min-h-screen relative z-10 py-20 lg:py-0 w-full">
+    <div className="min-h-screen bg-[#0a0a0a] flex relative overflow-hidden pt-[72px] md:pt-[80px]">
+      <div className="max-w-[1300px] mx-auto px-5 md:px-10 lg:px-14 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 min-h-[calc(100vh-80px)] relative z-10 py-16 lg:py-0 w-full">
 
-        {/* LEFT: Brand Narrative */}
+        {/* LEFT */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}
           className="lg:w-1/2 space-y-6"
         >
           <Link to="/" className="inline-flex">
-            <img src="/img/Pasoja option-01.png" alt="Pasoja" className="h-10 md:h-12 object-contain" />
+            <img src="/img/Pasoja option-01.png" alt="Pasoja" className="h-10 md:h-12 object-contain brightness-0 invert" />
           </Link>
-
-          <h1 className="text-3xl md:text-4xl xl:text-5xl font-bold text-[#1a1a1a] leading-[1.1] tracking-tight">
-            Begin your<br />
-            style journey with{" "}
-            <span className="text-[#A85721]">Pasoja.</span>
+          <h1 className="text-4xl md:text-5xl xl:text-6xl font-black text-white leading-[1.0] tracking-tight uppercase">
+            Begin Your<br />Style Journey.
           </h1>
-
-          <div className="w-12 h-[2px] bg-[#A85721]" />
-
-          <p className="text-[15px] text-[#333333]/60 leading-relaxed max-w-md">
+          <div className="w-10 h-[1px] bg-white/20" />
+          <p className="text-[15px] text-white/35 leading-relaxed max-w-md">
             Create an account to track orders, save your wishlist, and enjoy a faster checkout experience.
           </p>
         </motion.div>
 
         {/* RIGHT: Registration Card */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }}
           className="lg:w-[460px] w-full"
         >
-          <div className="bg-white border border-[#E6D8C3]/50 rounded-sm p-7 sm:p-10 shadow-sm">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-[#1a1a1a] tracking-tight mb-1">
-                Create Account
-              </h2>
-              <p className="text-[13px] text-[#5A2D0C]/40">
-                Join us for a premium shopping experience
-              </p>
+          <div className="bg-[#111111] border border-white/[0.08] p-7 sm:p-10">
+            <div className="mb-8">
+              <h2 className="text-2xl font-black text-white tracking-tight uppercase mb-1">Create Account</h2>
+              <p className="text-[13px] text-white/30">Join us for a premium shopping experience</p>
             </div>
 
             <AnimatePresence mode="wait">
               {error && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mb-5 overflow-hidden"
-                >
-                  <div className="p-3.5 bg-red-50 border border-red-100 rounded-sm flex items-start gap-3 text-red-700 text-[13px] font-medium">
-                    <AlertCircle size={15} className="shrink-0 text-red-500 mt-0.5" />
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-5 overflow-hidden">
+                  <div className="p-3.5 bg-red-950/50 border border-red-800/40 flex items-start gap-3 text-red-400 text-[12px] font-medium">
+                    <AlertCircle size={14} className="shrink-0 mt-0.5" />
                     <span>{error}</span>
                   </div>
                 </motion.div>
@@ -91,54 +73,53 @@ const Signup = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#5A2D0C]/60">Full Name</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Full Name</label>
                 <div className="relative">
-                  <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A2D0C]/25" />
-                  <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Your name" className="w-full pl-10 pr-4 py-3 bg-[#F7F2EA] border border-[#E6D8C3] rounded-sm text-[14px] text-[#1a1a1a] outline-none focus:border-[#A85721] transition-colors placeholder:text-[#5A2D0C]/25" required />
+                  <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
+                  <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Your name" required
+                    className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a] border border-white/10 text-sm text-white outline-none focus:border-white/30 transition-colors placeholder:text-white/20"
+                  />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#5A2D0C]/60">Email Address</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Email Address</label>
                 <div className="relative">
-                  <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A2D0C]/25" />
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com" className="w-full pl-10 pr-4 py-3 bg-[#F7F2EA] border border-[#E6D8C3] rounded-sm text-[14px] text-[#1a1a1a] outline-none focus:border-[#A85721] transition-colors placeholder:text-[#5A2D0C]/25" required />
+                  <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com" required
+                    className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a] border border-white/10 text-sm text-white outline-none focus:border-white/30 transition-colors placeholder:text-white/20"
+                  />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#5A2D0C]/60">Password</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Password</label>
                 <div className="relative">
-                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5A2D0C]/25" />
-                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min. 6 characters" className="w-full pl-10 pr-10 py-3 bg-[#F7F2EA] border border-[#E6D8C3] rounded-sm text-[14px] text-[#1a1a1a] outline-none focus:border-[#A85721] transition-colors placeholder:text-[#5A2D0C]/25" required />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5A2D0C]/25 hover:text-[#5A2D0C] transition-colors">
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
+                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min. 6 characters" required
+                    className="w-full pl-10 pr-10 py-3 bg-[#0a0a0a] border border-white/10 text-sm text-white outline-none focus:border-white/30 transition-colors placeholder:text-white/20"
+                  />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors">
+                    {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3.5 bg-[#5A2D0C] hover:bg-[#A85721] text-white font-bold text-[12px] uppercase tracking-[0.2em] rounded-sm transition-all duration-300 flex items-center justify-center gap-2.5 disabled:opacity-50 shadow-sm mt-2"
+              <button type="submit" disabled={loading}
+                className="w-full py-4 bg-white hover:bg-white/85 text-black font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2.5 disabled:opacity-50 mt-2"
               >
                 {loading ? (
-                  <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
                 ) : (
-                  <>
-                    <span>Create Account</span>
-                    <ArrowRight size={14} />
-                  </>
+                  <><span>Create Account</span><ArrowRight size={14} /></>
                 )}
               </button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-[13px] text-[#5A2D0C]/40">
+            <div className="mt-6 pt-5 border-t border-white/[0.06] text-center">
+              <p className="text-[13px] text-white/25">
                 Already have an account?{" "}
-                <Link to="/login" className="text-[#A85721] font-bold hover:text-[#5A2D0C] transition-colors">
-                  Sign in
-                </Link>
+                <Link to="/login" className="text-white font-bold hover:text-white/60 transition-colors">Sign in</Link>
               </p>
             </div>
           </div>

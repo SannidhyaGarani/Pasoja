@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Leaf } from 'lucide-react';
 
-const PremiumPreloader = ({ onComplete }) => {
+const Preloader = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [isLifting, setIsLifting] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [phase, setPhase] = useState('loading'); // 'loading' | 'ready'
 
   useEffect(() => {
-    const contentTimer = setTimeout(() => setShowContent(true), 150);
+    const contentTimer = setTimeout(() => setShowContent(true), 80);
 
     const timer = setInterval(() => {
       setProgress((prev) => {
@@ -15,12 +15,11 @@ const PremiumPreloader = ({ onComplete }) => {
           clearInterval(timer);
           return 100;
         }
-        // Organic non-linear slow-down as it approaches completion
         const remaining = 100 - prev;
-        const increment = Math.random() * (remaining > 20 ? 14 : 2.0);
+        const increment = Math.random() * (remaining > 20 ? 13 : 1.8);
         return Math.min(prev + increment, 100);
       });
-    }, 80);
+    }, 75);
 
     return () => {
       clearInterval(timer);
@@ -29,123 +28,150 @@ const PremiumPreloader = ({ onComplete }) => {
   }, []);
 
   useEffect(() => {
-    if (progress === 100) {
-      setTimeout(() => {
-        setIsLifting(true);
+    if (progress >= 100) {
+      setPhase('ready');
+      const exitTimer = setTimeout(() => {
+        setIsExiting(true);
         setTimeout(() => {
           if (onComplete) onComplete();
-        }, 1100); // Aligned precisely with curtain slide duration
-      }, 500);
+        }, 1000);
+      }, 600);
+      return () => clearTimeout(exitTimer);
     }
   }, [progress, onComplete]);
 
-  // Micro progress ring geometry definitions (Calibrated 1px Hairline Architecture)
-  const radius = 46;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
+  const displayProgress = Math.floor(Math.min(progress, 100));
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-[10000] overflow-hidden" style={{ pointerEvents: isExiting ? 'none' : 'auto' }}>
 
-      {/* BRAND ARCHITECTURE: Cinematic Split Curtain Matrices */}
-      <div className="absolute inset-0 flex flex-col w-full h-full" style={{ pointerEvents: 'auto' }}>
-        {/* Top Curtain Panel */}
+      {/* Split curtain panels */}
+      <div className="absolute inset-0 flex flex-col">
+        {/* Top curtain */}
         <div
-          className="w-full h-1/2 bg-[#FAF4E3] border-b border-[#E3DBC5]/30 transition-transform duration-[1100ms] ease-[cubic-bezier(0.85,0,0.15,1)] origin-top"
-          style={{ transform: isLifting ? 'translateY(-100%)' : 'translateY(0%)' }}
+          className="w-full h-1/2 bg-[#080808]"
+          style={{
+            transform: isExiting ? 'translateY(-100%)' : 'translateY(0%)',
+            transition: 'transform 1000ms cubic-bezier(0.85, 0, 0.15, 1)',
+          }}
         />
-        {/* Bottom Curtain Panel */}
+        {/* Bottom curtain */}
         <div
-          className="w-full h-1/2 bg-[#FAF4E3] border-t border-[#E3DBC5]/30 transition-transform duration-[1100ms] ease-[cubic-bezier(0.85,0,0.15,1)] origin-bottom"
-          style={{ transform: isLifting ? 'translateY(100%)' : 'translateY(0%)' }}
+          className="w-full h-1/2 bg-[#080808]"
+          style={{
+            transform: isExiting ? 'translateY(100%)' : 'translateY(0%)',
+            transition: 'transform 1000ms cubic-bezier(0.85, 0, 0.15, 1)',
+          }}
         />
       </div>
 
-      {/* SURFACE OVERLAY: Fine Luxury Paper Grain Texture */}
-      <div
-        className="absolute inset-0 opacity-[0.025] pointer-events-none mix-blend-multiply transition-opacity duration-700"
+      {/* Thin horizontal progress bar — top edge */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] z-30">
+        <div
+          className="h-full bg-white transition-all duration-150 ease-out"
+          style={{ width: `${displayProgress}%` }}
+        />
+      </div>
+
+      {/* Corner decorations */}
+      <div className="absolute inset-5 md:inset-8 pointer-events-none z-20"
+        style={{ opacity: isExiting ? 0 : 1, transition: 'opacity 600ms ease' }}
+      >
+        {/* TL */}
+        <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-white/10" />
+        {/* TR */}
+        <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-white/10" />
+        {/* BL */}
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-white/10" />
+        {/* BR */}
+        <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-white/10" />
+      </div>
+
+      {/* Central content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-20"
         style={{
-          backgroundImage: "url('https://www.transparenttextures.com/patterns/p6-grain.png')",
-          opacity: isLifting ? 0 : 0.025
+          opacity: showContent ? (isExiting ? 0 : 1) : 0,
+          transform: showContent ? (isExiting ? 'translateY(-16px)' : 'translateY(0)') : 'translateY(12px)',
+          transition: 'opacity 700ms ease, transform 700ms ease',
         }}
-      />
+      >
+        {/* Logo */}
+        <div className="mb-10">
+          <img
+            src="/img/Pasoja option-01.png"
+            alt="Pasoja"
+            className="h-14 md:h-16 object-contain brightness-0 invert opacity-90"
+          />
+        </div>
 
-      {/* COMPACTED CENTRAL IDENTITY BLOCK */}
-      <div className={`relative flex flex-col items-center z-20 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] ${showContent ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]'
-        } ${isLifting ? 'opacity-0 -translate-y-8' : ''}`}>
-
-        {/* REFINED MICRO-PROGRESS RING & EMBLEM FRAME */}
-        <div className="relative w-36 h-36 md:w-40 md:h-40 mb-6 flex items-center justify-center">
-
-          {/* Concentric Ambient Guide Rings */}
-          <div className="absolute inset-2 rounded-full border border-[#E3DBC5]/40" />
-          <div className="absolute inset-0 rounded-full border border-dashed border-[#976E2A]/10 scale-[1.04]" />
-
-          {/* Active 1px Golden Progress Track */}
-          <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+        {/* SVG Progress Ring */}
+        <div className="relative w-24 h-24 flex items-center justify-center mb-8">
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+            {/* Track */}
             <circle
-              cx="50"
-              cy="50"
-              r={radius}
-              className="stroke-[#976E2A] transition-all duration-200 ease-out"
-              strokeWidth="1.2"
-              fill="transparent"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
+              cx="50" cy="50" r="44"
+              stroke="rgba(255,255,255,0.06)"
+              strokeWidth="1"
+              fill="none"
+            />
+            {/* Progress */}
+            <circle
+              cx="50" cy="50" r="44"
+              stroke="rgba(255,255,255,0.9)"
+              strokeWidth="1"
+              fill="none"
+              strokeLinecap="square"
+              strokeDasharray={2 * Math.PI * 44}
+              strokeDashoffset={2 * Math.PI * 44 * (1 - progress / 100)}
+              style={{ transition: 'stroke-dashoffset 150ms ease-out' }}
             />
           </svg>
-
-          {/* Centered Protected Logo Frame */}
-          <div className="w-[78%] h-[78%] rounded-full bg-[#FFFDF6] border border-[#E3DBC5]/60 flex items-center justify-center p-4 shadow-sm">
-            <img
-              src="/img/Pasoja option-01.png"
-              alt="Pasoja Logo"
-              className="w-full h-full object-contain filter contrast-[1.01]"
-            />
-          </div>
+          {/* Counter */}
+          <span className="text-[22px] font-black text-white tabular-nums leading-none tracking-tight"
+            style={{ fontFeatureSettings: '"tnum"' }}
+          >
+            {displayProgress}
+          </span>
         </div>
 
-        {/* TYPOGRAPHIC BRAND MATRIX */}
-        <div className="text-center space-y-3 flex flex-col items-center">
-          <div className="flex flex-col items-center">
-            <h1 className="text-xl md:text-2xl font-serif font-bold text-[#5A2D0C] tracking-wide">
-              Pasoja
-            </h1>
-
-            {/* Fine Accent Divider */}
-            <div className="flex items-center gap-2 mt-2 w-32 justify-center">
-              <div className="h-[0.5px] w-4 bg-[#A85721]/30" />
-              <Leaf size={8} className="text-[#A85721]/80 fill-current rotate-45" />
-              <div className="h-[0.5px] w-4 bg-[#A85721]/30" />
-            </div>
-          </div>
-
-          {/* INTERACTIVE KINETIC TEXT ENGINE (Replaces Numerical Counter) */}
-          <div className="h-4 overflow-hidden relative w-48 text-center pt-0.5">
-            <span className={`absolute inset-x-0 mx-auto text-[14px] font-sans font-bold uppercase tracking-[0.25em] text-[#5A2D0C]/50 transition-all duration-500 ease-out transform ${progress === 100 ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
-              }`}>
-              Elevating your style
-            </span>
-            <span className={`absolute inset-x-0 mx-auto text-[14px] font-sans font-bold uppercase tracking-[0.25em] text-[#A85721] transition-all duration-500 ease-out transform ${progress === 100 ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
-              }`}>
-              Ready to shop
-            </span>
-          </div>
+        {/* Status text */}
+        <div className="h-5 overflow-hidden relative flex items-center justify-center">
+          <span
+            className="block text-[10px] font-black uppercase tracking-[0.35em] transition-all duration-500"
+            style={{
+              color: phase === 'ready' ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
+              transform: phase === 'ready' ? 'translateY(0)' : 'translateY(0)',
+            }}
+          >
+            {phase === 'ready' ? 'Ready' : 'Loading'}
+          </span>
         </div>
 
+        {/* Animated dots */}
+        {phase === 'loading' && (
+          <div className="flex gap-1.5 mt-5">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="w-1 h-1 bg-white/20 rounded-full"
+                style={{
+                  animation: `preloader-pulse 1.2s ease-in-out ${i * 0.2}s infinite`,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* EXTERIOR PERIMETER HAIRLINE GALLERY BORDER */}
-      <div
-        className="absolute inset-4 md:inset-6 border border-[#E3DBC5]/30 pointer-events-none transition-all duration-1000 z-30"
-        style={{
-          opacity: isLifting ? 0 : 1,
-          transform: isLifting ? 'scale(1.02)' : 'scale(1)'
-        }}
-      />
+      {/* Inline keyframe */}
+      <style>{`
+        @keyframes preloader-pulse {
+          0%, 80%, 100% { opacity: 0.2; transform: scaleY(1); }
+          40% { opacity: 1; transform: scaleY(1.4); }
+        }
+      `}</style>
     </div>
   );
 };
 
-export default PremiumPreloader;
+export default Preloader;

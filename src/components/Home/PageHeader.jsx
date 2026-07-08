@@ -5,40 +5,32 @@ import { motion } from "framer-motion";
 
 const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
   return (
-    <section className="relative w-full bg-[#F7F2EA] mt-[76px] md:mt-[118px] overflow-hidden">
-      {/* Subtle top border accent */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#A85721]/20 to-transparent" />
-
-      <div className="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-8 md:py-12">
+    <section className="relative w-full bg-[#0d0d0d] mt-[72px] md:mt-[80px] overflow-hidden border-b border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 py-10 md:py-16">
         {/* Breadcrumbs */}
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-2 mb-4"
-        >
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 mb-5">
           {breadcrumbItems.map((item, index) => {
             const isLast = index === breadcrumbItems.length - 1;
             const isFirst = index === 0;
-
             if (isLast) {
               return (
                 <React.Fragment key={index}>
-                  <span className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.2em] text-[#A85721]">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/50">
                     {item.label}
                   </span>
                 </React.Fragment>
               );
             }
-
             return (
               <React.Fragment key={index}>
                 <Link
                   to={item.path || "/"}
-                  className="flex items-center gap-1.5 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.15em] text-[#5A2D0C]/50 hover:text-[#5A2D0C] transition-colors"
+                  className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.2em] text-white/25 hover:text-white/50 transition-colors"
                 >
-                  {isFirst && <Home size={13} strokeWidth={2} />}
+                  {isFirst && <Home size={12} strokeWidth={2} />}
                   <span>{item.label}</span>
                 </Link>
-                <ChevronRight size={12} className="text-[#5A2D0C]/25" strokeWidth={2.5} />
+                <ChevronRight size={10} className="text-white/15" strokeWidth={2.5} />
               </React.Fragment>
             );
           })}
@@ -47,10 +39,10 @@ const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
         {/* Title */}
         {title && (
           <motion.h1
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1a1a1a] tracking-tight leading-[1.1]"
+            className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-[1.0] uppercase"
           >
             {title}
           </motion.h1>
@@ -62,15 +54,12 @@ const PageHeader = ({ title, subtitle, breadcrumbItems = [] }) => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-[14px] sm:text-[15px] text-[#5A2D0C]/50 font-medium mt-2 max-w-lg"
+            className="text-sm text-white/35 font-medium mt-3 max-w-lg"
           >
             {subtitle}
           </motion.p>
         )}
       </div>
-
-      {/* Bottom border */}
-      <div className="h-[1px] bg-[#E6D8C3]/60" />
     </section>
   );
 };

@@ -9,7 +9,7 @@ import Testimonials from '../Home/Testimonials';
 
 const Home = () => {
   return (
-    <main className="bg-white min-h-screen">
+    <main className="bg-[#0a0a0a] min-h-screen">
       <Hero />
       <BenefitsStrip />
       <Bestsellers />
