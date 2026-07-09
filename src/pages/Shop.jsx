@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../components/Firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { Search, Heart, ArrowUpRight, X, ShoppingBag, Eye, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { Search, Heart, ArrowUpRight, X, ShoppingBag, Eye, SlidersHorizontal, ChevronDown, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
@@ -24,6 +24,7 @@ const ProductCard = ({ product, idx, triggerToast }) => {
   const isInCart = cart.some(item => (item.cartId || item.id) === cartItemId);
 
   const handleAction = async (e, type) => {
+    e.preventDefault();
     e.stopPropagation();
     if (type === 'cart') {
       if (isInCart) return;
@@ -35,6 +36,9 @@ const ProductCard = ({ product, idx, triggerToast }) => {
     }
   };
 
+  const rating = product.rating || (4.5 + (idx % 5) * 0.1);
+  const badgeText = product.tag || (idx % 2 === 0 ? 'BEST SELLER' : 'NEW');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -44,57 +48,79 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(`/product/${product.id}`)}
-      className="group relative cursor-pointer flex flex-col"
+      className="group relative cursor-pointer flex flex-col bg-[#111111]/90 hover:bg-[#141414] p-3 rounded-2xl border border-white/[0.04] transition-all duration-300"
     >
-      <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#1a1a1a]">
+      {/* Image */}
+      <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#1a1a1a]">
         <img
           src={product.image || product.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop'}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
-        {savingsPercent > 0 && (
-          <div className="absolute top-3 left-3 z-10">
-            <span className="bg-white text-black px-2 py-0.5 text-[9px] font-black uppercase tracking-wider">-{savingsPercent}%</span>
-          </div>
-        )}
-        <button onClick={(e) => handleAction(e, 'wishlist')}
-          className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isWishlisted ? 'bg-white text-black' : 'bg-black/50 text-white/70 hover:bg-white hover:text-black backdrop-blur-sm'}`}
+
+        {/* Top-left Badge */}
+        <div className="absolute top-3.5 left-3.5 z-10">
+          <span className="bg-white text-black font-extrabold uppercase text-[9px] tracking-wider px-2 py-0.5 rounded shadow-sm">
+            {badgeText}
+          </span>
+        </div>
+
+        {/* Wishlist */}
+        <button
+          onClick={(e) => handleAction(e, 'wishlist')}
+          className="absolute top-3.5 right-3.5 z-30 text-white hover:scale-110 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-300 pointer-events-auto cursor-pointer"
         >
-          <Heart size={13} strokeWidth={isWishlisted ? 0 : 1.8} fill={isWishlisted ? 'currentColor' : 'none'} />
+          <Heart 
+            size={16} 
+            strokeWidth={2} 
+            fill={isWishlisted ? "#ef4444" : "none"} 
+            stroke={isWishlisted ? "#ef4444" : "#ef4444"} 
+            className="transition-colors duration-300"
+          />
         </button>
-        <div className={`absolute inset-x-0 bottom-0 p-2.5 transition-all duration-300 hidden md:block ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'}`}>
-          <div className="flex gap-1.5">
-            <button onClick={(e) => handleAction(e, 'cart')}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${isInCart ? 'bg-white/20 text-white backdrop-blur-md' : 'bg-white text-black hover:bg-white/90 backdrop-blur-md'}`}
-            >
-              <ShoppingBag size={11} strokeWidth={2.5} />
-              {isInCart ? 'In Bag' : 'Add to Bag'}
-            </button>
-            <button onClick={(e) => { e.stopPropagation(); navigate(`/product/${product.id}`); }}
-              className="w-10 flex items-center justify-center bg-white/20 text-white hover:bg-white hover:text-black transition-all duration-300 backdrop-blur-md"
-            >
-              <Eye size={13} strokeWidth={2} />
-            </button>
+      </div>
+
+      {/* Info */}
+      <div className="pt-3 flex flex-col flex-grow">
+        <h3 className="text-[13px] font-semibold text-white/90 leading-snug mb-1 line-clamp-1 group-hover:text-white transition-colors duration-300">
+          {product.name}
+        </h3>
+        
+        {/* Stars */}
+        <div className="flex items-center gap-0.5 text-yellow-500 mb-2">
+          {[...Array(5)].map((_, i) => (
+            <span key={i} className="text-[11px]">★</span>
+          ))}
+          <span className="text-[10px] text-white/40 ml-1.5 font-medium">({rating.toFixed(1)})</span>
+        </div>
+
+        {/* Price & Cart row */}
+        <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-bold text-white">₹{displayPrice?.toLocaleString('en-IN')}</span>
+            {originalPrice !== displayPrice && (
+              <span className="text-[11px] text-white/35 line-through">₹{originalPrice?.toLocaleString('en-IN')}</span>
+            )}
+            {savingsPercent > 0 && (
+              <span className="bg-[#b91c1c] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-sm">
+                -{savingsPercent}%
+              </span>
+            )}
           </div>
+
+          {/* Cart Icon Button */}
+          <button
+            onClick={(e) => handleAction(e, 'cart')}
+            className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 z-30 cursor-pointer relative pointer-events-auto ${
+              isInCart
+                ? 'bg-white text-black border-white'
+                : 'bg-[#191919] text-white/80 border-white/10 hover:bg-[#252525] hover:border-white/20 hover:text-white'
+            }`}
+          >
+            <ShoppingCart size={13} strokeWidth={2} />
+          </button>
         </div>
       </div>
-
-      <div className="pt-3 pb-1 flex flex-col flex-grow">
-        {product.category && (
-          <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold mb-1">{product.category}</span>
-        )}
-        <h3 className="text-[13px] sm:text-sm font-semibold text-white/80 leading-snug mb-2 line-clamp-2 group-hover:text-white transition-colors duration-300">{product.name}</h3>
-        <div className="flex items-center gap-2 mt-auto">
-          <span className="text-sm font-bold text-white">₹{displayPrice?.toLocaleString('en-IN')}</span>
-          {originalPrice !== displayPrice && <span className="text-xs text-white/25 line-through">₹{originalPrice?.toLocaleString('en-IN')}</span>}
-        </div>
-      </div>
-
-      <button onClick={(e) => handleAction(e, 'cart')}
-        className={`md:hidden w-full py-2.5 text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-300 mt-1 ${isInCart ? 'bg-white/10 text-white/50' : 'bg-white/5 text-white/60 border border-white/10 active:bg-white active:text-black'}`}
-      >
-        {isInCart ? 'In Your Bag' : 'Quick Add'}
-      </button>
     </motion.div>
   );
 };

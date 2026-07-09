@@ -10,7 +10,7 @@ const Hero = () => {
 
   const slides = [
     {
-      image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2000&auto=format&fit=crop',
+      image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595080/ChatGPT_Image_Jul_9_2026_04_31_19_PM_nholgd.png',
       tag: 'AW 2025',
       title: 'Define Your\nElegance.',
       subtitle: 'Curated silhouettes for the modern connoisseur.',
@@ -18,7 +18,7 @@ const Hero = () => {
       ctaLink: '/shop'
     },
     {
-      image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2000&auto=format&fit=crop',
+      image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595088/ChatGPT_Image_Jul_9_2026_04_31_27_PM_yam8qn.png',
       tag: 'Just Dropped',
       title: 'New Season\nArrivals.',
       subtitle: 'Fresh perspectives on timeless design.',
@@ -26,7 +26,7 @@ const Hero = () => {
       ctaLink: '/shop?filter=new'
     },
     {
-      image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2000&auto=format&fit=crop',
+      image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png',
       tag: 'Limited Edition',
       title: 'The Artisan\nEdit.',
       subtitle: 'Handcrafted exclusives. Meticulous detailing.',

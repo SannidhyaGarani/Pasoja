@@ -2,6 +2,8 @@ import React from 'react';
 import Hero from '../Home/Hero';
 import CategorySection from '../Home/CategorySection';
 import Bestsellers from '../Home/Bestsellers';
+import FeaturesStrip from '../Home/FeaturesStrip';
+import GallerySwiper from '../Home/GallerySwiper';
 import GenderBanner from '../Home/GenderBanner';
 import Banner from '../Home/Banner';
 import BenefitsStrip from '../Home/BenefitsStrip';
@@ -14,8 +16,10 @@ const Home = () => {
       <BenefitsStrip />
       <CategorySection />
       <Bestsellers />
-      <GenderBanner />
-      <Banner />
+      <FeaturesStrip />
+      <GallerySwiper />
+      {/* <GenderBanner />
+      <Banner /> */}
       <Testimonials />
     </main>
   );
