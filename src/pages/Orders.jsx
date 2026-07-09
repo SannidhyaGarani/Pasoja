@@ -48,7 +48,7 @@ const Orders = () => {
       />
 
       <div className="max-w-4xl mx-auto px-5 md:px-10 py-10 md:py-14">
-        <Link to="/account" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 hover:text-white mb-8 transition-colors">
+        <Link to="/account" className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30 hover:text-white mb-8 transition-colors">
           <ArrowLeft size={12} /> Back to Account
         </Link>
 
@@ -57,16 +57,16 @@ const Orders = () => {
             <div className="w-16 h-16 border border-white/10 flex items-center justify-center text-white/25 mx-auto mb-5">
               <ShoppingBag size={24} strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-black text-white uppercase mb-2">No orders found</h3>
+            <h3 className="text-xl font-light text-white tracking-widest uppercase mb-2">No orders found</h3>
             <p className="text-[13px] text-white/35 leading-relaxed mb-6">You haven't placed any orders yet.</p>
-            <Link to="/shop" className="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">
+            <Link to="/shop" className="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-black font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">
               Start Shopping
             </Link>
           </div>
         ) : (
           <div className="space-y-3">
             {orders.map((order) => (
-              <div key={order.id} className="bg-[#111111] border border-white/[0.06] overflow-hidden hover:border-white/[0.12] transition-all">
+              <div key={order.id} className="bg-[#0c0c0c] border border-white/[0.06] overflow-hidden hover:border-white/[0.12] transition-all">
                 <div className="p-5 md:p-6">
                   {/* Header */}
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5 pb-4 border-b border-white/[0.06]">
@@ -75,18 +75,18 @@ const Orders = () => {
                         <Package size={16} strokeWidth={1.5} />
                       </div>
                       <div>
-                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-white/25">Order ID</p>
-                        <p className="text-[13px] font-black text-white">#{order.id.slice(0, 10).toUpperCase()}</p>
+                        <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/25">Order ID</p>
+                        <p className="text-[13px] font-semibold text-white">#{order.id.slice(0, 10).toUpperCase()}</p>
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-3 items-center">
                       <div>
-                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-white/25">Placed On</p>
+                        <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/25">Placed On</p>
                         <p className="text-[12px] font-medium text-white/60">
                           {order.createdAt?.toDate ? order.createdAt.toDate().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Recently'}
                         </p>
                       </div>
-                      <div className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 border ${
+                      <div className={`px-3 py-1.5 text-[9px] font-medium uppercase tracking-wider flex items-center gap-1.5 border ${
                         order.status === 'confirmed' ? 'bg-emerald-950/50 text-emerald-400 border-emerald-800/30'
                         : order.status === 'failed' ? 'bg-red-950/50 text-red-400 border-red-800/30'
                         : 'bg-amber-950/50 text-amber-400 border-amber-800/30'
@@ -116,10 +116,10 @@ const Orders = () => {
                   {/* Footer */}
                   <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between">
                     <div>
-                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-white/25">Total</p>
-                      <p className="text-xl font-black text-white">₹{order.total}</p>
+                      <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/25">Total</p>
+                      <p className="text-xl font-light tracking-widest text-white">₹{order.total}</p>
                     </div>
-                    <Link to="/shop" className="text-[10px] font-black text-white/30 hover:text-white flex items-center gap-1 group uppercase tracking-wider transition-colors">
+                    <Link to="/shop" className="text-[10px] font-semibold text-white/30 hover:text-white flex items-center gap-1 group uppercase tracking-wider transition-colors">
                       Reorder <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>

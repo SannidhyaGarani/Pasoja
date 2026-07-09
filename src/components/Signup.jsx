@@ -40,7 +40,7 @@ const Signup = () => {
           <Link to="/" className="inline-flex">
             <img src="/img/Pasoja option-01.png" alt="Pasoja" className="h-10 md:h-12 object-contain brightness-0 invert" />
           </Link>
-          <h1 className="text-4xl md:text-5xl xl:text-6xl font-black text-white leading-[1.0] tracking-tight uppercase">
+          <h1 className="text-4xl md:text-5xl xl:text-6xl font-light text-white leading-[1.1] tracking-widest uppercase">
             Begin Your<br />Style Journey.
           </h1>
           <div className="w-10 h-[1px] bg-white/20" />
@@ -54,9 +54,9 @@ const Signup = () => {
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }}
           className="lg:w-[460px] w-full"
         >
-          <div className="bg-[#111111] border border-white/[0.08] p-7 sm:p-10">
+          <div className="bg-[#0c0c0c] border border-white/[0.08] p-7 sm:p-10">
             <div className="mb-8">
-              <h2 className="text-2xl font-black text-white tracking-tight uppercase mb-1">Create Account</h2>
+              <h2 className="text-2xl font-light text-white tracking-widest uppercase mb-1">Create Account</h2>
               <p className="text-[13px] text-white/30">Join us for a premium shopping experience</p>
             </div>
 
@@ -73,7 +73,7 @@ const Signup = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Full Name</label>
+                <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Full Name</label>
                 <div className="relative">
                   <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
                   <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Your name" required
@@ -83,7 +83,7 @@ const Signup = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Email Address</label>
+                <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Email Address</label>
                 <div className="relative">
                   <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com" required
@@ -93,7 +93,7 @@ const Signup = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Password</label>
+                <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">Password</label>
                 <div className="relative">
                   <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" />
                   <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min. 6 characters" required
@@ -106,7 +106,7 @@ const Signup = () => {
               </div>
 
               <button type="submit" disabled={loading}
-                className="w-full py-4 bg-white hover:bg-white/85 text-black font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2.5 disabled:opacity-50 mt-2"
+                className="w-full py-4 bg-white hover:bg-white/85 text-black font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2.5 disabled:opacity-50 mt-2"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />

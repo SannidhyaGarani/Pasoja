@@ -98,9 +98,9 @@ const Checkout = () => {
         <div className="w-16 h-16 border border-white/10 flex items-center justify-center mb-5">
           <ShieldCheck size={26} strokeWidth={1.2} className="text-white/30" />
         </div>
-        <h2 className="text-xl font-black text-white uppercase mb-2">Sign in Required</h2>
+        <h2 className="text-xl font-light text-white tracking-widest uppercase mb-2">Sign in Required</h2>
         <p className="text-[13px] text-white/35 max-w-xs mb-6 leading-relaxed">Please sign in to proceed with your order.</p>
-        <Link to="/login?redirect=checkout" className="px-8 py-3.5 bg-white text-black font-black text-[11px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">Sign In</Link>
+        <Link to="/login?redirect=checkout" className="px-8 py-3.5 bg-white text-black font-semibold text-[11px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">Sign In</Link>
       </div>
     </div>
   );
@@ -113,11 +113,11 @@ const Checkout = () => {
         >
           <CheckCircle size={36} className="text-white/60" />
         </motion.div>
-        <h2 className="text-3xl font-black text-white uppercase mb-3">Order Confirmed!</h2>
+        <h2 className="text-3xl font-light text-white tracking-widest uppercase mb-3">Order Confirmed!</h2>
         <p className="text-[14px] text-white/35 mb-8 leading-relaxed">Thank you. We're preparing your order for shipment.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link to="/orders" className="px-6 py-3.5 bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">View Orders</Link>
-          <Link to="/shop" className="px-6 py-3.5 bg-transparent border border-white/15 text-white/60 font-black text-[10px] uppercase tracking-[0.2em] hover:border-white/35 hover:text-white transition-all">Continue Shopping</Link>
+          <Link to="/orders" className="px-6 py-3.5 bg-white text-black font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">View Orders</Link>
+          <Link to="/shop" className="px-6 py-3.5 bg-transparent border border-white/15 text-white/60 font-semibold text-[10px] uppercase tracking-[0.2em] hover:border-white/35 hover:text-white transition-all">Continue Shopping</Link>
         </div>
       </div>
     </div>
@@ -129,9 +129,9 @@ const Checkout = () => {
         <div className="w-20 h-20 border border-red-800/30 flex items-center justify-center mx-auto mb-6">
           <X size={36} className="text-red-400" />
         </div>
-        <h2 className="text-3xl font-black text-white uppercase mb-3">Payment Failed</h2>
+        <h2 className="text-3xl font-light text-white tracking-widest uppercase mb-3">Payment Failed</h2>
         <p className="text-[14px] text-white/35 mb-8 leading-relaxed">The transaction could not be completed. Please try again.</p>
-        <button onClick={() => setOrderStatus(null)} className="px-8 py-3.5 bg-white text-black font-black text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all">Try Again</button>
+        <button onClick={() => setOrderStatus(null)} className="px-8 py-3.5 bg-white text-black font-semibold text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all">Try Again</button>
       </div>
     </div>
   );
@@ -151,30 +151,30 @@ const Checkout = () => {
               <section className="space-y-5">
                 <div className="flex items-center gap-3 pb-4 border-b border-white/[0.06]">
                   <div className="w-9 h-9 border border-white/10 text-white/30 flex items-center justify-center"><MapPin size={15} /></div>
-                  <h2 className="text-[13px] font-black text-white uppercase tracking-wider">Shipping Address</h2>
+                  <h2 className="text-[13px] font-light text-white uppercase tracking-widest">Shipping Address</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">Full Name</label>
+                    <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Full Name</label>
                     <div className="relative"><User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" /><input type="text" name="name" required value={formData.name} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="Your name" /></div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">Email</label>
+                    <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Email</label>
                     <div className="relative"><Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" /><input type="email" name="email" required value={formData.email} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="email@example.com" /></div>
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">Phone Number</label>
+                  <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Phone Number</label>
                   <div className="relative"><Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/20" /><input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange} className={`${inputClass} pl-10`} placeholder="+91 00000 00000" /></div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">Full Address</label>
+                  <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">Full Address</label>
                   <textarea name="address" required rows={3} value={formData.address} onChange={handleInputChange} className={`${inputClass} resize-none`} placeholder="Street, house number, area" />
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   {["city", "state", "pincode"].map((field) => (
                     <div key={field} className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25 capitalize">{field}</label>
+                      <label className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25 capitalize">{field}</label>
                       <input type="text" name={field} required value={formData[field]} onChange={handleInputChange} className={inputClass} placeholder={field === 'pincode' ? "000000" : ""} />
                     </div>
                   ))}
@@ -185,7 +185,7 @@ const Checkout = () => {
               <section className="space-y-5 pt-6 border-t border-white/[0.06]">
                 <div className="flex items-center gap-3 pb-4 border-b border-white/[0.06]">
                   <div className="w-9 h-9 border border-white/10 text-white/30 flex items-center justify-center"><CreditCard size={15} /></div>
-                  <h2 className="text-[13px] font-black text-white uppercase tracking-wider">Payment Method</h2>
+                  <h2 className="text-[13px] font-light text-white uppercase tracking-widest">Payment Method</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
@@ -200,7 +200,7 @@ const Checkout = () => {
                       >
                         <div className={`w-9 h-9 flex items-center justify-center shrink-0 border ${active ? 'bg-white text-black border-white' : 'text-white/30 border-white/10'}`}><Icon size={15} /></div>
                         <div>
-                          <p className={`text-[11px] font-black uppercase tracking-wider ${active ? 'text-white' : 'text-white/35'}`}>{method.label}</p>
+                          <p className={`text-[11px] font-semibold uppercase tracking-wider ${active ? 'text-white' : 'text-white/35'}`}>{method.label}</p>
                           <p className="text-[10px] text-white/25 mt-0.5">{method.desc}</p>
                         </div>
                       </button>
@@ -210,7 +210,7 @@ const Checkout = () => {
               </section>
 
               <button type="submit" disabled={isProcessing}
-                className="w-full py-4 bg-white hover:bg-white/85 text-black font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2.5"
+                className="w-full py-4 bg-white hover:bg-white/85 text-black font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2.5"
               >
                 {isProcessing ? <><div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />Processing...</> : <>Place Order</>}
               </button>
@@ -219,8 +219,8 @@ const Checkout = () => {
 
           {/* Summary */}
           <div className="lg:col-span-5">
-            <div className="bg-[#111111] border border-white/[0.06] p-6 sticky top-28">
-              <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.25em] mb-5 pb-4 border-b border-white/[0.06]">Order Summary</h3>
+            <div className="bg-[#0c0c0c] border border-white/[0.06] p-6 sticky top-28">
+              <h3 className="text-[10px] font-semibold text-white/30 uppercase tracking-[0.25em] mb-5 pb-4 border-b border-white/[0.06]">Order Summary</h3>
               <div className="space-y-4 mb-6 max-h-[300px] overflow-auto pr-1">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-3">
@@ -242,8 +242,8 @@ const Checkout = () => {
                 <div className="flex justify-between text-[12px]"><span className="text-white/35">Subtotal</span><span className="font-bold text-white">₹{total}</span></div>
                 <div className="flex justify-between text-[12px]"><span className="text-white/35">Delivery</span><span className="text-white font-bold">Free</span></div>
                 <div className="flex justify-between pt-4 border-t border-dashed border-white/[0.08] items-baseline">
-                  <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Total</span>
-                  <span className="text-2xl font-black text-white">₹{total}</span>
+                  <span className="text-[10px] font-semibold text-white/30 uppercase tracking-[0.2em]">Total</span>
+                  <span className="text-2xl font-light text-white tracking-widest font-heading font-light">₹{total}</span>
                 </div>
               </div>
             </div>
@@ -257,7 +257,7 @@ const Checkout = () => {
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
             className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white text-black px-5 py-3 shadow-2xl flex items-center gap-3"
           >
-            <p className="text-[11px] font-black uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
             <button onClick={() => setFeedbackMessage(null)} className="opacity-40 hover:opacity-100 ml-1"><X size={13} /></button>
           </motion.div>
         )}

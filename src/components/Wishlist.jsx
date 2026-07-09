@@ -49,16 +49,16 @@ const Wishlist = () => {
             <div className="w-16 h-16 border border-white/10 flex items-center justify-center text-white/25 mx-auto mb-5">
               <Heart size={24} strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-black text-white uppercase mb-2">Your wishlist is empty</h3>
+            <h3 className="text-xl font-light text-white tracking-widest uppercase mb-2">Your wishlist is empty</h3>
             <p className="text-[13px] text-white/35 leading-relaxed mb-6">Save items you love and come back to them anytime.</p>
-            <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">
+            <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-black font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">
               Explore Collection <ArrowRight size={13} />
             </Link>
           </motion.div>
         ) : (
           <div className="space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
-              <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
+              <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/30">
                 {wishlist.length} {wishlist.length === 1 ? 'Item' : 'Items'} Saved
               </h2>
             </div>
@@ -107,7 +107,7 @@ const Wishlist = () => {
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
             className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white text-black px-5 py-3 shadow-2xl flex items-center gap-3"
           >
-            <p className="text-[11px] font-black uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
             <button onClick={() => setFeedbackMessage(null)} className="opacity-40 hover:opacity-100 ml-1"><X size={13} /></button>
           </motion.div>
         )}

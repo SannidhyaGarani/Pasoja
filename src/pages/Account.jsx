@@ -57,7 +57,7 @@ const Account = () => {
       <div className="max-w-6xl mx-auto pt-10 md:pt-14">
 
         {/* ACCOUNT HEADER */}
-        <div className="bg-[#111111] border border-white/[0.08] p-6 sm:p-8 md:p-10 mb-8 relative overflow-hidden">
+        <div className="bg-[#0c0c0c] border border-white/[0.08] p-6 sm:p-8 md:p-10 mb-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/[0.02] rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3" />
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
@@ -74,17 +74,17 @@ const Account = () => {
                 </div>
               </div>
               <div className="space-y-1">
-                <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">
+                <h1 className="text-2xl md:text-3xl font-light text-white uppercase tracking-widest">
                   {userData?.displayName || "Member"}
                 </h1>
                 <p className="text-sm text-white/35">{user?.email}</p>
                 <div className="flex flex-wrap justify-center md:justify-start gap-2 pt-1">
-                  <span className="px-2.5 py-0.5 bg-white/5 border border-white/10 text-white text-[9px] font-black uppercase tracking-widest">Member</span>
+                  <span className="px-2.5 py-0.5 bg-white/5 border border-white/10 text-white text-[9px] font-medium uppercase tracking-widest">Member</span>
                 </div>
               </div>
             </div>
             <button onClick={handleLogout}
-              className="h-10 px-5 bg-white/5 border border-white/10 text-white/50 font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-950/50 hover:text-red-400 hover:border-red-800/30 transition-all flex items-center gap-2"
+              className="h-10 px-5 bg-white/5 border border-white/10 text-white/50 font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-red-950/50 hover:text-red-400 hover:border-red-800/30 transition-all flex items-center gap-2"
             >
               <LogOut size={12} strokeWidth={2} />
               Logout
@@ -98,24 +98,24 @@ const Account = () => {
           {/* LEFT */}
           <div className="lg:col-span-4 space-y-4">
             <div className="grid grid-cols-2 gap-3">
-              <Link to="/cart" className="group bg-[#111111] border border-white/[0.06] p-5 hover:border-white/[0.14] transition-all">
+              <Link to="/cart" className="group bg-[#0c0c0c] border border-white/[0.06] p-5 hover:border-white/[0.14] transition-all">
                 <div className="w-9 h-9 border border-white/10 flex items-center justify-center text-white/35 mb-3 group-hover:bg-white group-hover:text-black group-hover:border-white transition-all">
                   <ShoppingBag size={14} strokeWidth={1.5} />
                 </div>
-                <p className="text-2xl font-black text-white">{stats.cart}</p>
-                <p className="text-[9px] font-black text-white/25 uppercase tracking-widest mt-0.5">In Cart</p>
+                <p className="text-2xl font-light text-white tracking-wider">{stats.cart}</p>
+                <p className="text-[9px] font-semibold text-white/25 uppercase tracking-widest mt-0.5">In Cart</p>
               </Link>
-              <Link to="/wishlist" className="group bg-[#111111] border border-white/[0.06] p-5 hover:border-white/[0.14] transition-all">
+              <Link to="/wishlist" className="group bg-[#0c0c0c] border border-white/[0.06] p-5 hover:border-white/[0.14] transition-all">
                 <div className="w-9 h-9 border border-white/10 flex items-center justify-center text-white/35 mb-3 group-hover:bg-white group-hover:text-black group-hover:border-white transition-all">
                   <Heart size={14} strokeWidth={1.5} />
                 </div>
-                <p className="text-2xl font-black text-white">{stats.wishlist}</p>
-                <p className="text-[9px] font-black text-white/25 uppercase tracking-widest mt-0.5">Wishlist</p>
+                <p className="text-2xl font-light text-white tracking-wider">{stats.wishlist}</p>
+                <p className="text-[9px] font-semibold text-white/25 uppercase tracking-widest mt-0.5">Wishlist</p>
               </Link>
             </div>
 
-            <div className="bg-[#111111] border border-white/[0.06] p-1.5">
-              <span className="block px-3 py-2 text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Quick Links</span>
+            <div className="bg-[#0c0c0c] border border-white/[0.06] p-1.5">
+              <span className="block px-3 py-2 text-[9px] font-semibold text-white/20 uppercase tracking-[0.3em]">Quick Links</span>
               {[
                 { icon: Settings, label: "Profile Settings" },
                 { icon: Package, label: "Order History" },
@@ -138,13 +138,13 @@ const Account = () => {
 
           {/* RIGHT: Recent Orders */}
           <div className="lg:col-span-8">
-            <div className="bg-[#111111] border border-white/[0.06] p-6 md:p-8">
+            <div className="bg-[#0c0c0c] border border-white/[0.06] p-6 md:p-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-white/[0.06]">
                 <div>
-                  <h3 className="text-lg font-black text-white uppercase">Recent Orders</h3>
+                  <h3 className="text-lg font-light text-white uppercase tracking-widest">Recent Orders</h3>
                   <p className="text-[12px] text-white/30 mt-0.5">Track and manage your latest purchases</p>
                 </div>
-                <Link to="/orders" className="self-start h-8 px-4 border border-white/10 text-[10px] font-black text-white/35 uppercase tracking-wider hover:border-white/30 hover:text-white transition-all flex items-center">
+                <Link to="/orders" className="self-start h-8 px-4 border border-white/10 text-[10px] font-semibold text-white/35 uppercase tracking-wider hover:border-white/30 hover:text-white transition-all flex items-center">
                   View All
                 </Link>
               </div>
@@ -158,7 +158,7 @@ const Account = () => {
                           <Package size={16} strokeWidth={1.5} />
                         </div>
                         <div>
-                          <p className="text-[13px] font-black text-white/80 group-hover:text-white transition-colors">
+                          <p className="text-[13px] font-semibold text-white/80 group-hover:text-white transition-colors">
                             #{order.id.slice(0, 8).toUpperCase()}
                           </p>
                           <p className="text-[11px] text-white/25">
@@ -167,8 +167,8 @@ const Account = () => {
                         </div>
                       </div>
                       <div className="w-full sm:w-auto flex sm:flex-col justify-between sm:items-end items-center gap-1">
-                        <p className="text-sm font-black text-white">₹{order.total}</p>
-                        <span className={`px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider border ${
+                        <p className="text-sm font-semibold text-white">₹{order.total}</p>
+                        <span className={`px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider border ${
                           order.status === 'confirmed' ? 'bg-emerald-950/50 text-emerald-400 border-emerald-800/30'
                           : order.status === 'failed' ? 'bg-red-950/50 text-red-400 border-red-800/30'
                           : 'bg-amber-950/50 text-amber-400 border-amber-800/30'
@@ -182,9 +182,9 @@ const Account = () => {
                   <div className="w-14 h-14 border border-white/10 flex items-center justify-center text-white/20 mx-auto mb-4">
                     <ShoppingBag size={22} strokeWidth={1.5} />
                   </div>
-                  <h4 className="text-base font-black text-white uppercase mb-1">No orders yet</h4>
+                  <h4 className="text-base font-light text-white uppercase tracking-widest mb-1">No orders yet</h4>
                   <p className="text-[12px] text-white/30 mb-5">Start shopping to see your orders here.</p>
-                  <Link to="/shop" className="inline-flex items-center gap-2 px-5 py-3 bg-white text-black font-black text-[10px] uppercase tracking-[0.15em] hover:bg-white/85 transition-all">
+                  <Link to="/shop" className="inline-flex items-center gap-2 px-5 py-3 bg-white text-black font-semibold text-[10px] uppercase tracking-[0.15em] hover:bg-white/85 transition-all">
                     Browse Shop <ChevronRight size={11} />
                   </Link>
                 </div>

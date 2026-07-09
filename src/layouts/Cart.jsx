@@ -50,16 +50,16 @@ const Cart = () => {
                   <div className="w-16 h-16 border border-white/10 flex items-center justify-center text-white/25 mx-auto mb-5">
                     <ShoppingBag size={24} strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-xl font-black text-white uppercase mb-2">Your bag is empty</h3>
+                  <h3 className="text-xl font-light text-white tracking-widest uppercase mb-2">Your bag is empty</h3>
                   <p className="text-[13px] text-white/35 leading-relaxed mb-6">Start exploring our collection.</p>
-                  <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">
+                  <Link to="/shop" className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-black font-semibold text-[10px] uppercase tracking-[0.2em] hover:bg-white/85 transition-all">
                     Continue Shopping <ArrowRight size={13} />
                   </Link>
                 </motion.div>
               ) : (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
+                    <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/30">
                       {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
                     </h2>
                   </div>
@@ -71,7 +71,7 @@ const Cart = () => {
                           layout
                           initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -30 }}
                           transition={{ duration: 0.4 }}
-                          className="group bg-[#111111] border border-white/[0.06] p-4 flex flex-col sm:flex-row items-center gap-4 hover:border-white/[0.12] transition-all"
+                          className="group bg-[#0d0d0d] border border-white/[0.06] p-4 flex flex-col sm:flex-row items-center gap-4 hover:border-white/[0.12] transition-all"
                         >
                           <Link to={`/product/${item.id}`} className="w-20 h-24 bg-[#1a1a1a] shrink-0 overflow-hidden border border-white/[0.06]">
                             <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
@@ -105,8 +105,8 @@ const Cart = () => {
           {/* Order Summary */}
           {cart.length > 0 && (
             <aside className="lg:col-span-4 w-full sticky top-28">
-              <div className="bg-[#111111] border border-white/[0.06] p-6">
-                <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mb-5 pb-4 border-b border-white/[0.06]">Order Summary</h2>
+              <div className="bg-[#0c0c0c] border border-white/[0.06] p-6">
+                <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/30 mb-5 pb-4 border-b border-white/[0.06]">Order Summary</h2>
                 <div className="space-y-3 mb-5">
                   <div className="flex justify-between text-[12px] text-white/35">
                     <span>Subtotal</span>
@@ -124,7 +124,7 @@ const Cart = () => {
                   {/* Gift Note */}
                   <div className="pt-2 border-t border-white/[0.06]">
                     <button onClick={() => setIsGiftNoteOpen(!isGiftNoteOpen)}
-                      className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-white/35 hover:text-white transition-colors"
+                      className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-white/35 hover:text-white transition-colors"
                     >
                       <Gift size={12} strokeWidth={1.5} />
                       {isGiftNoteOpen ? 'Remove gift note' : 'Add a gift note'}
@@ -142,13 +142,13 @@ const Cart = () => {
                   </div>
 
                   <div className="pt-4 mt-2 border-t border-dashed border-white/[0.08] flex justify-between items-end">
-                    <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Total</span>
-                    <span className="text-2xl font-black text-white">₹{total.toLocaleString("en-IN")}</span>
+                    <span className="text-[10px] font-semibold text-white/30 uppercase tracking-[0.2em]">Total</span>
+                    <span className="text-2xl font-light text-white tracking-widest font-heading">₹{total.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
 
                 <button onClick={handleCheckout}
-                  className="w-full py-4 bg-white hover:bg-white/85 text-black font-black text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5"
+                  className="w-full py-4 bg-white hover:bg-white/85 text-black font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5"
                 >
                   Checkout <ChevronRight size={14} />
                 </button>
