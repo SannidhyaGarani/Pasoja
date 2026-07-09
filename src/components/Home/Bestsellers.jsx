@@ -217,10 +217,10 @@ const BestsellerProducts = () => {
           ))}
         </div>
 
-        {/* Mobile 2-col grid */}
+        {/* Mobile 1-col vertical scroll list */}
         <div className="md:hidden">
-          <div className="grid grid-cols-2 gap-3">
-            {products.slice(0, 6).map((product, idx) => (
+          <div className="flex flex-col gap-8 px-2 max-w-[360px] mx-auto">
+            {products.slice(0, 4).map((product, idx) => (
               <ProductCard key={product.id} product={product} idx={idx} triggerToast={triggerToast} />
             ))}
           </div>
