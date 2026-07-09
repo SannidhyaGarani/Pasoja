@@ -55,7 +55,7 @@ const Contact = () => {
           <motion.div {...fadeUp} className="lg:col-span-5 space-y-7">
             <div>
               <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-white/25 block mb-4">Reach Out</span>
-              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-[1.05] uppercase">We're Here<br />to Help</h2>
+              <h2 className="text-3xl sm:text-4xl font-light text-white tracking-widest leading-[1.05] uppercase">We're Here<br />to Help</h2>
               <p className="text-[14px] text-white/35 mt-4 leading-relaxed max-w-sm">
                 Whether you have a question about sizing, need styling advice, or want to discuss a bulk order — our team is ready.
               </p>
@@ -155,11 +155,11 @@ const Contact = () => {
       </div>
 
       {/* MAP */}
-      <section className="bg-[#111111] py-14 md:py-16 border-t border-white/[0.06]">
+      <section className="bg-[#0a0a0a] py-14 md:py-16 border-t border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
           <div className="mb-8 pb-8 border-b border-white/[0.06]">
             <span className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold block mb-3">Find Us</span>
-            <h2 className="text-2xl font-black text-white uppercase">Visit Our Store</h2>
+            <h2 className="text-2xl font-light text-white uppercase tracking-widest">Visit Our Store</h2>
           </div>
           <div className="w-full h-[280px] sm:h-[350px] bg-[#1a1a1a] overflow-hidden border border-white/[0.06]">
             <iframe

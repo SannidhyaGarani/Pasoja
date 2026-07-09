@@ -52,7 +52,7 @@ const GenderBanner = () => {
                   {category.subtitle}
                 </motion.span>
 
-                <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-3 leading-none uppercase">
+                <h2 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-widest text-white mb-3 leading-none uppercase">
                   {category.title}
                 </h2>
 

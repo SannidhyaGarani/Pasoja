@@ -3,6 +3,7 @@ import { Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
+import SectionHeader from '../Home/SectionHeader';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -35,7 +36,7 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="py-16 md:py-24 bg-[#111111] overflow-hidden relative">
+    <section className="py-16 md:py-24 bg-[#0a0a0a] overflow-hidden relative">
       {/* Decorative large text */}
       <div className="absolute top-8 right-8 text-[200px] font-black text-white/[0.02] leading-none select-none pointer-events-none hidden lg:block" aria-hidden>
         ★
@@ -44,12 +45,10 @@ const Testimonials = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 relative z-10">
 
         {/* Header */}
-        <div className="pb-10 border-b border-white/[0.06] mb-12">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold block mb-3">Testimonials</span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase">
-            What Our Clients Say
-          </h2>
-        </div>
+        <SectionHeader 
+          subtitle="Testimonials"
+          title="What Our Clients Say"
+        />
 
         <div className="relative">
           <Swiper

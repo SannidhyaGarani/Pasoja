@@ -64,7 +64,7 @@ const EditorialStory = () => {
               <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold block mb-4">
                 Our Philosophy
               </span>
-              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.1] tracking-tight uppercase">
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white tracking-widest uppercase mb-6">
                 Conscious Craft,<br />Timeless Design.
               </h3>
             </motion.div>

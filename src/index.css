@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -10,9 +11,8 @@
   --color-brand-gray-dark: #333333;
   
   --font-serif: "Playfair Display", serif;
-  --font-sans: "Instrument Sans", sans-serif;
-  --font-poppins: "Instrument Sans", sans-serif;
-  --font-instrument: "Instrument Sans", sans-serif;
+  --font-sans: "Nunito", sans-serif;
+  --font-heading: "Instrument Sans", sans-serif;
 }
 
 @layer base {
@@ -25,7 +25,7 @@
     @apply bg-[#0a0a0a] text-white font-sans antialiased min-h-screen text-[14px];
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply text-white font-sans;
+    @apply text-white font-heading;
   }
   ::selection {
     background-color: #ffffff;

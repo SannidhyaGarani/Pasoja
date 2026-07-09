@@ -83,8 +83,8 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center text-center p-6">
-        <h3 className="text-sm font-black tracking-widest uppercase text-white mb-4">Product Not Found</h3>
-        <Link to="/shop" className="px-8 py-3 bg-white text-black font-black text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all">
+        <h3 className="text-sm font-light tracking-widest uppercase text-white mb-4">Product Not Found</h3>
+        <Link to="/shop" className="px-8 py-3 bg-white text-black font-semibold text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all">
           Return To Collection
         </Link>
       </div>
@@ -116,7 +116,7 @@ const ProductDetail = () => {
             className="fixed bottom-10 left-1/2 z-50 bg-white text-black px-6 py-3.5 shadow-2xl flex items-center gap-3 min-w-[280px]"
           >
             <ShoppingBag size={14} className="shrink-0" />
-            <p className="text-[11px] font-black uppercase tracking-wider flex-1">{feedbackMessage}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider flex-1">{feedbackMessage}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -132,7 +132,7 @@ const ProductDetail = () => {
               />
               {discountPercent > 0 && (
                 <div className="absolute top-4 left-4">
-                  <span className="bg-white text-black px-2.5 py-1 text-[9px] font-black uppercase tracking-wider">-{discountPercent}%</span>
+                  <span className="bg-white text-black px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider">-{discountPercent}%</span>
                 </div>
               )}
             </div>
@@ -158,9 +158,9 @@ const ProductDetail = () => {
                   <Star size={9} fill="currentColor" strokeWidth={0} /> 4.8 Studio Choice
                 </span>
               </div>
-              <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white uppercase mb-4">{product.name}</h1>
+              <h1 className="text-2xl md:text-3xl font-light tracking-widest text-white uppercase mb-4">{product.name}</h1>
               <div className="flex items-baseline gap-3.5">
-                <span className="text-2xl font-black tracking-wide text-white">
+                <span className="text-2xl font-light tracking-widest text-white">
                   ₹{(selectedSize?.price || product.price)?.toLocaleString()}
                 </span>
                 {(selectedSize?.original_price || product.original_price) && (
@@ -185,10 +185,10 @@ const ProductDetail = () => {
                 <div className="flex flex-wrap gap-2">
                   {product.size_prices.map((sp, idx) => (
                     <button key={idx} onClick={() => setSelectedSize(sp)}
-                      className={`w-12 h-11 flex items-center justify-center border text-[11px] font-black tracking-wider transition-all duration-200 ${
+                      className={`w-12 h-11 flex items-center justify-center border text-[11px] font-semibold tracking-wider transition-all duration-200 ${
                         selectedSize?.size === sp.size
-                          ? 'border-white bg-white text-black'
-                          : 'border-white/15 bg-transparent text-white/50 hover:border-white/40 hover:text-white'
+                           ? 'border-white bg-white text-black'
+                           : 'border-white/15 bg-transparent text-white/50 hover:border-white/40 hover:text-white'
                       }`}
                     >
                       {sp.size}
@@ -227,12 +227,12 @@ const ProductDetail = () => {
 
               <div className="flex flex-col gap-2">
                 <button onClick={() => addToCollection('cart')}
-                  className="w-full h-12 bg-transparent border-2 border-white text-white font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
+                  className="w-full h-12 bg-transparent border-2 border-white text-white font-semibold text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
                 >
                   {isInCart ? 'View Bag' : 'Add to Shopping Bag'}
                 </button>
                 <button onClick={() => addToCollection('cart')}
-                  className="w-full h-12 bg-white text-black font-black text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all duration-300"
+                  className="w-full h-12 bg-white text-black font-semibold text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all duration-300"
                 >
                   Buy it Now
                 </button>
@@ -276,8 +276,8 @@ const ProductDetail = () => {
         {relatedProducts.length > 0 && (
           <div className="mt-24 border-t border-white/[0.06] pt-16">
             <div className="pb-10 mb-10">
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 block mb-3">You May Also Like</span>
-              <h2 className="text-3xl font-black text-white uppercase">Complete The Collection</h2>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/25 block mb-3">You May Also Like</span>
+              <h2 className="text-3xl font-light text-white uppercase tracking-widest">Complete The Collection</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {relatedProducts.map((item) => {

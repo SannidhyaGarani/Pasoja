@@ -13,10 +13,10 @@ const benefits = [
 
 const BenefitsStrip = () => {
   return (
-    <section className="bg-[#111111] border-y border-white/[0.06] py-4 overflow-hidden">
+    <section className="bg-[#0a0a0a] border-y border-white/[0.06] py-4 overflow-hidden">
       <motion.div
         animate={{ x: ['0%', '-50%'] }}
-        transition={{ repeat: Infinity, duration: 22, ease: 'linear' }}
+        transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
         className="flex gap-0 whitespace-nowrap"
       >
         {[...benefits, ...benefits].map((item, i) => {

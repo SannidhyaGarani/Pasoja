@@ -202,7 +202,7 @@ const Shop = () => {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 border ${
+                  className={`px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 border ${
                     selectedCategory === cat
                       ? 'bg-white text-black border-white'
                       : 'bg-transparent text-white/35 border-white/10 hover:border-white/25 hover:text-white/60'
@@ -253,10 +253,10 @@ const Shop = () => {
             <div className="w-14 h-14 border border-white/10 flex items-center justify-center text-white/25 mx-auto mb-5">
               <Search size={22} strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-black text-white uppercase mb-2">No Products Found</h3>
+            <h3 className="text-xl font-light text-white tracking-widest uppercase mb-2">No Products Found</h3>
             <p className="text-[13px] text-white/35 leading-relaxed mb-6">Try adjusting your search or filters.</p>
             <button onClick={() => { setSearchTerm(""); setSelectedCategory("All"); }}
-              className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-white hover:text-white/60 transition-colors"
+              className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white hover:text-white/60 transition-colors"
             >
               Reset All Filters
               <ArrowUpRight size={13} />

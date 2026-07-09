@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { useStore } from '../../components/StoreProvider';
+import SectionHeader from '../Home/SectionHeader';
 
 import 'swiper/css';
 
@@ -202,19 +203,19 @@ const BestsellerProducts = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
 
         {/* Section header */}
-        <div className="flex items-end justify-between mb-10 md:mb-14 pb-8 border-b border-white/[0.06]">
-          <div>
-            <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold block mb-3">Most Loved</span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase">Bestsellers</h2>
-          </div>
-          <Link
-            to="/shop"
-            className="hidden md:inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-bold text-white/40 hover:text-white transition-colors group"
-          >
-            View All
-            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
+        <SectionHeader 
+          subtitle="Most Loved"
+          title="Bestsellers"
+          action={
+            <Link
+              to="/shop"
+              className="hidden md:inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-bold text-white/40 hover:text-white transition-colors group"
+            >
+              View All
+              <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          }
+        />
 
         {/* Desktop 4-col grid */}
         <div className="hidden md:grid grid-cols-4 gap-5 lg:gap-6">

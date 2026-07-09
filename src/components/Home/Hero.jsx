@@ -63,7 +63,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black mt-[72px] md:mt-[80px]">
+    <section className="relative h-[70vh] sm:h-screen w-full overflow-hidden bg-black mt-[72px] md:mt-[80px]">
       {/* Background */}
       <AnimatePresence custom={direction} mode="sync">
         <motion.div
@@ -88,11 +88,11 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* Overlays */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-black/70 via-black/20 to-transparent sm:hidden" />
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-end pb-20 md:pb-24">
+      <div className="relative z-10 h-full flex flex-col justify-end pb-12 sm:pb-24 lg:pb-32">
         <div className="max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-16">
           <AnimatePresence mode="wait">
             <motion.div
@@ -107,10 +107,10 @@ const Hero = () => {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25, duration: 0.5 }}
-                className="flex items-center gap-3 mb-5"
+                className="flex items-center gap-3 mb-4 lg:mb-6"
               >
-                <span className="w-6 h-[1px] bg-white/60" />
-                <span className="text-[10px] font-bold tracking-[0.35em] uppercase text-white/60">
+                <span className="w-8 h-[1px] bg-white/70" />
+                <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-white/70">
                   {slide.tag}
                 </span>
               </motion.div>
@@ -120,8 +120,7 @@ const Hero = () => {
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-5 leading-[0.95] tracking-tight whitespace-pre-line uppercase"
-                style={{ fontFamily: "'Inter', sans-serif" }}
+                className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light text-white mb-6 md:mb-8 leading-[1.05] tracking-wide whitespace-pre-line uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
               >
                 {slide.title}
               </motion.h1>
@@ -133,15 +132,15 @@ const Hero = () => {
                 transition={{ delay: 0.5, duration: 0.55 }}
                 className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-12"
               >
-                <p className="text-sm sm:text-base text-white/55 max-w-xs leading-relaxed font-light">
+                <p className="text-sm md:text-base text-white/60 max-w-sm leading-relaxed font-light drop-shadow-md">
                   {slide.subtitle}
                 </p>
                 <Link
                   to={slide.ctaLink}
-                  className="group inline-flex items-center gap-3 bg-white text-black px-7 py-3.5 text-[11px] font-black tracking-[0.2em] uppercase transition-all duration-300 hover:bg-white/90 shrink-0 rounded-sm"
+                  className="group inline-flex items-center justify-center gap-4 bg-white text-black px-8 py-4 text-[10px] sm:text-[11px] font-black tracking-[0.25em] uppercase transition-all duration-300 hover:bg-white/80 shrink-0 w-full sm:w-auto"
                 >
                   {slide.cta}
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform duration-300" />
                 </Link>
               </motion.div>
             </motion.div>

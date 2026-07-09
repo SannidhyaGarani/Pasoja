@@ -51,7 +51,7 @@ const About = () => {
             <div className="space-y-7 lg:pl-4">
               <motion.div {...fadeUp}>
                 <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-white/25 block mb-4">Our Philosophy</span>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.05] tracking-tight uppercase">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-[1.1] tracking-widest uppercase">
                   Fashion That<br />Speaks to Your Soul
                 </h2>
               </motion.div>
@@ -67,11 +67,11 @@ const About = () => {
                 className="grid grid-cols-2 gap-6 py-7 border-y border-white/[0.07]"
               >
                 <div>
-                  <span className="text-4xl font-black text-white">500+</span>
+                  <span className="text-4xl font-light text-white tracking-widest">500+</span>
                   <p className="text-[10px] uppercase tracking-[0.25em] text-white/25 font-bold mt-1">Curated Designs</p>
                 </div>
                 <div>
-                  <span className="text-4xl font-black text-white">10K+</span>
+                  <span className="text-4xl font-light text-white tracking-widest">10K+</span>
                   <p className="text-[10px] uppercase tracking-[0.25em] text-white/25 font-bold mt-1">Happy Customers</p>
                 </div>
               </motion.div>
@@ -92,11 +92,11 @@ const About = () => {
       </section>
 
       {/* VALUES */}
-      <section className="py-16 md:py-20 bg-[#111111]">
+      <section className="py-16 md:py-20 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
           <div className="pb-10 border-b border-white/[0.06] mb-12">
             <span className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold block mb-3">What Defines Us</span>
-            <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">Our Core Values</h2>
+            <h2 className="text-3xl md:text-4xl font-light text-white uppercase tracking-widest">Our Core Values</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
             {[
@@ -118,7 +118,7 @@ const About = () => {
                   <div className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/40 mb-5 group-hover:bg-white group-hover:text-black group-hover:border-white transition-all duration-400">
                     <Icon size={17} strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-[12px] font-black text-white uppercase tracking-wide mb-2">{pillar.title}</h3>
+                  <h3 className="text-[12px] font-semibold text-white uppercase tracking-wide mb-2">{pillar.title}</h3>
                   <p className="text-[13px] text-white/35 leading-relaxed">{pillar.desc}</p>
                 </motion.div>
               );
@@ -143,7 +143,7 @@ const About = () => {
             transition={{ duration: 0.7 }}
           >
             <p className="text-white/40 text-[10px] uppercase tracking-[0.4em] font-bold mb-4">Our Promise</p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white max-w-2xl leading-[1.0] tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-white max-w-2xl leading-[1.1] tracking-widest uppercase">
               Designed to Inspire.<br />Built to Last.
             </h2>
           </motion.div>
@@ -155,7 +155,7 @@ const About = () => {
         <div className="max-w-4xl mx-auto px-5 md:px-10 lg:px-14">
           <div className="pb-10 border-b border-white/[0.06] mb-12">
             <span className="text-[10px] uppercase tracking-[0.3em] text-white/25 font-bold block mb-3">Our Journey</span>
-            <h2 className="text-3xl font-black text-white uppercase">Milestones That Define Us</h2>
+            <h2 className="text-3xl font-light text-white uppercase tracking-widest">Milestones That Define Us</h2>
           </div>
           <div className="space-y-0">
             {[
