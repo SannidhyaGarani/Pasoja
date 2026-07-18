@@ -24,6 +24,17 @@ const ProductDetail = () => {
   const isWishlisted = wishlist.some(item => item.id === id);
   const currentCartId = selectedSize ? `${id}-${selectedSize.size}` : id;
   const isInCart = cart.some(item => (item.cartId || item.id) === currentCartId);
+  const isOutOfStock = product?.stock === 0 || product?.stock_status === 'Out of Stock';
+
+  useEffect(() => {
+    if (product) {
+      if (product.stock === 0 || product.stock_status === 'Out of Stock') {
+        setQuantity(0);
+      } else {
+        setQuantity(1);
+      }
+    }
+  }, [product]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -170,6 +181,29 @@ const ProductDetail = () => {
                 )}
               </div>
               <p className="text-[11px] text-white/25 tracking-wide mt-1.5">Tax included. Free shipping protected.</p>
+              
+              {/* Stock Status Badge */}
+              <div className="mt-3 flex items-center gap-3">
+                <span className={`text-[10px] tracking-widest font-black uppercase px-2.5 py-1 rounded-sm border ${
+                  isOutOfStock 
+                    ? 'bg-red-500/10 border-red-500/20 text-red-400' 
+                    : (product.stock <= 5 || product.stock_status === 'Low Stock')
+                      ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                      : 'bg-green-500/10 border-green-500/20 text-green-400'
+                }`}>
+                  {isOutOfStock 
+                    ? 'Out of Stock' 
+                    : (product.stock <= 5 || product.stock_status === 'Low Stock')
+                      ? `Low Stock: Only ${product.stock ?? 3} left`
+                      : 'In Stock'
+                  }
+                </span>
+                {product.stock !== undefined && product.stock > 0 && (
+                  <span className="text-[11px] text-white/40 font-medium">
+                    ({product.stock} items available)
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Size Selector */}
@@ -201,12 +235,25 @@ const ProductDetail = () => {
             {/* Quantity + Wishlist */}
             <div className="border-t border-white/[0.06] pt-5 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="flex items-center justify-between border border-white/15 h-11 px-1 w-28 bg-transparent">
-                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-7 h-7 flex items-center justify-center text-white/35 hover:text-white transition-colors">
+                <div className={`flex items-center justify-between border ${isOutOfStock ? 'border-white/5 opacity-30 pointer-events-none' : 'border-white/15'} h-11 px-1 w-28 bg-transparent`}>
+                  <button 
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))} 
+                    disabled={isOutOfStock || quantity <= 1}
+                    className="w-7 h-7 flex items-center justify-center text-white/35 hover:text-white transition-colors disabled:opacity-20"
+                  >
                     <Minus size={12} />
                   </button>
-                  <span className="text-[12px] font-bold text-white w-5 text-center tabular-nums">{quantity}</span>
-                  <button onClick={() => setQuantity(quantity + 1)} className="w-7 h-7 flex items-center justify-center text-white/35 hover:text-white transition-colors">
+                  <span className="text-[12px] font-bold text-white w-5 text-center tabular-nums">
+                    {quantity}
+                  </span>
+                  <button 
+                    onClick={() => setQuantity(prev => {
+                      const maxStock = product.stock !== undefined ? product.stock : 999;
+                      return Math.min(maxStock, prev + 1);
+                    })} 
+                    disabled={isOutOfStock || (product.stock !== undefined && quantity >= product.stock)}
+                    className="w-7 h-7 flex items-center justify-center text-white/35 hover:text-white transition-colors disabled:opacity-20"
+                  >
                     <Plus size={12} />
                   </button>
                 </div>
@@ -226,16 +273,25 @@ const ProductDetail = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <button onClick={() => addToCollection('cart')}
-                  className="w-full h-12 bg-transparent border-2 border-white text-white font-semibold text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
+                <button 
+                  onClick={() => !isOutOfStock && addToCollection('cart')}
+                  disabled={isOutOfStock}
+                  className={`w-full h-12 border-2 text-[10px] font-semibold uppercase tracking-widest transition-all duration-300 ${
+                    isOutOfStock
+                      ? 'border-white/10 text-white/20 bg-transparent cursor-not-allowed'
+                      : 'border-white text-white bg-transparent hover:bg-white hover:text-black'
+                  }`}
                 >
-                  {isInCart ? 'View Bag' : 'Add to Shopping Bag'}
+                  {isOutOfStock ? 'Sold Out' : isInCart ? 'View Bag' : 'Add to Shopping Bag'}
                 </button>
-                <button onClick={() => addToCollection('cart')}
-                  className="w-full h-12 bg-white text-black font-semibold text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all duration-300"
-                >
-                  Buy it Now
-                </button>
+                {!isOutOfStock && (
+                  <button 
+                    onClick={() => addToCollection('cart')}
+                    className="w-full h-12 bg-white text-black font-semibold text-[10px] uppercase tracking-widest hover:bg-white/85 transition-all duration-300"
+                  >
+                    Buy it Now
+                  </button>
+                )}
               </div>
             </div>
 

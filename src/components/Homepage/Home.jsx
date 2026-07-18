@@ -14,10 +14,10 @@ const Home = () => {
     <main className="bg-[#0a0a0a] min-h-screen selection:bg-white selection:text-black">
       <Hero />
       <BenefitsStrip />
+      <GallerySwiper />
       <CategorySection />
       <Bestsellers />
       <FeaturesStrip />
-      <GallerySwiper />
       {/* <GenderBanner />
       <Banner /> */}
       <Testimonials />

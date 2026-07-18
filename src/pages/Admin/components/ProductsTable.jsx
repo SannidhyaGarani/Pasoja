@@ -17,9 +17,9 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
     <section className="bg-white rounded-2xl border border-[#D9D3C7] shadow-sm overflow-hidden">
       <div className="px-6 py-5 flex items-center justify-between border-b border-[#D9D3C7]">
         <div>
-          <h2 className="text-lg font-poppins font-bold text-[#1C2B21]">Sattu Products</h2>
+          <h2 className="text-lg font-poppins font-bold text-[#1C2B21]">Clothing Products</h2>
           <p className="text-sm text-[#707A72] mt-1">
-            Manage your sattu drink catalog
+            Manage your clothing catalog
           </p>
         </div>
         <span className="px-4 py-2 rounded-full bg-[#4A5D4E]/10 text-[#4A5D4E] text-sm font-bold">
@@ -31,8 +31,9 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
           <thead className="bg-[#EFECE6]">
             <tr className="text-sm font-bold text-[#4A5D4E] uppercase tracking-wide">
               <th className="px-6 py-4">Product Name</th>
-              <th className="px-6 py-4">Flavor</th>
+              <th className="px-6 py-4">Category</th>
               <th className="px-6 py-4">Price</th>
+              <th className="px-6 py-4">Qty</th>
               <th className="px-6 py-4">Stock</th>
               <th className="px-6 py-4 text-right">Actions</th>
             </tr>
@@ -43,11 +44,14 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
                 <td className="px-6 py-4 text-[#1C2B21] font-medium">
                   {row.name}
                 </td>
-                <td className="px-6 py-4 text-[#707A72]">
-                  {row.flavor || "-"}
+                 <td className="px-6 py-4 text-[#707A72]">
+                  {row.category || "-"}
                 </td>
                 <td className="px-6 py-4 text-[#1C2B21] font-semibold">
                   ₹{Number(row.price || 0).toFixed(0)}
+                </td>
+                <td className="px-6 py-4 text-[#1C2B21] font-bold tabular-nums">
+                  {row.stock ?? '—'}
                 </td>
                 <td className="px-6 py-4">
                   <span

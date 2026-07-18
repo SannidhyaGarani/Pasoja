@@ -22,6 +22,7 @@ const ProductCard = ({ product, idx, triggerToast }) => {
   const savingsPercent = displayPrice ? Math.round(((originalPrice - displayPrice) / originalPrice) * 100) : 0;
   const cartItemId = defaultSize ? `${product.id}-${defaultSize.size}` : product.id;
   const isInCart = cart.some(item => (item.cartId || item.id) === cartItemId);
+  const isOutOfStock = product.stock === 0 || product.stock_status === 'Out of Stock';
 
   const handleAction = async (e, type) => {
     e.preventDefault();
@@ -38,6 +39,9 @@ const ProductCard = ({ product, idx, triggerToast }) => {
 
   const rating = product.rating || (4.5 + (idx % 5) * 0.1);
   const badgeText = product.tag || (idx % 2 === 0 ? 'BEST SELLER' : 'NEW');
+  const displayedImage = isHovered && product.images && product.images.length > 1
+    ? product.images[1]
+    : (product.image || product.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop');
 
   return (
     <motion.div
@@ -48,19 +52,28 @@ const ProductCard = ({ product, idx, triggerToast }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(`/product/${product.id}`)}
-      className="group relative cursor-pointer flex flex-col bg-[#111111]/90 hover:bg-[#141414] p-3 rounded-2xl border border-white/[0.04] transition-all duration-300"
+      className="group relative cursor-pointer flex flex-col bg-transparent transition-all duration-300"
     >
       {/* Image */}
-      <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#1a1a1a]">
+      <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#151515] border border-white/[0.04]">
         <img
-          src={product.image || product.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop'}
+          src={displayedImage}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
 
+        {/* Out of Stock Overlay */}
+        {isOutOfStock && (
+          <div className="absolute inset-0 z-20 bg-black/60 flex items-center justify-center">
+            <span className="bg-white text-black font-bold uppercase text-[9px] tracking-[0.2em] px-3.5 py-2">
+              Out of Stock
+            </span>
+          </div>
+        )}
+
         {/* Top-left Badge */}
-        <div className="absolute top-3.5 left-3.5 z-10">
-          <span className="bg-white text-black font-extrabold uppercase text-[9px] tracking-wider px-2 py-0.5 rounded shadow-sm">
+        <div className="absolute top-2.5 left-2.5 z-10">
+          <span className="bg-white text-black font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1 shadow-sm">
             {badgeText}
           </span>
         </div>
@@ -68,42 +81,45 @@ const ProductCard = ({ product, idx, triggerToast }) => {
         {/* Wishlist */}
         <button
           onClick={(e) => handleAction(e, 'wishlist')}
-          className="absolute top-3.5 right-3.5 z-30 text-white hover:scale-110 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-300 pointer-events-auto cursor-pointer"
+          className="absolute top-2.5 right-2.5 z-30 text-white hover:scale-110 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-300 pointer-events-auto cursor-pointer"
         >
           <Heart 
-            size={16} 
+            size={15} 
             strokeWidth={2} 
             fill={isWishlisted ? "#ef4444" : "none"} 
-            stroke={isWishlisted ? "#ef4444" : "#ef4444"} 
+            stroke={isWishlisted ? "#ef4444" : "#ffffff"} 
             className="transition-colors duration-300"
           />
         </button>
       </div>
 
       {/* Info */}
-      <div className="pt-3 flex flex-col flex-grow">
-        <h3 className="text-[13px] font-semibold text-white/90 leading-snug mb-1 line-clamp-1 group-hover:text-white transition-colors duration-300">
+      <div className="pt-3.5 flex flex-col flex-grow">
+        {product.category && (
+          <span className="text-[9px] uppercase tracking-[0.2em] text-[#c9a962] font-semibold mb-1">
+            {product.category}
+          </span>
+        )}
+        <h3 className="text-[12px] font-light text-white uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-[#c9a962] transition-colors duration-300">
           {product.name}
         </h3>
         
-        {/* Stars */}
-        <div className="flex items-center gap-0.5 text-yellow-500 mb-2">
-          {[...Array(5)].map((_, i) => (
-            <span key={i} className="text-[11px]">★</span>
-          ))}
-          <span className="text-[10px] text-white/40 ml-1.5 font-medium">({rating.toFixed(1)})</span>
+        {/* Stars - Minimal */}
+        <div className="flex items-center gap-1 mb-2.5 text-[10px] text-white/40">
+          <span className="text-[#c9a962]">★</span>
+          <span className="font-semibold">{rating.toFixed(1)}</span>
         </div>
 
         {/* Price & Cart row */}
-        <div className="flex items-center justify-between mt-auto">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-white">₹{displayPrice?.toLocaleString('en-IN')}</span>
+        <div className="flex items-center justify-between mt-auto pt-1 border-t border-white/[0.04]">
+          <div className="flex items-baseline gap-2">
+            <span className="text-sm font-semibold tracking-wide text-white">₹{displayPrice?.toLocaleString('en-IN')}</span>
             {originalPrice !== displayPrice && (
-              <span className="text-[11px] text-white/35 line-through">₹{originalPrice?.toLocaleString('en-IN')}</span>
+              <span className="text-[11px] text-white/30 line-through">₹{originalPrice?.toLocaleString('en-IN')}</span>
             )}
             {savingsPercent > 0 && (
-              <span className="bg-[#b91c1c] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-sm">
-                -{savingsPercent}%
+              <span className="hidden md:inline text-red-400 text-[9px] font-bold">
+                ({savingsPercent}% OFF)
               </span>
             )}
           </div>
@@ -111,10 +127,13 @@ const ProductCard = ({ product, idx, triggerToast }) => {
           {/* Cart Icon Button */}
           <button
             onClick={(e) => handleAction(e, 'cart')}
-            className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 z-30 cursor-pointer relative pointer-events-auto ${
-              isInCart
-                ? 'bg-white text-black border-white'
-                : 'bg-[#191919] text-white/80 border-white/10 hover:bg-[#252525] hover:border-white/20 hover:text-white'
+            disabled={isOutOfStock}
+            className={`w-9 h-9 border flex items-center justify-center transition-all duration-300 z-30 cursor-pointer relative pointer-events-auto ${
+              isOutOfStock
+                ? 'bg-transparent text-white/20 border-white/5 cursor-not-allowed'
+                : isInCart
+                  ? 'bg-white text-black border-white'
+                  : 'bg-transparent text-white/80 border-white/10 hover:bg-white hover:text-black hover:border-white'
             }`}
           >
             <ShoppingCart size={13} strokeWidth={2} />
@@ -260,8 +279,8 @@ const Shop = () => {
             {[...Array(8)].map((_, i) => (
               <div key={i} className="space-y-3">
                 <div className="aspect-[3/4] bg-white/5 animate-pulse" />
-                <div className="h-3 bg-white/5 rounded animate-pulse w-2/3" />
-                <div className="h-3 bg-white/5 rounded animate-pulse w-1/3" />
+                <div className="h-3 bg-white/5 animate-pulse w-2/3" />
+                <div className="h-3 bg-white/5 animate-pulse w-1/3" />
               </div>
             ))}
           </div>

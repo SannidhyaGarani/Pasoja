@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { uploadToCloudinary } from "../Admin";
 
@@ -7,6 +7,20 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
   const initialSizePrices = product?.size_prices || [];
   const [sizePrices, setSizePrices] = useState(initialSizePrices.length > 0 ? initialSizePrices : [{ size: "", price: 0, original_price: 0 }]);
 
+  const getInitialImages = () => {
+    if (product) {
+      if (Array.isArray(product.images) && product.images.length > 0) {
+        return product.images.map(url => ({ type: 'existing', url }));
+      } else if (product.image) {
+        return [{ type: 'existing', url: product.image }];
+      }
+    }
+    return [];
+  };
+
+  const [imagePreviews, setImagePreviews] = useState(getInitialImages());
+  const [primaryIndex, setPrimaryIndex] = useState(0);
+
   const { register, handleSubmit, reset, formState, setValue, watch } = useForm({
     defaultValues: {
       name: product?.name || "",
@@ -14,6 +28,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       description: product?.description || "",
       price: product?.price || 0,
       original_price: product?.original_price || 0,
+      stock: product?.stock ?? 10,
       stock_status: product?.stock_status || "In Stock",
       sizes: product?.sizes || "",
       colors: product?.colors || "",
@@ -21,8 +36,78 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       rating: product?.rating || 4.5,
     },
   });
+
+  const stockValue = watch("stock");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (product) {
+      const initialImgs = [];
+      if (Array.isArray(product.images) && product.images.length > 0) {
+        product.images.forEach(url => initialImgs.push({ type: 'existing', url }));
+      } else if (product.image) {
+        initialImgs.push({ type: 'existing', url: product.image });
+      }
+      setImagePreviews(initialImgs);
+      setPrimaryIndex(0);
+      setSizePrices(product.size_prices && product.size_prices.length > 0 ? product.size_prices : [{ size: "", price: 0, original_price: 0 }]);
+      reset({
+        name: product.name || "",
+        category: product.category || "",
+        description: product.description || "",
+        price: product.price || 0,
+        original_price: product.original_price || 0,
+        stock: product.stock ?? 10,
+        stock_status: product.stock_status || "In Stock",
+        sizes: product.sizes || "",
+        colors: product.colors || "",
+        material: product.material || "",
+        rating: product.rating || 4.5,
+      });
+    } else {
+      setImagePreviews([]);
+      setPrimaryIndex(0);
+      setSizePrices([{ size: "", price: 0, original_price: 0 }]);
+      reset({
+        name: "",
+        category: "",
+        description: "",
+        price: 0,
+        original_price: 0,
+        stock: 10,
+        stock_status: "In Stock",
+        sizes: "",
+        colors: "",
+        material: "",
+        rating: 4.5,
+      });
+    }
+  }, [product, reset]);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    const newPreviews = files.map(file => ({
+      type: 'new',
+      url: URL.createObjectURL(file),
+      file
+    }));
+    setImagePreviews(prev => [...prev, ...newPreviews]);
+  };
+
+  const removeImage = (indexToRemove) => {
+    setImagePreviews(prev => {
+      const updated = prev.filter((_, idx) => idx !== indexToRemove);
+      if (primaryIndex >= updated.length) {
+        setPrimaryIndex(Math.max(0, updated.length - 1));
+      }
+      return updated;
+    });
+  };
+
+  const selectPrimary = (idx) => {
+    setPrimaryIndex(idx);
+  };
 
   const categories = [
     "T-Shirts",
@@ -54,13 +139,22 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
     setError("");
     setLoading(true);
     try {
-      const files = values.images?.[0] ? Array.from(values.images) : [];
       const uploadUrls = [];
-      if (files.length > 0) {
-        for (const file of files) {
-          const url = await uploadToCloudinary(file);
+      for (const item of imagePreviews) {
+        if (item.type === 'existing') {
+          uploadUrls.push(item.url);
+        } else if (item.type === 'new' && item.file) {
+          const url = await uploadToCloudinary(item.file);
           uploadUrls.push(url);
         }
+      }
+
+      // Re-order the images array so that the primary image is first!
+      let orderedUrls = [...uploadUrls];
+      if (uploadUrls.length > 0) {
+        const primaryUrl = uploadUrls[primaryIndex] || uploadUrls[0];
+        const remainingUrls = uploadUrls.filter((_, idx) => idx !== primaryIndex);
+        orderedUrls = [primaryUrl, ...remainingUrls];
       }
 
       // Process size_prices - filter out empty sizes
@@ -70,6 +164,9 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       const defaultPrice = validSizePrices.length > 0 ? validSizePrices[0].price : Number(values.price) || 0;
       const defaultOriginalPrice = validSizePrices.length > 0 ? validSizePrices[0].original_price : Number(values.original_price) || 0;
 
+      const stockQty = Number(values.stock) || 0;
+      const autoStatus = stockQty === 0 ? "Out of Stock" : stockQty <= 5 ? "Low Stock" : "In Stock";
+
       const docData = {
         name: values.name,
         category: values.category,
@@ -77,19 +174,22 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         price: defaultPrice,
         original_price: defaultOriginalPrice,
         size_prices: validSizePrices,
-        stock_status: values.stock_status,
+        stock: stockQty,
+        stock_status: autoStatus,
         sizes: validSizePrices.map(sp => sp.size).join(", "),
         colors: values.colors,
         material: values.material,
         rating: Number(values.rating) || 4.5,
-        images: uploadUrls,
-        image: uploadUrls[0] || (product?.image || ""),
+        images: orderedUrls,
+        image: orderedUrls[0] || "",
       };
 
       if (onSuccess) {
         onSuccess(docData);
       }
       reset();
+      setImagePreviews([]);
+      setPrimaryIndex(0);
     } catch (err) {
       setError("Upload failed: " + err.message);
     } finally {
@@ -201,16 +301,22 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide">
-            Stock Status
+            Stock Quantity
           </label>
-          <select
+          <input
+            type="number"
+            min="0"
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white"
-            {...register("stock_status")}
-          >
-            <option value="In Stock">In Stock</option>
-            <option value="Low Stock">Low Stock</option>
-            <option value="Out of Stock">Out of Stock</option>
-          </select>
+            placeholder="e.g. 20"
+            {...register("stock")}
+          />
+          {/* Auto-derived status preview */}
+          <p className={`text-xs font-bold mt-1 ${
+            Number(stockValue) === 0 ? 'text-red-500' :
+            Number(stockValue) <= 5 ? 'text-amber-500' : 'text-green-600'
+          }`}>
+            Status: {Number(stockValue) === 0 ? 'Out of Stock' : Number(stockValue) <= 5 ? 'Low Stock' : 'In Stock'}
+          </p>
         </div>
         <div className="space-y-1.5">
           <label className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide">
@@ -254,9 +360,9 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         </div>
       </div>
 
-      <div className="space-y-1.5">
+      <div className="space-y-3">
         <label className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide">
-          Product Images
+          Product Images (Select first image display)
         </label>
         <div className="relative">
           <input
@@ -264,9 +370,53 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             multiple
             accept="image/*"
             className="w-full px-4 py-3 rounded-xl border border-dashed border-[#c9a962] hover:border-[#1a1a1a] transition-colors text-sm file:mr-4 file:py-2 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#c9a962]/10 file:text-[#c9a962] cursor-pointer bg-white"
-            {...register("images")}
+            onChange={handleFileChange}
           />
         </div>
+
+        {/* Image previews grid */}
+        {imagePreviews.length > 0 && (
+          <div className="space-y-2">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
+              Manage Images (Click on image to mark as Primary display thumbnail)
+            </span>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
+              {imagePreviews.map((img, idx) => (
+                <div 
+                  key={idx} 
+                  onClick={() => selectPrimary(idx)}
+                  className={`relative group aspect-square rounded-lg border overflow-hidden bg-white cursor-pointer transition-all ${
+                    primaryIndex === idx ? 'border-4 border-[#c9a962]' : 'border-gray-200 hover:border-[#c9a962]'
+                  }`}
+                >
+                  <img src={img.url} alt="Preview" className="w-full h-full object-cover" />
+                  
+                  {/* Remove button */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeImage(idx);
+                    }}
+                    className="absolute top-1.5 right-1.5 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-xs shadow transition-opacity"
+                    title="Remove Image"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+
+                  {/* Primary indicator badge */}
+                  {primaryIndex === idx && (
+                    <span className="absolute bottom-1.5 left-1.5 bg-[#c9a962] text-[#1a1a1a] text-[8px] font-bold tracking-wider px-1.5 py-0.5 rounded-sm uppercase">
+                      Primary
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-end gap-3 pt-2 border-t border-gray-300 mt-4">

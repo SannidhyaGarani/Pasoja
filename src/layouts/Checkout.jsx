@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../components/useAuth";
 import { db } from "../components/Firebase";
-import { collection, getDocs, addDoc, serverTimestamp, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, serverTimestamp, doc, deleteDoc, getDoc, updateDoc } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
 import { CreditCard, MapPin, User, Phone, Mail, CheckCircle, X, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -40,7 +40,7 @@ const Checkout = () => {
 
   const triggerToast = (msg) => { setFeedbackMessage(msg); setTimeout(() => setFeedbackMessage(null), 4000); };
   const handleInputChange = (e) => { setFormData({ ...formData, [e.target.name]: e.target.value }); };
-  const total = items.reduce((sum, i) => sum + (Number(i.price) || 0), 0);
+  const total = items.reduce((sum, i) => sum + ((Number(i.price) || 0) * (i.quantity || 1)), 0);
 
   const clearCart = async () => {
     try {
@@ -56,7 +56,41 @@ const Checkout = () => {
         shipping: formData, paymentMethod: formData.paymentMethod,
         paymentId, status, paymentStatus, createdAt: serverTimestamp(),
       });
-      if (status === "confirmed") { await clearCart(); setOrderStatus("success"); }
+      if (status === "confirmed") { 
+        // Update product stocks
+        for (const item of items) {
+          try {
+            // Find base product id (robust fallback if it's cartId format)
+            const productId = item.id || item.cartId?.split("-")[0];
+            if (productId) {
+              const productRef = doc(db, "products", productId);
+              const productSnap = await getDoc(productRef);
+              if (productSnap.exists()) {
+                const currentStock = Number(productSnap.data().stock) || 0;
+                const quantityPurchased = Number(item.quantity) || 1;
+                const newStock = Math.max(0, currentStock - quantityPurchased);
+                
+                // Set matching status
+                let newStatus = "In Stock";
+                if (newStock === 0) {
+                  newStatus = "Out of Stock";
+                } else if (newStock <= 5) {
+                  newStatus = "Low Stock";
+                }
+
+                await updateDoc(productRef, {
+                  stock: newStock,
+                  stock_status: newStatus
+                });
+              }
+            }
+          } catch (stockErr) {
+            console.error("Failed to update stock for item", item.id, stockErr);
+          }
+        }
+        await clearCart(); 
+        setOrderStatus("success"); 
+      }
       else { setOrderStatus("failed"); }
     } catch (error) { console.error("Error saving order:", error); triggerToast("Order save failed. Please contact support."); }
   };

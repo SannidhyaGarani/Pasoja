@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
+import { EffectCoverflow, Pagination, Autoplay, Mousewheel } from 'swiper/modules';
+import { db } from '../Firebase';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import SectionHeader from './SectionHeader';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
-const slides = [
+const fallbackSlides = [
   {
     image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop',
     title: 'Neo-Street Edit',
@@ -51,6 +54,37 @@ const slides = [
 ];
 
 const GallerySwiper = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      try {
+        const q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(8));
+        const snap = await getDocs(q);
+        const fetched = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setProducts(fetched);
+      } catch (err) {
+        console.error("Error loading gallery products:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecent();
+  }, []);
+
+  const slides = products.length > 0
+    ? products.map(p => ({
+      id: p.id,
+      image: p.image || p.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800',
+      title: p.name,
+      subtitle: p.category || 'New Season',
+      price: p.price,
+      isProduct: true
+    }))
+    : fallbackSlides;
+
   return (
     <section className="py-20 bg-[#0a0a0a] overflow-hidden relative border-t border-white/[0.03]">
       {/* Premium ambient decorative elements */}
@@ -58,11 +92,11 @@ const GallerySwiper = () => {
       <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-white/[0.005] rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
-        
-        <SectionHeader 
-          subtitle="Editorial Visuals"
-          title="Campaign Showcase"
-          description="A photographic narrative exploring architectural forms, raw fabric grains, and high-contrast styling."
+
+        <SectionHeader
+          subtitle="New Brand Showcase"
+          title="Recent Arrivals"
+          description="Explore recently uploaded designer details, highlighting structured cuts and signature fits."
         />
 
         <div className="relative w-full py-8 gallery-swiper">
@@ -71,7 +105,7 @@ const GallerySwiper = () => {
             grabCursor={true}
             centeredSlides={true}
             slidesPerView={'auto'}
-            loop={true}
+            loop={slides.length > 3}
             speed={1000}
             autoplay={{
               delay: 3000,
@@ -84,7 +118,7 @@ const GallerySwiper = () => {
               modifier: 1,
               slideShadows: true,
             }}
-            pagination={{ 
+            pagination={{
               clickable: true,
               dynamicBullets: false,
             }}
@@ -92,10 +126,14 @@ const GallerySwiper = () => {
             className="w-full overflow-visible"
           >
             {slides.map((slide, idx) => (
-              <SwiperSlide key={idx} className="relative rounded-[24px] overflow-hidden border border-white/[0.05] bg-[#0c0c0c] shadow-2xl">
+              <SwiperSlide
+                key={idx}
+                onClick={() => slide.isProduct && navigate(`/product/${slide.id}`)}
+                className="relative rounded-none overflow-hidden border border-white/[0.05] bg-[#0c0c0c] shadow-2xl cursor-pointer group"
+              >
                 {/* Image */}
-                <img 
-                  src={slide.image} 
+                <img
+                  src={slide.image}
                   alt={slide.title}
                   className="w-full h-full object-cover transition-transform duration-[1500ms] ease-out hover:scale-105"
                 />
@@ -105,12 +143,17 @@ const GallerySwiper = () => {
 
                 {/* Coverflow content overlay */}
                 <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-8 pointer-events-none">
-                  <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-white/50 mb-1.5 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                  <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-[#c9a962] mb-1.5 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                     {slide.subtitle}
                   </span>
-                  <h4 className="text-xl md:text-2xl font-light text-white tracking-widest uppercase leading-none">
+                  <h4 className="text-sm md:text-md font-light text-white tracking-widest uppercase leading-snug line-clamp-2">
                     {slide.title}
                   </h4>
+                  {slide.price !== undefined && slide.price !== null && (
+                    <span className="text-[12px] font-bold text-white tracking-wider mt-1 text-left">
+                      ₹{Number(slide.price).toLocaleString("en-IN")}
+                    </span>
+                  )}
                 </div>
               </SwiperSlide>
             ))}

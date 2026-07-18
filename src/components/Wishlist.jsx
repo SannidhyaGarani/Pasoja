@@ -1,14 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, ShoppingBag, ArrowRight, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "./Home/PageHeader";
 import { useStore } from "./StoreProvider";
+import { db } from "./Firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const Wishlist = () => {
   const { wishlist, removeFromWishlist, addToCart, loading } = useStore();
   const navigate = useNavigate();
   const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const [productStocks, setProductStocks] = useState({});
+
+  useEffect(() => {
+    const fetchStocks = async () => {
+      try {
+        const stocksMap = {};
+        for (const item of wishlist) {
+          const docSnap = await getDoc(doc(db, "products", item.id));
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            stocksMap[item.id] = {
+              stock: data.stock !== undefined ? data.stock : 10,
+              stock_status: data.stock_status || "In Stock"
+            };
+          }
+        }
+        setProductStocks(stocksMap);
+      } catch (err) {
+        console.error("Error fetching wishlist stocks:", err);
+      }
+    };
+    if (wishlist.length > 0) {
+      fetchStocks();
+    }
+  }, [wishlist]);
 
   const triggerToast = (msg) => {
     setFeedbackMessage(msg);
@@ -77,24 +104,48 @@ const Wishlist = () => {
                     <X size={13} strokeWidth={2} />
                   </button>
 
-                  <div onClick={() => navigate(`/product/${item.id}`)} className="relative w-full aspect-[3/4] overflow-hidden bg-[#1a1a1a] cursor-pointer">
-                    <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  </div>
+                  {
+                    (() => {
+                      const stockInfo = productStocks[item.id] || { stock: 999, stock_status: "In Stock" };
+                      const isOutOfStock = stockInfo.stock === 0 || stockInfo.stock_status === "Out of Stock";
 
-                  <div className="pt-3 flex-grow flex flex-col">
-                    {item.category && <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold mb-1">{item.category}</span>}
-                    <h3 onClick={() => navigate(`/product/${item.id}`)}
-                      className="text-[13px] sm:text-sm font-semibold text-white/80 leading-snug mb-2 group-hover:text-white transition-colors cursor-pointer line-clamp-2"
-                    >{item.name}</h3>
-                    <div className="flex items-center justify-between mt-auto">
-                      <span className="text-sm font-bold text-white">₹{Number(item.price).toLocaleString("en-IN")}</span>
-                      <button onClick={() => handleMoveToCart(item)}
-                        className="w-9 h-9 bg-white text-black flex items-center justify-center hover:bg-white/85 transition-all"
-                      >
-                        <ShoppingBag size={14} strokeWidth={2} />
-                      </button>
-                    </div>
-                  </div>
+                      return (
+                        <>
+                          <div onClick={() => navigate(`/product/${item.id}`)} className="relative w-full aspect-[3/4] overflow-hidden bg-[#1a1a1a] cursor-pointer">
+                            <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                            {isOutOfStock && (
+                              <div className="absolute inset-0 z-20 bg-black/60 flex items-center justify-center">
+                                <span className="bg-white text-black font-black uppercase text-[10px] tracking-widest px-3 py-1.5">
+                                  Out of Stock
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="pt-3 flex-grow flex flex-col">
+                            {item.category && <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold mb-1">{item.category}</span>}
+                            <h3 onClick={() => navigate(`/product/${item.id}`)}
+                              className="text-[13px] sm:text-sm font-semibold text-white/80 leading-snug mb-2 group-hover:text-white transition-colors cursor-pointer line-clamp-2"
+                            >{item.name}</h3>
+                            <div className="flex items-center justify-between mt-auto">
+                              <span className="text-sm font-bold text-white">₹{Number(item.price).toLocaleString("en-IN")}</span>
+                              <button 
+                                onClick={() => !isOutOfStock && handleMoveToCart(item)}
+                                disabled={isOutOfStock}
+                                className={`w-9 h-9 flex items-center justify-center transition-all ${
+                                  isOutOfStock 
+                                    ? 'bg-[#1a1a1a] text-white/20 border border-white/5 cursor-not-allowed' 
+                                    : 'bg-white text-black hover:bg-white/85'
+                                }`}
+                              >
+                                <ShoppingBag size={14} strokeWidth={2} />
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })()
+                  }
                 </motion.div>
               ))}
             </div>

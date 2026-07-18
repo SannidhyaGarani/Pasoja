@@ -48,13 +48,6 @@ const Header = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
-  const mobileNavItems = [
-    { name: 'Shop', icon: ShoppingBag, path: '/shop' },
-    { name: 'Wishlist', icon: Heart, path: '/wishlist', count: wishlistCount },
-    { name: 'Home', icon: Sparkles, path: '/' },
-    { name: 'Cart', icon: ShoppingBag, path: '/cart', count: cartCount },
-    { name: 'Profile', icon: User, path: '/account' },
-  ];
 
   const tickerItems = [
     'COMPLIMENTARY SHIPPING OVER ₹1999',
@@ -285,36 +278,6 @@ const Header = () => {
           )}
         </AnimatePresence>
       </header>
-
-      {/* ── MOBILE BOTTOM DOCK ── */}
-      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-[460px] h-[68px] bg-[#111]/95 backdrop-blur-2xl rounded-2xl border border-white/10 md:hidden z-[150] shadow-[0_8px_32px_rgba(0,0,0,0.6)] flex items-center justify-around px-3">
-        {mobileNavItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = location.pathname === item.path;
-          return (
-            <Link
-              key={item.name}
-              to={item.path}
-              className="relative flex flex-col items-center justify-center flex-1 h-full select-none"
-            >
-              <motion.div
-                whileTap={{ scale: 0.88 }}
-                className={`flex flex-col items-center gap-1 transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/35 hover:text-white/60'}`}
-              >
-                <div className={`p-1.5 rounded-xl transition-all duration-300 ${isActive ? 'bg-white/10' : ''}`}>
-                  <Icon size={21} strokeWidth={isActive ? 2 : 1.5} />
-                </div>
-                <span className="text-[9px] tracking-wide font-semibold uppercase">{item.name}</span>
-                {item.count > 0 && (
-                  <span className="absolute -top-0.5 right-2 w-4 h-4 bg-white text-black text-[8px] font-black rounded-full flex items-center justify-center">
-                    {item.count}
-                  </span>
-                )}
-              </motion.div>
-            </Link>
-          );
-        })}
-      </nav>
     </>
   );
 };

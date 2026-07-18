@@ -80,7 +80,7 @@ export const StoreProvider = ({ children }) => {
       name: product.name,
       price: price,
       image: product.image || product.images?.[0] || "",
-      flavor: product.flavor || "",
+      category: product.category || "",
       size: selectedSize?.size || "",
       addedAt: new Date().toISOString(),
       quantity: 1
@@ -116,7 +116,7 @@ export const StoreProvider = ({ children }) => {
       name: product.name,
       price: product.price,
       image: product.image || product.images?.[0] || "",
-      flavor: product.flavor || "",
+      category: product.category || "",
       addedAt: new Date().toISOString()
     };
 

@@ -45,7 +45,7 @@ const MetricCards = () => {
     {
       label: "Total Products",
       value: loading ? "..." : stats.products,
-      hint: "Across all flavors",
+      hint: "Across all categories",
       icon: Package,
       color: "text-[#4A5D4E]",
       bg: "bg-[#4A5D4E]/10"

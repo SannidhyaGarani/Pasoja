@@ -33,6 +33,41 @@ const categories = [
     image: 'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?q=80&w=1200&auto=format&fit=crop',
     link: '/shop?category=shirts',
   },
+  {
+    id: 5,
+    title: 'Jackets',
+    subtitle: 'Contemporary Warmth',
+    image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png',
+    link: '/shop?category=jackets',
+  },
+  {
+    id: 6,
+    title: 'Sweaters',
+    subtitle: 'Finest Knitwear',
+    image: 'https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?q=80&w=1200&auto=format&fit=crop',
+    link: '/shop?category=sweaters',
+  },
+  {
+    id: 7,
+    title: 'Coats',
+    subtitle: 'Structured Outerwear',
+    image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1200&auto=format&fit=crop',
+    link: '/shop?category=coats',
+  },
+  {
+    id: 8,
+    title: 'Accessories',
+    subtitle: 'Complete The Look',
+    image: 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?q=80&w=1200&auto=format&fit=crop',
+    link: '/shop?category=accessories',
+  },
+  {
+    id: 9,
+    title: 'Dresses',
+    subtitle: 'Elegant Silhouettes',
+    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1200&auto=format&fit=crop',
+    link: '/shop?category=dresses',
+  }
 ];
 
 const containerVariants = {
@@ -73,13 +108,13 @@ const CategorySection = () => {
           />
         </div>
 
-        {/* Premium Grid Layout - 2 columns on mobile, 4 columns on large devices */}
+        {/* Premium Grid Layout - 3 columns on mobile, 4 columns on larger devices */}
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: '-60px' }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+          className="grid grid-cols-3 md:grid-cols-4 gap-2 sm:gap-6 lg:gap-8"
         >
           {categories.map((cat, index) => (
             <motion.div 
@@ -98,31 +133,31 @@ const CategorySection = () => {
                   />
                   
                   {/* Number styling top left */}
-                  <div className="absolute top-6 left-6 z-20 text-[10px] font-mono tracking-widest text-white/30 group-hover:text-white/80 transition-colors duration-500">
+                  <div className="absolute top-2.5 left-2.5 sm:top-6 sm:left-6 z-20 text-[8px] sm:text-[10px] font-mono tracking-widest text-white/30 group-hover:text-white/80 transition-colors duration-500">
                     0{index + 1}
                   </div>
 
                   {/* Corner indicator button top right */}
-                  <div className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/30 group-hover:text-white group-hover:bg-white group-hover:border-white transition-all duration-500">
-                    <ArrowUpRight size={12} className="transform group-hover:text-black transition-transform duration-300" />
+                  <div className="absolute top-2.5 right-2.5 sm:top-6 sm:right-6 z-20 w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-white/10 flex items-center justify-center text-white/30 group-hover:text-white group-hover:bg-white group-hover:border-white transition-all duration-500">
+                    <ArrowUpRight size={10} className="transform group-hover:text-black transition-transform duration-300 sm:w-[12px] sm:h-[12px]" />
                   </div>
 
                   {/* Premium gradient overlay specifically for text contrast */}
                   <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10 transition-opacity duration-700 group-hover:opacity-80" />
                   
                   {/* Inline micro border design inside the image box */}
-                  <div className="absolute inset-3 border border-white/0 group-hover:border-white/5 z-20 transition-all duration-700 pointer-events-none" />
+                  <div className="absolute inset-2 sm:inset-3 border border-white/0 group-hover:border-white/5 z-20 transition-all duration-700 pointer-events-none" />
                 </div>
                 
                 {/* Content details overlay */}
-                <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-8 pointer-events-none">
-                  <span className="text-[9px] uppercase font-bold tracking-[0.25em] text-white/40 mb-2 transform translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out delay-75">
+                <div className="absolute inset-0 z-20 flex flex-col justify-end p-2 sm:p-6 md:p-8 pointer-events-none">
+                  <span className="text-[7px] sm:text-[9px] uppercase font-bold tracking-[0.18em] sm:tracking-[0.25em] text-white/40 mb-1 sm:mb-2 transform translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out delay-75">
                     {cat.subtitle}
                   </span>
-                  <h3 className="text-xl md:text-2xl font-light text-white uppercase tracking-widest leading-none transform translate-y-1 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                  <h3 className="text-xs sm:text-lg md:text-xl lg:text-2xl font-light text-white uppercase tracking-widest leading-none transform translate-y-1 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     {cat.title}
                   </h3>
-                  <div className="w-0 group-hover:w-10 h-[1px] bg-white/40 mt-3 transition-all duration-500 ease-out" />
+                  <div className="w-0 group-hover:w-10 h-[1px] bg-white/40 mt-2 sm:mt-3 transition-all duration-500 ease-out" />
                 </div>
               </Link>
             </motion.div>

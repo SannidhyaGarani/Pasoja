@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingBag, Trash2, ShieldCheck, Truck, RotateCcw, ChevronRight, Gift, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 import { useStore } from "../components/StoreProvider";
 import { useAuth } from "../components/useAuth";
+import { db } from "../components/Firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, loading } = useStore();
@@ -14,6 +16,37 @@ const Cart = () => {
   const [giftNote, setGiftNote] = useState("");
 
   const total = cart.reduce((sum, item) => sum + ((Number(item.price) || 0) * (item.quantity || 1)), 0);
+  const [productStocks, setProductStocks] = useState({});
+
+  useEffect(() => {
+    const fetchStocks = async () => {
+      try {
+        const stocksMap = {};
+        for (const item of cart) {
+          const docSnap = await getDoc(doc(db, "products", item.id));
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            stocksMap[item.id] = {
+              stock: data.stock !== undefined ? data.stock : 10,
+              stock_status: data.stock_status || "In Stock"
+            };
+          }
+        }
+        setProductStocks(stocksMap);
+      } catch (err) {
+        console.error("Error fetching cart stock:", err);
+      }
+    };
+    if (cart.length > 0) {
+      fetchStocks();
+    }
+  }, [cart]);
+
+  const hasOutOfStockItem = cart.some(item => {
+    const stockInfo = productStocks[item.id];
+    if (!stockInfo) return false;
+    return stockInfo.stock === 0 || stockInfo.stock_status === "Out of Stock" || item.quantity > stockInfo.stock;
+  });
 
   const handleCheckout = () => {
     if (!user) navigate("/login?redirect=checkout");
@@ -65,8 +98,12 @@ const Cart = () => {
                   </div>
                   <motion.div layout className="space-y-2">
                     <AnimatePresence mode="popLayout">
-                      {cart.map((item, idx) => (
-                        <motion.div
+                      {cart.map((item, idx) => {
+                        const stockInfo = productStocks[item.id] || { stock: 999, stock_status: "In Stock" };
+                        const isOutOfStock = stockInfo.stock === 0 || stockInfo.stock_status === "Out of Stock";
+
+                        return (
+                          <motion.div
                           key={`${item.cartId || item.id}-${idx}`}
                           layout
                           initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -30 }}
@@ -80,12 +117,35 @@ const Cart = () => {
                             {item.category && <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/25">{item.category}</span>}
                             <h3 className="text-sm font-bold text-white/85 group-hover:text-white transition-colors leading-tight">{item.name}</h3>
                             {item.size && <p className="text-[11px] font-medium text-white/35 uppercase tracking-wider">Size: {item.size}</p>}
-                            <p className="text-sm font-bold text-white mt-1">₹{Number(item.price).toLocaleString("en-IN")}</p>
+                            <div className="flex flex-wrap items-center gap-2 mt-1 sm:justify-start justify-center">
+                              <p className="text-sm font-bold text-white">₹{Number(item.price).toLocaleString("en-IN")}</p>
+                              {isOutOfStock ? (
+                                <span className="bg-red-500/10 border border-red-500/20 text-red-400 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">Out of Stock</span>
+                              ) : item.quantity > stockInfo.stock ? (
+                                <span className="bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">Only {stockInfo.stock} left</span>
+                              ) : null}
+                            </div>
                           </div>
                           <div className="flex items-center bg-[#1a1a1a] border border-white/10 h-9">
-                            <button onClick={() => updateQuantity(item.cartId || item.id, -1)} className="w-8 h-full flex items-center justify-center text-white/35 hover:text-white transition-colors text-sm font-bold">−</button>
+                            <button 
+                              onClick={() => updateQuantity(item.cartId || item.id, -1)} 
+                              disabled={item.quantity <= 1}
+                              className="w-8 h-full flex items-center justify-center text-white/35 hover:text-white transition-colors text-sm font-bold disabled:opacity-20"
+                            >
+                              −
+                            </button>
                             <span className="w-7 text-center text-[13px] font-bold text-white">{item.quantity || 1}</span>
-                            <button onClick={() => updateQuantity(item.cartId || item.id, 1)} className="w-8 h-full flex items-center justify-center text-white/35 hover:text-white transition-colors text-sm font-bold">+</button>
+                            <button 
+                              onClick={() => {
+                                if (item.quantity < stockInfo.stock) {
+                                  updateQuantity(item.cartId || item.id, 1);
+                                }
+                              }} 
+                              disabled={isOutOfStock || item.quantity >= stockInfo.stock}
+                              className="w-8 h-full flex items-center justify-center text-white/35 hover:text-white transition-colors text-sm font-bold disabled:opacity-20"
+                            >
+                              +
+                            </button>
                           </div>
                           <button onClick={() => removeFromCart(item.cartId || item.id)}
                             className="p-2.5 bg-[#1a1a1a] text-white/25 border border-white/10 hover:bg-red-900/30 hover:text-red-400 hover:border-red-500/20 transition-all"
@@ -94,7 +154,8 @@ const Cart = () => {
                             <Trash2 size={14} strokeWidth={1.5} />
                           </button>
                         </motion.div>
-                      ))}
+                      );
+                    })}
                     </AnimatePresence>
                   </motion.div>
                 </div>
@@ -147,10 +208,16 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <button onClick={handleCheckout}
-                  className="w-full py-4 bg-white hover:bg-white/85 text-black font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5"
+                <button 
+                  onClick={() => !hasOutOfStockItem && handleCheckout()}
+                  disabled={hasOutOfStockItem}
+                  className={`w-full py-4 font-semibold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 mb-5 ${
+                    hasOutOfStockItem
+                      ? 'bg-white/10 text-white/20 cursor-not-allowed'
+                      : 'bg-white hover:bg-white/85 text-black'
+                  }`}
                 >
-                  Checkout <ChevronRight size={14} />
+                  {hasOutOfStockItem ? 'Remove Out of Stock Items' : 'Checkout'} <ChevronRight size={14} />
                 </button>
 
                 <div className="space-y-3 pt-4 border-t border-white/[0.06]">

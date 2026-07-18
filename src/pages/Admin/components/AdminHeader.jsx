@@ -9,7 +9,7 @@ const AdminHeader = ({ activeItem }) => {
           {activeItem}
         </h1>
         <p className="mt-2 text-sm font-medium tracking-wide text-[#4A5D4E] uppercase">
-          Sattu Drink Management
+          Clothing Store Management
         </p>
       </div>
       <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white shadow-sm border border-[#D9D3C7]">
