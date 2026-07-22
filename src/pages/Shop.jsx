@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "../components/Firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { Search, Heart, ArrowUpRight, X, ShoppingBag, Eye, SlidersHorizontal, ChevronDown, ShoppingCart } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../components/Home/PageHeader";
 import { useStore } from "../components/StoreProvider";
@@ -145,6 +145,7 @@ const ProductCard = ({ product, idx, triggerToast }) => {
 };
 
 const Shop = () => {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -153,6 +154,13 @@ const Shop = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const cat = searchParams.get("category");
+    if (cat) {
+      setSelectedCategory(cat);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchProducts = async () => {

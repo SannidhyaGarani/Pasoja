@@ -5,7 +5,6 @@ import Bestsellers from '../Home/Bestsellers';
 import FeaturesStrip from '../Home/FeaturesStrip';
 import GallerySwiper from '../Home/GallerySwiper';
 import GenderBanner from '../Home/GenderBanner';
-import Banner from '../Home/Banner';
 import BenefitsStrip from '../Home/BenefitsStrip';
 import Testimonials from '../Home/Testimonials';
 
@@ -18,8 +17,7 @@ const Home = () => {
       <CategorySection />
       <Bestsellers />
       <FeaturesStrip />
-      {/* <GenderBanner />
-      <Banner /> */}
+      <GenderBanner />
       <Testimonials />
     </main>
   );

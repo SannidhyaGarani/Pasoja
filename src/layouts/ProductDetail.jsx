@@ -76,9 +76,14 @@ const ProductDetail = () => {
     }
   };
 
-  const images = product?.images && product.images.length > 0
-    ? product.images
+  const rawImages = product?.images && product.images.length > 0
+    ? [...product.images]
     : [product?.image || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop'];
+
+  if (product?.model_image && !rawImages.includes(product.model_image)) {
+    rawImages.push(product.model_image);
+  }
+  const images = rawImages;
 
   if (loading) {
     return (

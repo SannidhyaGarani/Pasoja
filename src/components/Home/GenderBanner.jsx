@@ -1,82 +1,62 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const GenderBanner = () => {
-  const categories = [
+  const banners = [
     {
-      title: 'Women',
-      subtitle: 'The Fluid Collection',
-      desc: 'Graceful silhouettes for every occasion',
-      image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1000&auto=format&fit=crop',
-      path: '/shop?category=Women'
+      id: 'mens',
+      title: 'SHOP MENS',
+      buttonText: 'EXPLORE',
+      image: 'https://plus.unsplash.com/premium_photo-1669688174622-0393f5c6baa2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWVucyUyMGZhc2hpb258ZW58MHx8MHx8fDA%3D',
+      path: '/shop?category=Men'
     },
     {
-      title: 'Men',
-      subtitle: 'The Structural Form',
-      desc: 'Refined essentials, tailored precision',
-      image: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=1000&auto=format&fit=crop',
-      path: '/shop?category=Men'
+      id: 'womens',
+      title: 'SHOP WOMENS',
+      buttonText: 'EXPLORE',
+      image: 'https://images.unsplash.com/photo-1609505848912-b7c3b8b4beda?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29tYW4lMjBmYXNoaW9ufGVufDB8fDB8fHww',
+      path: '/shop?category=Women'
     }
   ];
 
   return (
-    <section className="bg-[#0a0a0a] overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        {categories.map((category, idx) => (
-          <motion.div
-            key={category.title}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ delay: idx * 0.1, duration: 0.8 }}
-            className="relative group overflow-hidden"
-          >
-            <Link to={category.path} className="block relative aspect-[3/4] sm:aspect-[4/5] w-full">
-              {/* Image */}
-              <div className="absolute inset-0 overflow-hidden">
+    <section className="bg-black py-4 md:py-6 overflow-hidden">
+      <div className="max-w-[1920px] mx-auto px-2 sm:px-4 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          {banners.map((banner, idx) => (
+            <motion.div
+              key={banner.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: idx * 0.15 }}
+              className="relative group overflow-hidden rounded-xs bg-[#111]"
+            >
+              <Link to={banner.path} className="block relative w-full h-[520px] sm:h-[620px] md:h-[680px] lg:h-[760px]">
+                {/* Background Image */}
                 <img
-                  src={category.image}
-                  alt={`${category.title} collection`}
-                  className="w-full h-full object-cover object-center transition-transform duration-[2s] ease-out group-hover:scale-[1.06]"
+                  src={banner.image}
+                  alt={banner.title}
+                  className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/10" />
-              </div>
 
-              {/* Content */}
-              <div className="absolute inset-0 p-8 sm:p-10 lg:p-14 flex flex-col justify-end">
-                <motion.span
-                  className="text-[9px] tracking-[0.35em] uppercase text-white/40 font-bold mb-3 block"
-                >
-                  {category.subtitle}
-                </motion.span>
+                {/* Dark Gradient Overlay at Bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
 
-                <h2 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-widest text-white mb-3 leading-none uppercase">
-                  {category.title}
-                </h2>
-
-                <p className="text-white/45 text-[13px] font-light mb-7">
-                  {category.desc}
-                </p>
-
-                <div className="flex items-center gap-3 group/cta">
-                  <span className="text-[10px] uppercase tracking-[0.25em] font-black text-white/70 group-hover/cta:text-white transition-colors duration-300">
-                    Shop {category.title}
-                  </span>
-                  <div className="w-7 h-7 rounded-full border border-white/20 flex items-center justify-center group-hover/cta:bg-white group-hover/cta:border-white transition-all duration-400">
-                    <ArrowRight size={11} className="text-white group-hover/cta:text-black transition-colors duration-400" />
+                {/* Bottom-left Overlay Content */}
+                <div className="absolute bottom-8 left-8 sm:bottom-10 sm:left-10 lg:bottom-12 lg:left-12 z-10 flex flex-col items-start">
+                  <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase mb-4 drop-shadow-md">
+                    {banner.title}
+                  </h2>
+                  <div className="px-6 py-2 sm:px-7 sm:py-2.5 rounded-full border border-white text-white text-xs sm:text-sm font-bold uppercase tracking-widest bg-black/20 backdrop-blur-xs transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:border-white shadow-md">
+                    {banner.buttonText}
                   </div>
                 </div>
-              </div>
-
-              {/* Divider line on left for second panel */}
-              {idx === 1 && (
-                <div className="absolute inset-y-0 left-0 w-[1px] bg-white/[0.06] hidden md:block" />
-              )}
-            </Link>
-          </motion.div>
-        ))}
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

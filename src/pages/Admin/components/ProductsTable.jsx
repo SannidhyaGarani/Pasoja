@@ -30,8 +30,9 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
         <table className="min-w-full text-left text-sm">
           <thead className="bg-[#EFECE6]">
             <tr className="text-sm font-bold text-[#4A5D4E] uppercase tracking-wide">
-              <th className="px-6 py-4">Product Name</th>
+              <th className="px-6 py-4">Product</th>
               <th className="px-6 py-4">Category</th>
+              <th className="px-6 py-4">Gender</th>
               <th className="px-6 py-4">Price</th>
               <th className="px-6 py-4">Qty</th>
               <th className="px-6 py-4">Stock</th>
@@ -42,10 +43,39 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
             {products.map((row) => (
               <tr key={row.id} className="hover:bg-[#FDFBF7] transition-colors">
                 <td className="px-6 py-4 text-[#1C2B21] font-medium">
-                  {row.name}
+                  <div className="flex items-center gap-3">
+                    {/* Thumbnail */}
+                    <div className="relative w-10 h-12 rounded overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200">
+                      <img
+                        src={row.image || row.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=200&auto=format&fit=crop'}
+                        alt={row.name}
+                        className="w-full h-full object-cover"
+                      />
+                      {row.model_image && (
+                        <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#c9a962] rounded-bl-sm" title="Model photo included" />
+                      )}
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-900 block">{row.name}</span>
+                      {row.model_image && (
+                        <span className="text-[10px] text-[#c9a962] font-bold uppercase tracking-wider block">
+                          ✦ Model Photo
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </td>
-                 <td className="px-6 py-4 text-[#707A72]">
+                <td className="px-6 py-4 text-[#707A72]">
                   {row.category || "-"}
+                </td>
+                <td className="px-6 py-4">
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${
+                    row.gender === 'Men' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                    row.gender === 'Women' ? 'bg-pink-50 text-pink-700 border border-pink-200' :
+                    'bg-gray-100 text-gray-700 border border-gray-200'
+                  }`}>
+                    {row.gender || "Unisex"}
+                  </span>
                 </td>
                 <td className="px-6 py-4 text-[#1C2B21] font-semibold">
                   ₹{Number(row.price || 0).toFixed(0)}
@@ -83,7 +113,7 @@ const ProductsTable = ({ products, onEdit, onDelete }) => {
             {products.length === 0 && (
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={7}
                   className="px-6 py-10 text-center text-sm text-[#707A72]"
                 >
                   No products yet. Click &quot;Add Product&quot; to get started!

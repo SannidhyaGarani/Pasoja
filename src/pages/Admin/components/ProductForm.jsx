@@ -21,10 +21,15 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
   const [imagePreviews, setImagePreviews] = useState(getInitialImages());
   const [primaryIndex, setPrimaryIndex] = useState(0);
 
+  // Model Image state (1 image)
+  const [modelImagePreview, setModelImagePreview] = useState(product?.model_image || null);
+  const [modelImageFile, setModelImageFile] = useState(null);
+
   const { register, handleSubmit, reset, formState, setValue, watch } = useForm({
     defaultValues: {
       name: product?.name || "",
       category: product?.category || "",
+      gender: product?.gender || "Unisex",
       description: product?.description || "",
       price: product?.price || 0,
       original_price: product?.original_price || 0,
@@ -51,10 +56,13 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       }
       setImagePreviews(initialImgs);
       setPrimaryIndex(0);
+      setModelImagePreview(product.model_image || null);
+      setModelImageFile(null);
       setSizePrices(product.size_prices && product.size_prices.length > 0 ? product.size_prices : [{ size: "", price: 0, original_price: 0 }]);
       reset({
         name: product.name || "",
         category: product.category || "",
+        gender: product.gender || "Unisex",
         description: product.description || "",
         price: product.price || 0,
         original_price: product.original_price || 0,
@@ -68,10 +76,13 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
     } else {
       setImagePreviews([]);
       setPrimaryIndex(0);
+      setModelImagePreview(null);
+      setModelImageFile(null);
       setSizePrices([{ size: "", price: 0, original_price: 0 }]);
       reset({
         name: "",
         category: "",
+        gender: "Unisex",
         description: "",
         price: 0,
         original_price: 0,
@@ -93,6 +104,19 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       file
     }));
     setImagePreviews(prev => [...prev, ...newPreviews]);
+  };
+
+  const handleModelImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setModelImageFile(file);
+      setModelImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const removeModelImage = () => {
+    setModelImageFile(null);
+    setModelImagePreview(null);
   };
 
   const removeImage = (indexToRemove) => {
@@ -149,6 +173,14 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         }
       }
 
+      // Upload model image if selected (Optional - 1 Image)
+      let modelImageUrl = product?.model_image || "";
+      if (modelImageFile) {
+        modelImageUrl = await uploadToCloudinary(modelImageFile);
+      } else if (!modelImagePreview) {
+        modelImageUrl = "";
+      }
+
       // Re-order the images array so that the primary image is first!
       let orderedUrls = [...uploadUrls];
       if (uploadUrls.length > 0) {
@@ -170,6 +202,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       const docData = {
         name: values.name,
         category: values.category,
+        gender: values.gender || "Unisex",
         description: values.description,
         price: defaultPrice,
         original_price: defaultOriginalPrice,
@@ -182,6 +215,7 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
         rating: Number(values.rating) || 4.5,
         images: orderedUrls,
         image: orderedUrls[0] || "",
+        model_image: modelImageUrl,
       };
 
       if (onSuccess) {
@@ -190,6 +224,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
       reset();
       setImagePreviews([]);
       setPrimaryIndex(0);
+      setModelImagePreview(null);
+      setModelImageFile(null);
     } catch (err) {
       setError("Upload failed: " + err.message);
     } finally {
@@ -199,8 +235,8 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-1.5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-1.5 md:col-span-1">
           <label className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide">
             Product Name
           </label>
@@ -222,6 +258,19 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
             {categories.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
+          </select>
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide">
+            Gender
+          </label>
+          <select
+            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-[#c9a962] focus:ring-1 focus:ring-[#c9a962] outline-none transition-all text-sm bg-white"
+            {...register("gender")}
+          >
+            <option value="Unisex">Unisex</option>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
           </select>
         </div>
       </div>
@@ -414,6 +463,51 @@ const ClothingProductForm = ({ onSuccess, isEdit = false, product = null }) => {
                   )}
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Model Image Section (1 Image) */}
+      <div className="space-y-3 pt-3 border-t border-gray-200">
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-semibold text-[#1a1a1a] uppercase tracking-wide flex items-center gap-2">
+            <span>Model Image (Optional)</span>
+          </label>
+          <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full border border-gray-200">
+            Optional — 1 Image for lookbook view
+          </span>
+        </div>
+        <div className="relative">
+          <input
+            type="file"
+            accept="image/*"
+            className="w-full px-4 py-3 rounded-xl border border-dashed border-[#c9a962] hover:border-[#1a1a1a] transition-colors text-sm file:mr-4 file:py-2 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#c9a962]/10 file:text-[#c9a962] cursor-pointer bg-white"
+            onChange={handleModelImageChange}
+          />
+        </div>
+
+        {/* Model Image Preview */}
+        {modelImagePreview && (
+          <div className="space-y-2">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
+              Selected Model Image
+            </span>
+            <div className="relative w-36 aspect-[3/4] rounded-xl border-2 border-[#c9a962] overflow-hidden bg-gray-50 shadow-md">
+              <img src={modelImagePreview} alt="Model Preview" className="w-full h-full object-cover" />
+              <button
+                type="button"
+                onClick={removeModelImage}
+                className="absolute top-1.5 right-1.5 z-30 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full text-xs shadow transition-opacity"
+                title="Remove Model Image"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <span className="absolute bottom-1.5 left-1.5 bg-black/80 text-white text-[8px] font-bold tracking-wider px-2 py-0.5 rounded-sm uppercase">
+                Model Photo
+              </span>
             </div>
           </div>
         )}
