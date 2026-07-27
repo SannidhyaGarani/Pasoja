@@ -20,9 +20,11 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
   body {
     @apply bg-[#0a0a0a] text-white font-sans antialiased min-h-screen text-[14px];
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply text-white font-heading;

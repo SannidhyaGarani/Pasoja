@@ -86,7 +86,7 @@ const GallerySwiper = () => {
     : fallbackSlides;
 
   return (
-    <section className="py-20 bg-[#0a0a0a] overflow-hidden relative border-t border-white/[0.03]">
+    <section className="py-10 bg-[#0a0a0a] overflow-x-hidden relative border-t border-white/[0.03]">
       {/* Premium ambient decorative elements */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#fff/[0.01],transparent_40%)] pointer-events-none" />
       <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-white/[0.005] rounded-full blur-[160px] pointer-events-none" />
@@ -99,7 +99,7 @@ const GallerySwiper = () => {
           description="Explore recently uploaded designer details, highlighting structured cuts and signature fits."
         />
 
-        <div className="relative w-full py-8 gallery-swiper">
+        <div className="relative w-full py-8 gallery-swiper overflow-x-hidden">
           <Swiper
             effect={'coverflow'}
             grabCursor={true}

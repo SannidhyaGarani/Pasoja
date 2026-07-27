@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, ShoppingBag, Eye, X, ArrowRight, ShoppingCart } from 'lucide-react';
+import { Heart, X, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { useStore } from '../../components/StoreProvider';
-import SectionHeader from '../Home/SectionHeader';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 
@@ -52,103 +52,107 @@ const ProductCard = ({ product, idx, triggerToast }) => {
     : (product.image || product.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop');
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: idx * 0.06, duration: 0.5 }}
+    <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(`/product/${product.id}`)}
-      className="group relative cursor-pointer flex flex-col bg-transparent transition-all duration-300"
+      className="group relative cursor-pointer flex flex-col bg-gradient-to-b from-[#121212] to-[#0d0d0d] border border-white/10 rounded-none h-[500px] sm:h-[540px] md:h-[560px] transition-all duration-500 hover:border-white/20 hover:from-[#161616] hover:to-[#101010]"
     >
-      {/* Image */}
-      <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#151515] border border-white/[0.04]">
+      {/* 65-70% Height Image Area */}
+      <div className="relative w-full h-[65%] overflow-hidden bg-[#161616]/40 border-b border-white/[0.06] flex items-center justify-center p-6">
         <img
           src={displayedImage}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="max-h-full max-w-full object-contain transition-all duration-[600ms] ease-out group-hover:scale-104 group-hover:brightness-[1.05]"
         />
+
+        {/* Soft overlay tint to tone down white backgrounds */}
+        <div className="absolute inset-0 bg-black/[0.03] group-hover:bg-transparent transition-colors duration-[600ms] pointer-events-none" />
 
         {/* Out of Stock Overlay */}
         {isOutOfStock && (
-          <div className="absolute inset-0 z-20 bg-black/60 flex items-center justify-center">
-            <span className="bg-white text-black font-bold uppercase text-[9px] tracking-[0.2em] px-3.5 py-2">
+          <div className="absolute inset-0 z-20 bg-black/75 flex items-center justify-center">
+            <span className="bg-white text-black font-extrabold uppercase text-[9px] tracking-[0.2em] px-3.5 py-2">
               Out of Stock
             </span>
           </div>
         )}
 
-        {/* Top-left Badge */}
-        <div className="absolute top-2.5 left-2.5 z-10">
-          <span className="bg-white text-black font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1 shadow-sm">
+        {/* Top-left Dynamic Badge */}
+        <div className="absolute top-3 left-3 z-10">
+          <span className="bg-white text-black font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1">
             {badgeText}
           </span>
         </div>
 
-        {/* Wishlist */}
+        {/* Wishlist Button */}
         <button
           onClick={(e) => handleAction(e, 'wishlist')}
-          className="absolute top-2.5 right-2.5 z-30 text-white hover:scale-110 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-300 pointer-events-auto cursor-pointer"
+          className="absolute top-3 right-3 z-30 text-white/80 hover:text-white hover:scale-110 transition-all duration-300 pointer-events-auto cursor-pointer"
         >
           <Heart 
-            size={15} 
-            strokeWidth={2} 
+            size={16} 
+            strokeWidth={1.8} 
             fill={isWishlisted ? "#ef4444" : "none"} 
-            stroke={isWishlisted ? "#ef4444" : "#ffffff"} 
-            className="transition-colors duration-300"
+            stroke={isWishlisted ? "#ef4444" : "currentColor"} 
           />
         </button>
       </div>
 
-      {/* Info */}
-      <div className="pt-3.5 flex flex-col flex-grow">
-        {product.category && (
-          <span className="text-[9px] uppercase tracking-[0.2em] text-[#c9a962] font-semibold mb-1">
-            {product.category}
-          </span>
-        )}
-        <h3 className="text-[12px] font-light text-white uppercase tracking-wider mb-1 line-clamp-1 group-hover:text-[#c9a962] transition-colors duration-300">
-          {product.name}
-        </h3>
-        
-        {/* Stars - Minimal */}
-        <div className="flex items-center gap-1 mb-2.5 text-[10px] text-white/40">
-          <span className="text-[#c9a962]">★</span>
-          <span className="font-semibold">{rating.toFixed(1)}</span>
+      {/* Info Area (30-35% Height) */}
+      <div className="p-4 sm:p-5 flex flex-col justify-between flex-grow">
+        <div>
+          {product.category && (
+            <span className="text-[9px] uppercase tracking-[0.25em] text-[#c9a962] font-semibold block mb-1">
+              {product.category}
+            </span>
+          )}
+          <h3 className="text-[13px] font-light text-white uppercase tracking-wider mb-1 line-clamp-2 leading-snug group-hover:text-[#c9a962] transition-colors duration-300">
+            {product.name}
+          </h3>
+          
+          {/* Rating */}
+          <div className="flex items-center gap-1.5 text-[10px] text-white/40 mt-1">
+            <span className="text-[#c9a962]">★</span>
+            <span className="font-semibold">{rating.toFixed(1)}</span>
+          </div>
         </div>
 
-        {/* Price & Cart row */}
-        <div className="flex items-center justify-between mt-auto pt-1 border-t border-white/[0.04]">
-          <div className="flex items-baseline gap-2">
-            <span className="text-sm font-semibold tracking-wide text-white">₹{displayPrice?.toLocaleString('en-IN')}</span>
-            {originalPrice !== displayPrice && (
-              <span className="text-[11px] text-white/30 line-through">₹{originalPrice?.toLocaleString('en-IN')}</span>
-            )}
+        {/* Pricing & Cart Action Row */}
+        <div className="flex items-end justify-between mt-auto pt-3 border-t border-white/[0.04]">
+          <div className="flex flex-col gap-0.5">
+            <div className="flex items-baseline gap-2">
+              <span className="text-sm font-bold tracking-wide text-white">₹{displayPrice?.toLocaleString('en-IN')}</span>
+              {originalPrice !== displayPrice && (
+                <span className="text-[11px] text-white/30 line-through">₹{originalPrice?.toLocaleString('en-IN')}</span>
+              )}
+            </div>
             {savingsPercent > 0 && (
-              <span className="hidden md:inline text-red-400 text-[9px] font-bold">
+              <span className="text-red-400 text-[9px] font-bold">
                 ({savingsPercent}% OFF)
               </span>
             )}
           </div>
 
-          {/* Cart Icon Button */}
+          {/* Minimal Circular Outlined Action Arrow Button */}
           <button
             onClick={(e) => handleAction(e, 'cart')}
             disabled={isOutOfStock}
-            className={`w-9 h-9 border flex items-center justify-center transition-all duration-300 z-30 cursor-pointer relative pointer-events-auto ${
+            className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 z-30 cursor-pointer relative pointer-events-auto ${
               isOutOfStock
-                ? 'bg-transparent text-white/20 border-white/5 cursor-not-allowed'
+                ? 'bg-transparent text-white/10 border-white/5 cursor-not-allowed'
                 : isInCart
                   ? 'bg-white text-black border-white'
-                  : 'bg-transparent text-white/80 border-white/10 hover:bg-white hover:text-black hover:border-white'
+                  : 'bg-transparent text-white/80 border-white/20 hover:bg-white hover:text-black hover:border-white'
             }`}
           >
-            <ShoppingCart size={13} strokeWidth={2} />
+            <span className="text-sm transform group-hover:translate-x-0.5 transition-transform duration-300">
+              &rarr;
+            </span>
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -156,6 +160,7 @@ const BestsellerProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const swiperRef = useRef(null);
 
   const triggerToast = (msg) => {
     setFeedbackMessage(msg);
@@ -188,8 +193,8 @@ const BestsellerProducts = () => {
 
   if (loading) {
     return (
-      <section className="py-16 md:py-24 bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+      <section className="py-16 md:py-24 bg-[#080808]">
+        <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10">
             <div>
               <div className="h-3 w-24 bg-white/5 mb-4 animate-pulse" />
@@ -211,51 +216,94 @@ const BestsellerProducts = () => {
   }
 
   return (
-    <section className="py-16 md:py-24 bg-[#0a0a0a] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14">
+    <section className="py-16 md:py-24 bg-[#080808] overflow-hidden">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Section header */}
-        <SectionHeader 
-          subtitle="Most Loved"
-          title="Bestsellers"
-        />
-
-        {/* Desktop 4-col grid */}
-        <div className="hidden md:grid grid-cols-4 gap-5 lg:gap-6">
-          {products.map((product, idx) => (
-            <ProductCard key={product.id} product={product} idx={idx} triggerToast={triggerToast} />
-          ))}
-        </div>
-
-        {/* Mobile 2-col Grid */}
-        <div className="md:hidden">
-          <div className="grid grid-cols-2 gap-4">
-            {products.slice(0, 4).map((product, idx) => (
-              <ProductCard key={product.id} product={product} idx={idx} triggerToast={triggerToast} />
-            ))}
+        {/* Premium Header Layout */}
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
+            <div>
+              <p className="text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
+                NEW ARRIVALS
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extralight tracking-[0.15em] text-white uppercase whitespace-nowrap leading-none">
+                FRESH DROPS
+              </h2>
+            </div>
+            <div className="hidden md:block flex-1 h-[1px] bg-zinc-800/80 mb-3" />
+          </div>
+          
+          <div className="flex items-center gap-6 self-start md:self-auto">
+            <p className="text-zinc-400 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
+              The latest arrivals crafted for those who set the trend.
+            </p>
+            <div className="flex gap-2.5">
+              <button 
+                onClick={() => swiperRef.current?.slidePrev()}
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all duration-300 cursor-pointer"
+              >
+                &larr;
+              </button>
+              <button 
+                onClick={() => swiperRef.current?.slideNext()}
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all duration-300 cursor-pointer"
+              >
+                &rarr;
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Centered View More Button */}
-        <div className="mt-12 flex justify-center">
+        {/* Horizontal Swiper Carousel */}
+        <div className="w-full">
+          <Swiper
+            onSwiper={(swiper) => { swiperRef.current = swiper; }}
+            spaceBetween={14}
+            slidesPerView={1.15}
+            breakpoints={{
+              640: {
+                slidesPerView: 2.2,
+                spaceBetween: 14,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 16,
+              },
+              1200: {
+                slidesPerView: 4,
+                spaceBetween: 18,
+              },
+            }}
+            className="w-full overflow-visible"
+          >
+            {products.map((product, idx) => (
+              <SwiperSlide key={product.id}>
+                <ProductCard product={product} idx={idx} triggerToast={triggerToast} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        {/* Centered Outlined CTA */}
+        <div className="mt-16 flex justify-center">
           <Link
             to="/shop"
-            className="flex items-center justify-center gap-2 px-8 py-4 border border-white/10 text-white text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black hover:border-white transition-all duration-300 w-full sm:w-auto text-center"
+            className="group flex items-center justify-center gap-3 px-10 h-[54px] border border-white/20 bg-transparent text-white text-[11px] font-semibold uppercase tracking-[0.27em] transition-all duration-300 hover:bg-white hover:text-black hover:border-white rounded-none"
           >
-            View More
-            <ArrowRight size={12} />
+            View All New Arrivals
+            <span className="transform group-hover:translate-x-1.5 transition-transform duration-300">&rarr;</span>
           </Link>
         </div>
       </div>
 
-      {/* Toast */}
+      {/* Toast Notification */}
       <AnimatePresence>
         {feedbackMessage && (
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] bg-white text-black px-5 py-3 rounded-sm shadow-2xl flex items-center gap-3"
+            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] bg-white text-black px-5 py-3 rounded-none shadow-2xl flex items-center gap-3"
           >
             <p className="text-[12px] font-black uppercase tracking-wider whitespace-nowrap">{feedbackMessage}</p>
             <button onClick={() => setFeedbackMessage(null)} className="opacity-40 hover:opacity-100 ml-1">

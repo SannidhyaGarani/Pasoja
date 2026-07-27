@@ -2,6 +2,7 @@ import React from 'react';
 import Hero from '../Home/Hero';
 import CategorySection from '../Home/CategorySection';
 import Bestsellers from '../Home/Bestsellers';
+import ShopTheLook from '../Home/ShopTheLook';
 import FeaturesStrip from '../Home/FeaturesStrip';
 import GallerySwiper from '../Home/GallerySwiper';
 import GenderBanner from '../Home/GenderBanner';
@@ -16,8 +17,9 @@ const Home = () => {
       <GallerySwiper />
       <CategorySection />
       <Bestsellers />
-      <FeaturesStrip />
-      <GenderBanner />
+      <ShopTheLook />
+      {/* <FeaturesStrip /> */}
+      {/* <GenderBanner /> */}
       <Testimonials />
     </main>
   );

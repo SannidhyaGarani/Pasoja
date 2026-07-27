@@ -1,113 +1,216 @@
-import React from 'react';
-import { Star } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
-import SectionHeader from '../Home/SectionHeader';
-import 'swiper/css';
-import 'swiper/css/pagination';
+import { db } from '../../components/Firebase';
+import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
+import { Star, Award, MessageSquare, RefreshCw, Heart } from 'lucide-react';
 
-const testimonials = [
-  {
-    name: 'Priya Sharma',
-    role: 'Fashion Blogger',
-    text: 'The quality is truly remarkable. The fabrics feel incredibly premium and the fit is perfect. Pasoja has become my absolute go-to brand.',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop'
-  },
-  {
-    name: 'Rahul Mehta',
-    role: 'Verified Buyer',
-    text: 'Fast delivery, excellent customer service, and the clothes are exactly as pictured. I\'ve ordered multiple times and never been disappointed.',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop'
-  },
-  {
-    name: 'Ananya Patel',
-    role: 'Style Consultant',
-    text: 'The attention to detail is impeccable. From the stitching to the packaging, everything exudes luxury. Worth every single penny!',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop'
-  },
-  {
-    name: 'Vikram Singh',
-    role: 'Verified Buyer',
-    text: 'Outstanding selection and incredible value. The return process was seamless too. Highly recommend for anyone who values quality apparel.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop'
-  }
-];
+import 'swiper/css';
+
+const IconMap = {
+  Star: Star,
+  Award: Award,
+  MessageSquare: MessageSquare,
+  RefreshCw: RefreshCw,
+  Heart: Heart
+};
 
 const Testimonials = () => {
+  const [settings, setSettings] = useState({
+    eyebrow: 'TESTIMONIALS',
+    heading: 'LOVED BY OUR COMMUNITY',
+    description_line_1: 'Real people. Real style. Real reviews.',
+    description_line_2: 'See why they love Pasoja.',
+    is_active: true
+  });
+  const [images, setImages] = useState([]);
+  const [stats, setStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const swiperRef = useRef(null);
+
+  useEffect(() => {
+    const fetchCommunityData = async () => {
+      try {
+        // 1. Settings
+        const settingsDoc = await getDocs(collection(db, 'community_settings'));
+        if (settingsDoc.empty) {
+          const defaultSettings = {
+            eyebrow: 'TESTIMONIALS',
+            heading: 'LOVED BY OUR COMMUNITY',
+            description_line_1: 'Real people. Real style. Real reviews.',
+            description_line_2: 'See why they love Pasoja.',
+            is_active: true
+          };
+          await setDoc(doc(db, 'community_settings', 'main'), defaultSettings);
+          setSettings(defaultSettings);
+        } else {
+          setSettings(settingsDoc.docs[0].data());
+        }
+
+        // 2. Images
+        const imgQuery = query(collection(db, 'community_images'), orderBy('sort_order', 'asc'));
+        const imgSnap = await getDocs(imgQuery);
+        if (imgSnap.empty) {
+          const defaultImages = [
+            { id: 'img_1', image: '/img/style_1.jpg', link: '', sort_order: 1, is_active: true },
+            { id: 'img_2', image: '/img/style_2.jpg', link: '', sort_order: 2, is_active: true },
+            { id: 'img_3', image: '/img/style_3.jpg', link: '', sort_order: 3, is_active: true },
+            { id: 'img_4', image: '/img/style_4.jpg', link: '', sort_order: 4, is_active: true },
+            { id: 'img_5', image: '/img/style_5.jpg', link: '', sort_order: 5, is_active: true },
+            { id: 'img_6', image: '/img/style_6.jpg', link: '', sort_order: 6, is_active: true }
+          ];
+          for (const item of defaultImages) {
+            await setDoc(doc(db, 'community_images', item.id), item);
+          }
+          setImages(defaultImages);
+        } else {
+          setImages(imgSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false));
+        }
+
+        // 3. Stats
+        const statsQuery = query(collection(db, 'community_stats'), orderBy('sort_order', 'asc'));
+        const statsSnap = await getDocs(statsQuery);
+        if (statsSnap.empty) {
+          const defaultStats = [
+            { id: 'stat_1', icon: 'Star', value: '15,000+', label: 'Happy Customers', sort_order: 1, is_active: true },
+            { id: 'stat_2', icon: 'Award', value: '4.8/5', label: 'Avg. Rating', sort_order: 2, is_active: true },
+            { id: 'stat_3', icon: 'MessageSquare', value: '2,000+', label: 'Reviews', sort_order: 3, is_active: true },
+            { id: 'stat_4', icon: 'RefreshCw', value: '95%', label: 'Recommend Us', sort_order: 4, is_active: true }
+          ];
+          for (const item of defaultStats) {
+            await setDoc(doc(db, 'community_stats', item.id), item);
+          }
+          setStats(defaultStats);
+        } else {
+          setStats(statsSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false));
+        }
+      } catch (err) {
+        console.error("Error fetching community data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCommunityData();
+  }, []);
+
+  if (loading || !settings.is_active) return null;
+
   return (
-    <section className="py-16 md:py-24 bg-[#0a0a0a] overflow-hidden relative">
-      {/* Decorative large text */}
-      <div className="absolute top-8 right-8 text-[200px] font-black text-white/[0.02] leading-none select-none pointer-events-none hidden lg:block" aria-hidden>
-        ★
-      </div>
-
-      <div className="max-w-7xl mx-auto px-5 md:px-10 lg:px-14 relative z-10">
-
+    <section className="py-16 md:py-24 bg-[#0a0a0a] overflow-hidden relative border-t border-white/[0.03]">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
+        
         {/* Header */}
-        <SectionHeader 
-          subtitle="Testimonials"
-          title="What Our Clients Say"
-        />
-
-        <div className="relative">
-          <Swiper
-            modules={[Autoplay, Pagination]}
-            spaceBetween={16}
-            slidesPerView={1}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
-            pagination={{ clickable: true, el: '.testimonial-dots' }}
-            breakpoints={{
-              640: { slidesPerView: 1.4, spaceBetween: 16 },
-              768: { slidesPerView: 2, spaceBetween: 20 },
-              1200: { slidesPerView: 3, spaceBetween: 24 },
-            }}
-            className="pb-12"
-          >
-            {testimonials.map((item, index) => (
-              <SwiperSlide key={index} className="h-auto">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08, duration: 0.5 }}
-                  className="h-full"
-                >
-                  <div className="bg-[#191919] border border-white/[0.06] p-7 h-full flex flex-col hover:border-white/[0.12] transition-colors duration-400">
-                    {/* Stars */}
-                    <div className="flex gap-1 mb-5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={13} className="fill-white text-white" />
-                      ))}
-                    </div>
-
-                    {/* Text */}
-                    <p className="text-[14px] text-white/50 leading-relaxed flex-1 mb-7">
-                      "{item.text}"
-                    </p>
-
-                    {/* Author */}
-                    <div className="flex items-center gap-3 pt-5 border-t border-white/[0.06]">
-                      <div className="w-10 h-10 overflow-hidden bg-white/5 shrink-0 rounded-sm">
-                        <img src={item.avatar} className="w-full h-full object-cover" alt={item.name} />
-                      </div>
-                      <div>
-                        <h4 className="text-[13px] font-bold text-white leading-tight">{item.name}</h4>
-                        <p className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-semibold mt-0.5">{item.role}</p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Pagination dots */}
-          <div className="testimonial-dots flex justify-center gap-2 mt-2 [&>.swiper-pagination-bullet]:w-1 [&>.swiper-pagination-bullet]:h-1 [&>.swiper-pagination-bullet]:rounded-none [&>.swiper-pagination-bullet]:bg-white/20 [&>.swiper-pagination-bullet-active]:bg-white [&>.swiper-pagination-bullet-active]:w-6" />
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
+            <div>
+              <p className="text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
+                {settings.eyebrow}
+              </p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-white uppercase whitespace-nowrap leading-none">
+                {settings.heading}
+              </h2>
+            </div>
+            <div className="hidden md:block flex-1 h-[1px] bg-zinc-800/80 mb-2" />
+          </div>
+          
+          <div className="flex items-center gap-6 self-start md:self-auto">
+            <div className="text-zinc-400 text-xs sm:text-sm tracking-wide max-w-[280px] font-light leading-relaxed text-left md:text-right">
+              <p>{settings.description_line_1}</p>
+              <p>{settings.description_line_2}</p>
+            </div>
+            <div className="flex gap-2.5">
+              <button 
+                onClick={() => swiperRef.current?.slidePrev()}
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all duration-300 cursor-pointer"
+              >
+                &larr;
+              </button>
+              <button 
+                onClick={() => swiperRef.current?.slideNext()}
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all duration-300 cursor-pointer"
+              >
+                &rarr;
+              </button>
+            </div>
+          </div>
         </div>
+
+        {/* Separator under header */}
+        <div className="w-full h-[1px] bg-white/[0.04] mb-10" />
+
+        {/* Gallery Carousel */}
+        <div className="w-full mb-16">
+          <Swiper
+            onSwiper={(swiper) => { swiperRef.current = swiper; }}
+            spaceBetween={8}
+            slidesPerView={1.5}
+            breakpoints={{
+              640: {
+                slidesPerView: 3,
+                spaceBetween: 8,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 8,
+              },
+              1200: {
+                slidesPerView: 6,
+                spaceBetween: 8,
+              },
+            }}
+            className="w-full overflow-visible"
+          >
+            {images.map((item) => {
+              const ImageComponent = item.link ? Link : 'div';
+              const componentProps = item.link ? { to: item.link } : {};
+
+              return (
+                <SwiperSlide key={item.id}>
+                  <ImageComponent
+                    {...componentProps}
+                    className="relative group block overflow-hidden bg-[#111] aspect-[3/4] sm:aspect-[3/5] w-full border border-white/[0.03]"
+                  >
+                    <img
+                      src={item.image}
+                      alt="Community look"
+                      className="absolute inset-0 w-full h-full object-cover transition-all duration-[600ms] ease-out group-hover:scale-[1.03] group-hover:brightness-[1.05]"
+                      loading="lazy"
+                    />
+                  </ImageComponent>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
+
+        {/* Social Proof Statistics Row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 pt-8 border-t border-white/[0.04]">
+          {stats.map((stat, idx) => {
+            const IconComponent = IconMap[stat.icon] || Star;
+            return (
+              <div 
+                key={stat.id} 
+                className={`flex items-center gap-4 ${
+                  idx > 0 ? 'md:border-l md:border-white/[0.06] md:pl-8' : ''
+                }`}
+              >
+                <div className="text-zinc-500">
+                  <IconComponent size={20} strokeWidth={1.5} className="text-zinc-400" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold tracking-tight text-white">{stat.value}</h4>
+                  <p className="text-[10px] sm:text-xs tracking-wider text-zinc-500 uppercase font-medium mt-0.5">{stat.label}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
       </div>
     </section>
   );
 };
 
 export default Testimonials;
+export { Testimonials as TestimonialsSection };
