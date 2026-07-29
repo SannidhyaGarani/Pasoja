@@ -102,7 +102,7 @@ const Checkout = () => {
     if (formData.paymentMethod === "online") {
       const options = {
         key: "rzp_test_YOUR_KEY_HERE", amount: total * 100, currency: "INR",
-        name: "Pasoja", description: "Premium Apparel Order", image: "/img/Pasoja option-01.png",
+        name: "Pasoja", description: "Premium Apparel Order", image: "https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png",
         handler: async (response) => { await saveOrder(response.razorpay_payment_id, "confirmed", "captured"); setIsProcessing(false); },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         theme: { color: "#000000" },

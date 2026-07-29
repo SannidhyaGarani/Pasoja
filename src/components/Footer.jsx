@@ -30,7 +30,7 @@ const Footer = () => {
           <div className="lg:col-span-4 flex flex-col gap-6">
             <Link to="/" className="flex items-center gap-4">
               <img
-                src="/img/Pasoja option-01.png"
+                src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
                 alt="Pasoja Logo"
                 className="h-16 md:h-20 object-contain"
               />

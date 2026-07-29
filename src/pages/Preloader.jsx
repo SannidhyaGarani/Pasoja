@@ -98,7 +98,7 @@ const Preloader = ({ onComplete }) => {
         {/* Logo */}
         <div className="mb-10">
           <img
-            src="/img/Pasoja option-01.png"
+            src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
             alt="Pasoja"
             className="h-14 md:h-16 object-contain brightness-0 invert opacity-90"
           />

@@ -64,8 +64,11 @@ const sidebarSections = [
   {
     title: "CONTENT",
     items: [
-      { name: "Homepage CMS", icon: Layout },
-      { name: "Banners", icon: Image },
+      { name: "Hero Slides", icon: Layout },
+      { name: "Shop By Category", icon: Grid },
+      { name: "Shop The Look", icon: Sparkles },
+      { name: "Community Gallery", icon: Image },
+      { name: "Benefits Strip", icon: ClipboardList },
       { name: "Blogs", icon: BookOpen },
       { name: "Pages", icon: FileText }
     ]
@@ -106,7 +109,6 @@ const sidebarSections = [
 const AdminSidebar = ({ activeItem, setActiveItem }) => {
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
-      // Clear token / session
       localStorage.removeItem("adminToken");
       sessionStorage.removeItem("adminToken");
       window.location.reload();
@@ -114,7 +116,7 @@ const AdminSidebar = ({ activeItem, setActiveItem }) => {
   };
 
   return (
-    <aside className="w-64 border-r border-[#1a1a1a] bg-[#090909] text-gray-400 flex flex-col h-screen shrink-0 overflow-y-auto selection:bg-white selection:text-black">
+    <aside className="w-64 border-r border-[#1a1a1a] bg-[#090909] text-gray-400 flex flex-col h-screen shrink-0 selection:bg-white selection:text-black">
       {/* Brand Header */}
       <div className="px-6 py-5 border-b border-[#1a1a1a] sticky top-0 bg-[#090909] z-10">
         <div className="flex items-center gap-3">
@@ -131,7 +133,7 @@ const AdminSidebar = ({ activeItem, setActiveItem }) => {
       </div>
 
       {/* Navigation Groups */}
-      <nav className="flex-1 px-4 py-6 space-y-7">
+      <nav className="flex-grow overflow-y-auto px-4 py-6 space-y-7">
         {sidebarSections.map((section) => (
           <div key={section.title} className="space-y-1.5">
             <p className="text-[9px] font-bold text-zinc-600 tracking-[0.2em] px-3 uppercase">
@@ -163,7 +165,7 @@ const AdminSidebar = ({ activeItem, setActiveItem }) => {
       </nav>
 
       {/* Logout button */}
-      <div className="p-4 border-t border-[#1a1a1a] bg-[#0c0c0c] sticky bottom-0 z-10">
+      <div className="p-4 border-t border-[#1a1a1a] bg-[#0c0c0c]">
         <button
           onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold text-red-400 hover:bg-red-950/20 hover:text-red-300 transition-all border border-transparent hover:border-red-900/30"

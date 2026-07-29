@@ -6,6 +6,7 @@ import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { useStore } from '../../components/StoreProvider';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Mousewheel } from 'swiper/modules';
 
 import 'swiper/css';
 
@@ -45,111 +46,88 @@ const ProductCard = ({ product, idx, triggerToast }) => {
     }
   };
 
-  const rating = product.rating || (4.5 + (idx % 5) * 0.1);
-  const badgeText = product.tag || (idx % 2 === 0 ? 'BEST SELLER' : 'NEW');
   const displayedImage = isHovered && product.images && product.images.length > 1
     ? product.images[1]
-    : (product.image || product.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800&auto=format&fit=crop');
+    : (product.image || product.images?.[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=800');
 
   return (
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(`/product/${product.id}`)}
-      className="group relative cursor-pointer flex flex-col bg-gradient-to-b from-[#121212] to-[#0d0d0d] border border-white/10 rounded-none h-[500px] sm:h-[540px] md:h-[560px] transition-all duration-500 hover:border-white/20 hover:from-[#161616] hover:to-[#101010]"
+      className="group relative cursor-pointer flex flex-col bg-[#0f0f0f] border border-white/[0.04] transition-all duration-500 hover:border-white/10 w-full"
     >
-      {/* 65-70% Height Image Area */}
-      <div className="relative w-full h-[65%] overflow-hidden bg-[#161616]/40 border-b border-white/[0.06] flex items-center justify-center p-6">
+      {/* Product Image Area */}
+      <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#131313] flex items-center justify-center">
         <img
           src={displayedImage}
           alt={product.name}
-          className="max-h-full max-w-full object-contain transition-all duration-[600ms] ease-out group-hover:scale-104 group-hover:brightness-[1.05]"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out"
         />
 
-        {/* Soft overlay tint to tone down white backgrounds */}
-        <div className="absolute inset-0 bg-black/[0.03] group-hover:bg-transparent transition-colors duration-[600ms] pointer-events-none" />
+        {/* Dark subtle overlay */}
+        <div className="absolute inset-0 bg-black/[0.02] pointer-events-none" />
 
         {/* Out of Stock Overlay */}
         {isOutOfStock && (
           <div className="absolute inset-0 z-20 bg-black/75 flex items-center justify-center">
-            <span className="bg-white text-black font-extrabold uppercase text-[9px] tracking-[0.2em] px-3.5 py-2">
+            <span className="bg-white text-black font-extrabold uppercase text-[9px] tracking-[0.2em] px-3 py-1.5">
               Out of Stock
             </span>
           </div>
         )}
 
-        {/* Top-left Dynamic Badge */}
-        <div className="absolute top-3 left-3 z-10">
-          <span className="bg-white text-black font-extrabold uppercase text-[8px] tracking-[0.18em] px-2.5 py-1">
-            {badgeText}
-          </span>
-        </div>
+        {/* Top-left Save Percentage Badge */}
+        {savingsPercent > 0 && !isOutOfStock && (
+          <div className="absolute top-3.5 left-3.5 z-10">
+            <span className="bg-[#cc2222] text-white font-bold uppercase text-[8px] tracking-wider px-2 py-0.5 rounded-sm">
+              SAVE {savingsPercent}%
+            </span>
+          </div>
+        )}
 
-        {/* Wishlist Button */}
+        {/* Wishlist Heart Icon */}
         <button
           onClick={(e) => handleAction(e, 'wishlist')}
-          className="absolute top-3 right-3 z-30 text-white/80 hover:text-white hover:scale-110 transition-all duration-300 pointer-events-auto cursor-pointer"
+          className="absolute top-3.5 right-3.5 z-30 text-white hover:scale-110 transition-transform duration-300 pointer-events-auto cursor-pointer"
         >
-          <Heart 
-            size={16} 
-            strokeWidth={1.8} 
-            fill={isWishlisted ? "#ef4444" : "none"} 
-            stroke={isWishlisted ? "#ef4444" : "currentColor"} 
+          <Heart
+            size={16}
+            strokeWidth={1.8}
+            fill={isWishlisted ? "#e53e3e" : "none"}
+            stroke={isWishlisted ? "#e53e3e" : "#ffffff"}
           />
         </button>
+
+        {/* Hover Slide-up ADD TO CART overlay */}
+        {!isOutOfStock && (
+          <div className="absolute bottom-0 inset-x-0 z-20 overflow-hidden h-10 pointer-events-auto">
+            <button
+              onClick={(e) => handleAction(e, 'cart')}
+              className={`w-full h-full bg-[#111111] text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center ${
+                isHovered ? 'translate-y-0' : 'translate-y-full'
+              } hover:bg-white hover:text-black`}
+            >
+              {isInCart ? 'IN BAG' : 'ADD TO CART'}
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Info Area (30-35% Height) */}
-      <div className="p-4 sm:p-5 flex flex-col justify-between flex-grow">
-        <div>
-          {product.category && (
-            <span className="text-[9px] uppercase tracking-[0.25em] text-[#c9a962] font-semibold block mb-1">
-              {product.category}
-            </span>
-          )}
-          <h3 className="text-[13px] font-light text-white uppercase tracking-wider mb-1 line-clamp-2 leading-snug group-hover:text-[#c9a962] transition-colors duration-300">
-            {product.name}
-          </h3>
-          
-          {/* Rating */}
-          <div className="flex items-center gap-1.5 text-[10px] text-white/40 mt-1">
-            <span className="text-[#c9a962]">★</span>
-            <span className="font-semibold">{rating.toFixed(1)}</span>
-          </div>
-        </div>
-
-        {/* Pricing & Cart Action Row */}
-        <div className="flex items-end justify-between mt-auto pt-3 border-t border-white/[0.04]">
-          <div className="flex flex-col gap-0.5">
-            <div className="flex items-baseline gap-2">
-              <span className="text-sm font-bold tracking-wide text-white">₹{displayPrice?.toLocaleString('en-IN')}</span>
-              {originalPrice !== displayPrice && (
-                <span className="text-[11px] text-white/30 line-through">₹{originalPrice?.toLocaleString('en-IN')}</span>
-              )}
-            </div>
-            {savingsPercent > 0 && (
-              <span className="text-red-400 text-[9px] font-bold">
-                ({savingsPercent}% OFF)
-              </span>
-            )}
-          </div>
-
-          {/* Minimal Circular Outlined Action Arrow Button */}
-          <button
-            onClick={(e) => handleAction(e, 'cart')}
-            disabled={isOutOfStock}
-            className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 z-30 cursor-pointer relative pointer-events-auto ${
-              isOutOfStock
-                ? 'bg-transparent text-white/10 border-white/5 cursor-not-allowed'
-                : isInCart
-                  ? 'bg-white text-black border-white'
-                  : 'bg-transparent text-white/80 border-white/20 hover:bg-white hover:text-black hover:border-white'
-            }`}
-          >
-            <span className="text-sm transform group-hover:translate-x-0.5 transition-transform duration-300">
-              &rarr;
-            </span>
-          </button>
+      {/* Info Area (Text displays below product) */}
+      <div className="pt-4 pb-5 px-1 flex flex-col text-left">
+        <h3 className="text-xs md:text-sm font-bold text-white uppercase tracking-wider line-clamp-1 leading-snug mb-1">
+          {product.name}
+        </h3>
+        
+        {/* Prices */}
+        <div className="flex items-baseline gap-2.5">
+          <span className="text-xs text-zinc-500 line-through">
+            Rs.{originalPrice?.toLocaleString('en-IN')}.00
+          </span>
+          <span className="text-sm font-bold text-[#e53e3e]">
+            Rs.{displayPrice?.toLocaleString('en-IN')}.00
+          </span>
         </div>
       </div>
     </div>
@@ -226,7 +204,7 @@ const BestsellerProducts = () => {
               <p className="text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
                 NEW ARRIVALS
               </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extralight tracking-[0.15em] text-white uppercase whitespace-nowrap leading-none">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extralight tracking-[0.15em] text-white uppercase whitespace-nowrap leading-none">
                 FRESH DROPS
               </h2>
             </div>
@@ -260,6 +238,10 @@ const BestsellerProducts = () => {
             onSwiper={(swiper) => { swiperRef.current = swiper; }}
             spaceBetween={14}
             slidesPerView={1.15}
+            mousewheel={{
+              forceToAxis: true,
+              sensitivity: 1,
+            }}
             breakpoints={{
               640: {
                 slidesPerView: 2.2,
@@ -274,6 +256,7 @@ const BestsellerProducts = () => {
                 spaceBetween: 18,
               },
             }}
+            modules={[Mousewheel]}
             className="w-full overflow-visible"
           >
             {products.map((product, idx) => (

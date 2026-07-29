@@ -1119,12 +1119,14 @@ const Admin = () => {
             collectionName="blogs"
             title="Brand Editorial Blogs"
             fields={[
+              { key: 'image', label: 'Featured Image', type: 'image' },
               { key: 'title', label: 'Blog Title' },
               { key: 'slug', label: 'Slug' },
               { key: 'excerpt', label: 'Excerpt', type: 'textarea' },
+              { key: 'content', label: 'Blog Content (HTML)', type: 'textarea' },
               { key: 'is_active', label: 'Status', type: 'boolean' }
             ]}
-            defaultItem={{ title: '', slug: '', excerpt: '', is_active: true }}
+            defaultItem={{ image: '', title: '', slug: '', excerpt: '', content: '', is_active: true }}
           />
         );
       case "Pages":
@@ -1142,12 +1144,72 @@ const Admin = () => {
           />
         );
       case "Shop By Category":
-        return <CMSManager collectionName="shop_by_category" title="Shop By Category Management" />;
+        return (
+          <GenericCRUDManager
+            collectionName="shop_by_category"
+            title="Shop By Category Banner CRUD"
+            fields={[
+              { key: 'image', label: 'Banner Image', type: 'image' },
+              { key: 'title', label: 'Category Title' },
+              { key: 'link', label: 'Shop Link Route' },
+              { key: 'sort_order', label: 'Sort Order', type: 'number' },
+              { key: 'is_active', label: 'Status', type: 'boolean' }
+            ]}
+            defaultItem={{ image: '', title: 'NEW CATEGORY', link: '/shop?category=Men', sort_order: 1, is_active: true }}
+          />
+        );
       case "Shop The Look":
-        return <CMSManager collectionName="shop_the_look" title="Shop The Look Management" />;
+        return (
+          <GenericCRUDManager
+            collectionName="shop_the_look"
+            title="Shop The Look Panel CRUD"
+            fields={[
+              { key: 'image', label: 'Panel Image', type: 'image' },
+              { key: 'category', label: 'Tag / Category Subtitle' },
+              { key: 'title', label: 'Product Title' },
+              { key: 'price', label: 'Price (INR)', type: 'number' },
+              { key: 'link', label: 'Destination Link' },
+              { key: 'sort_order', label: 'Sort Order', type: 'number' },
+              { key: 'is_active', label: 'Status', type: 'boolean' }
+            ]}
+            defaultItem={{ image: '', category: 'STREETWEAR', title: 'Product Name', price: 2499, link: '/shop', sort_order: 1, is_active: true }}
+          />
+        );
       case "Community Gallery":
       case "Reviews":
         return <CommunityManager />;
+      case "Hero Slides":
+        return (
+          <GenericCRUDManager
+            collectionName="hero_slides"
+            title="Homepage Hero Slides CMS"
+            fields={[
+              { key: 'image', label: 'Slide Image', type: 'image' },
+              { key: 'tag', label: 'Tag / Eyebrow' },
+              { key: 'title', label: 'Title (use \\n for line breaks)' },
+              { key: 'subtitle', label: 'Subtitle' },
+              { key: 'cta', label: 'CTA Text' },
+              { key: 'ctaLink', label: 'CTA Link' },
+              { key: 'sort_order', label: 'Sort Order', type: 'number' },
+              { key: 'is_active', label: 'Status', type: 'boolean' }
+            ]}
+            defaultItem={{ image: '', tag: 'NEW IN', title: 'Brand Title', subtitle: 'Description details...', cta: 'Shop Collection', ctaLink: '/shop', sort_order: 1, is_active: true }}
+          />
+        );
+      case "Benefits Strip":
+        return (
+          <GenericCRUDManager
+            collectionName="benefits_strip"
+            title="Homepage Benefits Info Strip CMS"
+            fields={[
+              { key: 'icon', label: 'Icon (Truck, Zap, RotateCcw, ShieldCheck)' },
+              { key: 'text', label: 'Benefit text' },
+              { key: 'sort_order', label: 'Sort Order', type: 'number' },
+              { key: 'is_active', label: 'Status', type: 'boolean' }
+            ]}
+            defaultItem={{ icon: 'Truck', text: 'Free Delivery', sort_order: 1, is_active: true }}
+          />
+        );
       case "Activity Logs":
         return <ActivityLogsView />;
       case "Store Settings":

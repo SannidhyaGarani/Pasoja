@@ -65,7 +65,7 @@ const Login = () => {
           
           <div className="relative z-10">
             <Link to="/" className="inline-block mb-10">
-              <img src="/img/Pasoja option-01.png" alt="Pasoja" className="h-9 object-contain brightness-0 invert" />
+              <img src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png" alt="Pasoja" className="h-9 object-contain brightness-0 invert" />
             </Link>
           </div>
           

@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { db } from '../../components/Firebase';
 import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
 import { Star, Award, MessageSquare, RefreshCw, Heart } from 'lucide-react';
+import { Autoplay, Mousewheel } from 'swiper/modules';
 
 import 'swiper/css';
 
@@ -52,12 +53,12 @@ const Testimonials = () => {
         const imgSnap = await getDocs(imgQuery);
         if (imgSnap.empty) {
           const defaultImages = [
-            { id: 'img_1', image: '/img/style_1.jpg', link: '', sort_order: 1, is_active: true },
-            { id: 'img_2', image: '/img/style_2.jpg', link: '', sort_order: 2, is_active: true },
-            { id: 'img_3', image: '/img/style_3.jpg', link: '', sort_order: 3, is_active: true },
-            { id: 'img_4', image: '/img/style_4.jpg', link: '', sort_order: 4, is_active: true },
-            { id: 'img_5', image: '/img/style_5.jpg', link: '', sort_order: 5, is_active: true },
-            { id: 'img_6', image: '/img/style_6.jpg', link: '', sort_order: 6, is_active: true }
+            { id: 'img_1', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317400/imjhv8luafwtxfu9iswq.jpg', link: '', sort_order: 1, is_active: true },
+            { id: 'img_2', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317401/ffl2xbtgi5vetrobuxzl.jpg', link: '', sort_order: 2, is_active: true },
+            { id: 'img_3', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317401/vuoqvdcaff3ni3jdmjkq.jpg', link: '', sort_order: 3, is_active: true },
+            { id: 'img_4', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317402/bz0d4jlszdu0ju8e0iwl.jpg', link: '', sort_order: 4, is_active: true },
+            { id: 'img_5', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317403/fc1is0gziu7rgyejzlwf.jpg', link: '', sort_order: 5, is_active: true },
+            { id: 'img_6', image: 'https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317404/zikp7hjgjndo7mjvqm4f.jpg', link: '', sort_order: 6, is_active: true }
           ];
           for (const item of defaultImages) {
             await setDoc(doc(db, 'community_images', item.id), item);
@@ -100,8 +101,15 @@ const Testimonials = () => {
     <section className="py-16 md:py-24 bg-[#0a0a0a] overflow-hidden relative border-t border-white/[0.03]">
       <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header */}
-        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        {/* Mobile Header (block md:hidden) - Screenshot 3 Style */}
+        <div className="block md:hidden mb-6">
+          <h2 className="text-xl font-bold tracking-[0.05em] text-white uppercase font-sans">
+            #SEENONFEED
+          </h2>
+        </div>
+
+        {/* Desktop Header (hidden md:flex) */}
+        <div className="hidden md:flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="flex-1 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
             <div>
               <p className="text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 uppercase mb-2 font-medium">
@@ -136,15 +144,23 @@ const Testimonials = () => {
           </div>
         </div>
 
-        {/* Separator under header */}
-        <div className="w-full h-[1px] bg-white/[0.04] mb-10" />
+        {/* Separator under header - Desktop only */}
+        <div className="hidden md:block w-full h-[1px] bg-white/[0.04] mb-10" />
 
         {/* Gallery Carousel */}
         <div className="w-full mb-16">
           <Swiper
             onSwiper={(swiper) => { swiperRef.current = swiper; }}
             spaceBetween={8}
-            slidesPerView={1.5}
+            slidesPerView={1.8}
+            mousewheel={{
+              forceToAxis: true,
+              sensitivity: 1,
+            }}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
             breakpoints={{
               640: {
                 slidesPerView: 3,
@@ -159,6 +175,7 @@ const Testimonials = () => {
                 spaceBetween: 8,
               },
             }}
+            modules={[Autoplay, Mousewheel]}
             className="w-full overflow-visible"
           >
             {images.map((item) => {
@@ -169,7 +186,7 @@ const Testimonials = () => {
                 <SwiperSlide key={item.id}>
                   <ImageComponent
                     {...componentProps}
-                    className="relative group block overflow-hidden bg-[#111] aspect-[3/4] sm:aspect-[3/5] w-full border border-white/[0.03]"
+                    className="relative group block overflow-hidden bg-[#111] aspect-[3/4] sm:aspect-[3/5] w-full border border-white/[0.03] rounded-none"
                   >
                     <img
                       src={item.image}

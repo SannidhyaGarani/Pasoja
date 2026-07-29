@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay, Mousewheel } from 'swiper/modules';
 import { db } from '../Firebase';
@@ -56,6 +56,8 @@ const fallbackSlides = [
 const GallerySwiper = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const swiperRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,6 +87,8 @@ const GallerySwiper = () => {
     }))
     : fallbackSlides;
 
+  const currentSlide = slides[activeIndex] || {};
+
   return (
     <section className="py-10 bg-[#0a0a0a] overflow-x-hidden relative border-t border-white/[0.03]">
       {/* Premium ambient decorative elements */}
@@ -107,8 +111,12 @@ const GallerySwiper = () => {
             slidesPerView={'auto'}
             loop={slides.length > 3}
             speed={1000}
+            mousewheel={{
+              forceToAxis: true,
+              sensitivity: 1,
+            }}
             autoplay={{
-              delay: 3000,
+              delay: 3500,
               disableOnInteraction: false,
             }}
             coverflowEffect={{
@@ -118,11 +126,13 @@ const GallerySwiper = () => {
               modifier: 1,
               slideShadows: true,
             }}
-            pagination={{
-              clickable: true,
-              dynamicBullets: false,
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
             }}
-            modules={[EffectCoverflow, Pagination, Autoplay]}
+            onSlideChange={(swiper) => {
+              setActiveIndex(swiper.realIndex);
+            }}
+            modules={[EffectCoverflow, Autoplay, Mousewheel]}
             className="w-full overflow-visible"
           >
             {slides.map((slide, idx) => (
@@ -139,25 +149,48 @@ const GallerySwiper = () => {
                 />
 
                 {/* Dark Vignette Wash */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-black/10 z-10" />
-
-                {/* Coverflow content overlay */}
-                <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-8 pointer-events-none">
-                  <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-[#c9a962] mb-1.5 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                    {slide.subtitle}
-                  </span>
-                  <h4 className="text-sm md:text-md font-light text-white tracking-widest uppercase leading-snug line-clamp-2">
-                    {slide.title}
-                  </h4>
-                  {slide.price !== undefined && slide.price !== null && (
-                    <span className="text-[12px] font-bold text-white tracking-wider mt-1 text-left">
-                      ₹{Number(slide.price).toLocaleString("en-IN")}
-                    </span>
-                  )}
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/10 z-10" />
               </SwiperSlide>
             ))}
           </Swiper>
+        </div>
+
+        {/* Dynamic centered slide content below swiper */}
+        <div className="mt-8 flex flex-col items-center justify-center text-center px-4">
+          {currentSlide.subtitle && (
+            <span className="text-[10px] uppercase tracking-[0.25em] font-medium text-zinc-500 mb-2">
+              {currentSlide.subtitle}
+            </span>
+          )}
+          
+          <div className="flex items-center justify-center gap-6 max-w-2xl w-full">
+            {/* Left Scroller Button */}
+            <button
+              onClick={() => swiperRef.current?.slidePrev()}
+              className="text-white hover:text-[#c9a962] transition-colors p-1 cursor-pointer"
+            >
+              <span className="text-base select-none">&larr;</span>
+            </button>
+
+            {/* Slide Title */}
+            <h4 className="text-sm md:text-base font-bold text-white tracking-wider uppercase leading-snug line-clamp-1 flex-1">
+              {currentSlide.title || 'Loading...'}
+            </h4>
+
+            {/* Right Scroller Button */}
+            <button
+              onClick={() => swiperRef.current?.slideNext()}
+              className="text-white hover:text-[#c9a962] transition-colors p-1 cursor-pointer"
+            >
+              <span className="text-base select-none">&rarr;</span>
+            </button>
+          </div>
+
+          {currentSlide.price !== undefined && currentSlide.price !== null && (
+            <span className="text-xs font-semibold text-zinc-400 tracking-widest mt-2 block">
+              INR {Number(currentSlide.price).toLocaleString("en-IN")}.00
+            </span>
+          )}
         </div>
       </div>
 
@@ -170,8 +203,8 @@ const GallerySwiper = () => {
           .gallery-swiper .swiper-slide {
             width: 260px;
             height: 380px;
-            opacity: 1;
-            filter: brightness(0.9);
+            opacity: 0.6;
+            filter: brightness(0.6);
             transform: scale(0.9);
             transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
@@ -188,28 +221,6 @@ const GallerySwiper = () => {
             border-color: rgba(255, 255, 255, 0.3);
             box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8), 0 0 50px rgba(255,255,255,0.05);
             z-index: 10;
-          }
-          .gallery-swiper .swiper-pagination {
-            position: relative !important;
-            bottom: 0 !important;
-            margin-top: 48px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-          }
-          .gallery-swiper .swiper-pagination-bullet {
-            background: rgba(255, 255, 255, 0.15) !important;
-            width: 5px;
-            height: 5px;
-            opacity: 1;
-            margin: 0 !important;
-            transition: all 0.4s ease;
-          }
-          .gallery-swiper .swiper-pagination-bullet-active {
-            background: #ffffff !important;
-            width: 24px;
-            border-radius: 3px;
           }
         `
       }} />

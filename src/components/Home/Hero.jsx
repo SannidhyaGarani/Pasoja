@@ -2,40 +2,75 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { db } from '../../components/Firebase';
+import { collection, getDocs, query, orderBy, doc, setDoc } from 'firebase/firestore';
 
 const Hero = () => {
+  const [slides, setSlides] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [loading, setLoading] = useState(true);
   const intervalRef = useRef(null);
 
-  const slides = [
-    {
-      image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595080/ChatGPT_Image_Jul_9_2026_04_31_19_PM_nholgd.png',
-      tag: 'AW 2025',
-      title: 'Define Your\nElegance.',
-      subtitle: 'Curated silhouettes for the modern connoisseur.',
-      cta: 'Shop Collection',
-      ctaLink: '/shop'
-    },
-    {
-      image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595088/ChatGPT_Image_Jul_9_2026_04_31_27_PM_yam8qn.png',
-      tag: 'Just Dropped',
-      title: 'New Season\nArrivals.',
-      subtitle: 'Fresh perspectives on timeless design.',
-      cta: 'Explore Now',
-      ctaLink: '/shop?filter=new'
-    },
-    {
-      image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png',
-      tag: 'Limited Edition',
-      title: 'The Artisan\nEdit.',
-      subtitle: 'Handcrafted exclusives. Meticulous detailing.',
-      cta: 'Discover Now',
-      ctaLink: '/shop?filter=sale'
-    }
-  ];
+  useEffect(() => {
+    const fetchHeroSlides = async () => {
+      try {
+        const q = query(collection(db, 'hero_slides'), orderBy('sort_order', 'asc'));
+        const snap = await getDocs(q);
+        if (snap.empty) {
+          const defaults = [
+            {
+              id: 'slide_1',
+              image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595080/ChatGPT_Image_Jul_9_2026_04_31_19_PM_nholgd.png',
+              tag: 'AW 2025',
+              title: 'Define Your\nElegance.',
+              subtitle: 'Curated silhouettes for the modern connoisseur.',
+              cta: 'Shop Collection',
+              ctaLink: '/shop',
+              sort_order: 1,
+              is_active: true
+            },
+            {
+              id: 'slide_2',
+              image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595088/ChatGPT_Image_Jul_9_2026_04_31_27_PM_yam8qn.png',
+              tag: 'Just Dropped',
+              title: 'New Season\nArrivals.',
+              subtitle: 'Fresh perspectives on timeless design.',
+              cta: 'Explore Now',
+              ctaLink: '/shop?filter=new',
+              sort_order: 2,
+              is_active: true
+            },
+            {
+              id: 'slide_3',
+              image: 'https://res.cloudinary.com/duzwys877/image/upload/v1783595079/ChatGPT_Image_Jul_9_2026_04_33_24_PM_nudlxb.png',
+              tag: 'Limited Edition',
+              title: 'The Artisan\nEdit.',
+              subtitle: 'Handcrafted exclusives. Meticulous detailing.',
+              cta: 'Discover Now',
+              ctaLink: '/shop?filter=sale',
+              sort_order: 3,
+              is_active: true
+            }
+          ];
+          for (const item of defaults) {
+            await setDoc(doc(db, 'hero_slides', item.id), item);
+          }
+          setSlides(defaults);
+        } else {
+          setSlides(snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.is_active !== false));
+        }
+      } catch (err) {
+        console.error("Error loading hero slides:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHeroSlides();
+  }, []);
 
   const startAutoplay = () => {
+    if (slides.length <= 1) return;
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setDirection(1);
@@ -44,15 +79,19 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    startAutoplay();
+    if (slides.length > 0) {
+      startAutoplay();
+    }
     return () => clearInterval(intervalRef.current);
-  }, []);
+  }, [slides]);
 
   const goToSlide = (index) => {
     setDirection(index > currentSlide ? 1 : -1);
     setCurrentSlide(index);
     startAutoplay();
   };
+
+  if (loading || slides.length === 0) return null;
 
   const slide = slides[currentSlide];
 
@@ -63,7 +102,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative h-[70vh] sm:h-screen w-full overflow-hidden bg-black mt-[72px] md:mt-[80px]">
+    <section className="relative h-screen w-full overflow-hidden bg-black mt-[72px] md:mt-[80px]">
       {/* Background */}
       <AnimatePresence custom={direction} mode="sync">
         <motion.div
@@ -147,23 +186,25 @@ const Hero = () => {
           </AnimatePresence>
 
           {/* Slide Indicators + Counter */}
-          <div className="flex items-center justify-between mt-10 md:mt-12">
-            <div className="flex items-center gap-2">
-              {slides.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => goToSlide(idx)}
-                  aria-label={`Go to slide ${idx + 1}`}
-                  className="group py-2"
-                >
-                  <div className={`h-[1px] transition-all duration-500 ${idx === currentSlide ? 'w-10 bg-white' : 'w-4 bg-white/25 group-hover:bg-white/50'}`} />
-                </button>
-              ))}
+          {slides.length > 1 && (
+            <div className="flex items-center justify-between mt-10 md:mt-12">
+              <div className="flex items-center gap-2">
+                {slides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => goToSlide(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className="group py-2"
+                  >
+                    <div className={`h-[1px] transition-all duration-500 ${idx === currentSlide ? 'w-10 bg-white' : 'w-4 bg-white/25 group-hover:bg-white/50'}`} />
+                  </button>
+                ))}
+              </div>
+              <span className="text-white/30 text-[10px] tracking-[0.2em] font-medium tabular-nums">
+                {String(currentSlide + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+              </span>
             </div>
-            <span className="text-white/30 text-[10px] tracking-[0.2em] font-medium tabular-nums">
-              {String(currentSlide + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
-            </span>
-          </div>
+          )}
         </div>
       </div>
     </section>

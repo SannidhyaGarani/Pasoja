@@ -116,7 +116,7 @@ const Header = () => {
             <div className="flex justify-center">
               <Link to="/" className="flex items-center">
                 <img
-                  src="/img/Pasoja option-01.png"
+                  src="https://res.cloudinary.com/dlsbj8nug/image/upload/v1785317399/p3jd3nuet4vkqbfd5qaz.png"
                   alt="Pasoja"
                   className="h-10 md:h-[52px] w-auto object-contain brightness-0 invert transition-opacity duration-300 hover:opacity-80"
                 />
